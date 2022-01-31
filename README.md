@@ -1,1 +1,1 @@
-# biologicSeqTools2
+# biologicSeqTools
