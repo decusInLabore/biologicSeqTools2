@@ -6308,16 +6308,17 @@ make.hm <- function(
     selcol2 <- colorRampPalette(brewer.pal(9, "Set1"))
     clustcol.height = selcol2(nofclust.height)
 
-    if (filename != ""){
-        pdf(
-            paste(
-                filename,
-                "pdf",
-                sep = "."
-            )
-        )
-    }
-
+    # if (filename != ""){
+    #     pdf(
+    #         paste(
+    #             filename,
+    #             "pdf",
+    #             sep = "."
+    #         )
+    #     )
+    # }
+    pdf("temp.pdf")
+    
     if (showRowNames){
         labRowVec = row.names(m.df1)
     } else {
@@ -6364,9 +6365,12 @@ make.hm <- function(
         rowsep = rowsep
     )
 
-    if (filename != ""){
-        dev.off()
-    }
+    # if (filename != ""){
+    #     dev.off()
+    # }
+    dev.off()
+    unlink(temp.pdf)
+    
     sorted = m.df1[
         match(
             rev(
@@ -6376,16 +6380,16 @@ make.hm <- function(
         ]
 
     sorted = sorted[, hm$colInd]
-    if (filename != ""){
-        pdf(paste(filename, "colorkey.pdf", sep = "."))
-    }
-    plot.new()
-    par(lend = 1)
-    legend("topleft", legend = 1:nofclust.height, col = clustcol.height,
-           lty = 1, lwd = 10)
-    if (filename != ""){
-        dev.off()
-    }
+    # if (filename != ""){
+    #     pdf(paste(filename, "colorkey.pdf", sep = "."))
+    # }
+    # plot.new()
+    # par(lend = 1)
+    # legend("topleft", legend = 1:nofclust.height, col = clustcol.height,
+    #        lty = 1, lwd = 10)
+    # if (filename != ""){
+    #     dev.off()
+    # }
     df.res = list(sorted = sorted, clusters = clusters)
     return(df.res)
     #return(clusters)
