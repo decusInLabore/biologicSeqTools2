@@ -1676,11 +1676,11 @@ setGeneric(
         pcaSelectionVec = NULL,
         pcaDimensionsToInvestigate = c(1:5)
     ) {
-        if (!dir.exists(obj@parameterList$DEseq2Dir)){
-            dir.create(obj@parameterList$DEseq2Dir)
-        }
+        # if (!dir.exists(obj@parameterList$DEseq2Dir)){
+        #     dir.create(obj@parameterList$DEseq2Dir)
+        # }
 
-        setwd(obj@parameterList$DEseq2Dir)
+        # setwd(obj@parameterList$DEseq2Dir)
 
         if (obj@parameterList$batchMode){
             library(limma)
@@ -1724,16 +1724,16 @@ setGeneric(
             )
             df <- df[df$PercentVariation > 0,]
 
-            library(ggplot2)
-            obj@plotCollection[["PCAvariationPerDimensionO"]] <- ggplot(df, aes(PCdimension, PercentVariation)) + geom_col() + scale_x_discrete(limits=PCdimension) +  theme(
-                axis.text.y   = element_text(size=8),
-                axis.text.x   = element_text(size=8),
-                axis.title.y  = element_text(size=8),
-                axis.title.x  = element_text(size=8),
-                axis.line = element_line(colour = "black"),
-                panel.border = element_rect(colour = "black", fill=NA, size=1),
-                plot.title = element_text(hjust = 0.5, size = 12)
-            )
+            # library(ggplot2)
+            # obj@plotCollection[["PCAvariationPerDimensionO"]] <- ggplot(df, aes(PCdimension, PercentVariation)) + geom_col() + scale_x_discrete(limits=PCdimension) +  theme(
+            #     axis.text.y   = element_text(size=8),
+            #     axis.text.x   = element_text(size=8),
+            #     axis.title.y  = element_text(size=8),
+            #     axis.title.x  = element_text(size=8),
+            #     axis.line = element_line(colour = "black"),
+            #     panel.border = element_rect(colour = "black", fill=NA, size=1),
+            #     plot.title = element_text(hjust = 0.5, size = 12)
+            # )
 
             #pcaFN <- "pca.table.txt"
             #fn = paste("PCA_plot.sample.groups.normalized.counts.png", sep="")
@@ -1765,17 +1765,17 @@ setGeneric(
         obj@dfPCA <- df.pca
 
         ## Add plot ##
-        tryCatch({
-            obj@plotCollection[["PCAd1d2plot"]] <- plotPCA(
-                rld,
-                ntop = Ntop4pca
-            )
-        },
-        error = function(c) "Plot error",
-        warning = function(c) "warning",
-        message = function(c) "message"
-
-        )
+        # tryCatch({
+        #     obj@plotCollection[["PCAd1d2plot"]] <- plotPCA(
+        #         rld,
+        #         ntop = Ntop4pca
+        #     )
+        # },
+        # error = function(c) "Plot error",
+        # warning = function(c) "warning",
+        # message = function(c) "message"
+        # 
+        # )
 
         ###########################################################################
         ## Get loadings ##                                                       ##
@@ -2006,15 +2006,15 @@ setGeneric(
 
     ## Cut to 10 dimensions ##
 
-    obj@plotCollection[[plotname]] <- ggplot(
-        plotFrame,
-        aes(x=Component, y=Covariate, fill=-log10(p))) +
-        geom_raster() +
-        scale_fill_gradient(low="grey90", high="red") +
-        theme_classic() +
-        coord_fixed() +
-        scale_x_continuous( labels = unique(plotFrame$Component), breaks = unique(plotFrame$Component)
-    )
+    # obj@plotCollection[[plotname]] <- ggplot(
+    #     plotFrame,
+    #     aes(x=Component, y=Covariate, fill=-log10(p))) +
+    #     geom_raster() +
+    #     scale_fill_gradient(low="grey90", high="red") +
+    #     theme_classic() +
+    #     coord_fixed() +
+    #     scale_x_continuous( labels = unique(plotFrame$Component), breaks = unique(plotFrame$Component)
+    # )
 
     return(obj)
 
@@ -2063,28 +2063,28 @@ setGeneric(
         d <- as.dist(1-c)
         hr <- hclust(d, method = "ward.D", members=NULL)
 
-        tryCatch({
-        obj@plotCollection[[plotname]] <- ggdendrogram(
-            hr,
-            rotate = TRUE,
-            size = 4,
-            theme_dendro = FALSE,
-            color = "tomato"
-            ) +  theme(
-                axis.text.y   = element_text(size=8),
-                axis.text.x   = element_text(size=8),
-                axis.title.y  = element_text(size=8),
-                axis.title.x  = element_text(size=8),
-                axis.line = element_line(colour = "black"),
-                panel.border = element_rect(colour = "black", fill=NA, size=1),
-                plot.title = element_text(hjust = 0.5, size = 12)
-            )
-        },
-        error = function(c) "Plot error",
-        warning = function(c) "warning",
-        message = function(c) "message"
-
-        )
+        # tryCatch({
+        # obj@plotCollection[[plotname]] <- ggdendrogram(
+        #     hr,
+        #     rotate = TRUE,
+        #     size = 4,
+        #     theme_dendro = FALSE,
+        #     color = "tomato"
+        #     ) +  theme(
+        #         axis.text.y   = element_text(size=8),
+        #         axis.text.x   = element_text(size=8),
+        #         axis.title.y  = element_text(size=8),
+        #         axis.title.x  = element_text(size=8),
+        #         axis.line = element_line(colour = "black"),
+        #         panel.border = element_rect(colour = "black", fill=NA, size=1),
+        #         plot.title = element_text(hjust = 0.5, size = 12)
+        #     )
+        # },
+        # error = function(c) "Plot error",
+        # warning = function(c) "warning",
+        # message = function(c) "message"
+        # 
+        # )
 
 
         return(obj)
@@ -2217,28 +2217,28 @@ setGeneric(
                 library(ggplot2)
                 plotname <- paste0("MAplot_", colName)
 
-                tryCatch({
-                    obj@plotCollection[[plotname]] <- ggmaplot(
-                        res, main = plotname,
-                        fdr = 0.05, fc = 4, size = 1,
-                        palette = c("#B31B21", "#1465AC", "darkgray"),
-                        genenames = as.vector(row.names(res)),
-                        legend = "top", top = 5,
-                        font.label = c("bold", 5),
-                        font.legend = "bold",
-                        font.main = "bold",
-                        ggtheme = ggplot2::theme_minimal())+
-                        theme(plot.title = element_text(hjust = 0.5),
-                              panel.border = element_rect(colour = "black", fill=NA, size=1)
-                        ) + ylim(-10, 10)
-
-
-                    #    obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
-                },
-                error = function(c) "MA plot not produced due to X11 error",
-                warning = function(c) "warning",
-                message = function(c) "message"
-                )
+                # tryCatch({
+                #     obj@plotCollection[[plotname]] <- ggmaplot(
+                #         res, main = plotname,
+                #         fdr = 0.05, fc = 4, size = 1,
+                #         palette = c("#B31B21", "#1465AC", "darkgray"),
+                #         genenames = as.vector(row.names(res)),
+                #         legend = "top", top = 5,
+                #         font.label = c("bold", 5),
+                #         font.legend = "bold",
+                #         font.main = "bold",
+                #         ggtheme = ggplot2::theme_minimal())+
+                #         theme(plot.title = element_text(hjust = 0.5),
+                #               panel.border = element_rect(colour = "black", fill=NA, size=1)
+                #         ) + ylim(-10, 10)
+                # 
+                # 
+                #     #    obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
+                # },
+                # error = function(c) "MA plot not produced due to X11 error",
+                # warning = function(c) "warning",
+                # message = function(c) "message"
+                # )
 
                 #Identify most variable genes in the dataset
                 #Use sd(row)/mean(row)
@@ -2348,46 +2348,46 @@ setGeneric(
                 alpha <- I(0.5)
                 shape <- 21
 
-                tryCatch({
-                    library(ggplot2)
-                    plotname <- paste0("Volcano_Plot_", colName)
-                    obj@plotCollection[[plotname]] <- ggplot(
-                        data=dfVplot,
-                        aes_string(
-                            x=names(res)[grep("logFC", names(res))],
-                            y=names(res)[grep("lg10p", names(res))],
-                            fill = "Significance", alpha = alpha
-                        )
-                    ) + geom_vline(xintercept = 0, color = "black", size=0.5
-                    ) + geom_hline(yintercept = 0, color = "black", size=0.5
-                    ) + geom_vline(xintercept = c(-2,2), color = "red", size=0.5,linetype = 2
-                    ) + geom_hline(yintercept = c(1.3), color = "red", size=0.5,linetype = 2
-                    ) + geom_point(shape=shape
-                    ) + labs(title = plotname, y = "-log10(padjust)"
-                    ) +  theme(
-                        axis.text.y   = element_text(size=8),
-                        axis.text.x   = element_text(size=8),
-                        axis.title.y  = element_text(size=8),
-                        axis.title.x  = element_text(size=8),
-                        axis.line = element_line(colour = "black"),
-                        panel.border = element_rect(colour = "black", fill=NA, size=1),
-                        plot.title = element_text(hjust = 0.5, size = 12),
-                        panel.grid.minor = element_blank()
-                    ) + scale_x_continuous(breaks=c(-2,2,seq(-30,30,5))
-                    ) + scale_y_continuous(breaks=c(seq(0,400,5))
-                    ) + scale_color_manual(values=c("black", "black", "black")
-                    ) + scale_fill_manual(values=c("blue", "grey", "red")
-                    ) + guides(color = FALSE
-                    )
-
-
-                    #obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
-                },
-                error = function(c) "MA plot not produced due to X11 error",
-                warning = function(c) "warning",
-                message = function(c) "message"
-
-                )
+                # tryCatch({
+                #     library(ggplot2)
+                #     plotname <- paste0("Volcano_Plot_", colName)
+                #     obj@plotCollection[[plotname]] <- ggplot(
+                #         data=dfVplot,
+                #         aes_string(
+                #             x=names(res)[grep("logFC", names(res))],
+                #             y=names(res)[grep("lg10p", names(res))],
+                #             fill = "Significance", alpha = alpha
+                #         )
+                #     ) + geom_vline(xintercept = 0, color = "black", size=0.5
+                #     ) + geom_hline(yintercept = 0, color = "black", size=0.5
+                #     ) + geom_vline(xintercept = c(-2,2), color = "red", size=0.5,linetype = 2
+                #     ) + geom_hline(yintercept = c(1.3), color = "red", size=0.5,linetype = 2
+                #     ) + geom_point(shape=shape
+                #     ) + labs(title = plotname, y = "-log10(padjust)"
+                #     ) +  theme(
+                #         axis.text.y   = element_text(size=8),
+                #         axis.text.x   = element_text(size=8),
+                #         axis.title.y  = element_text(size=8),
+                #         axis.title.x  = element_text(size=8),
+                #         axis.line = element_line(colour = "black"),
+                #         panel.border = element_rect(colour = "black", fill=NA, size=1),
+                #         plot.title = element_text(hjust = 0.5, size = 12),
+                #         panel.grid.minor = element_blank()
+                #     ) + scale_x_continuous(breaks=c(-2,2,seq(-30,30,5))
+                #     ) + scale_y_continuous(breaks=c(seq(0,400,5))
+                #     ) + scale_color_manual(values=c("black", "black", "black")
+                #     ) + scale_fill_manual(values=c("blue", "grey", "red")
+                #     ) + guides(color = FALSE
+                #     )
+                # 
+                # 
+                #     #obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
+                # },
+                # error = function(c) "MA plot not produced due to X11 error",
+                # warning = function(c) "warning",
+                # message = function(c) "message"
+                # 
+                # )
                 ## Done diagnostic Volcano plot                              ##
                 ###############################################################
 
