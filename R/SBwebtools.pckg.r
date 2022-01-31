@@ -9212,21 +9212,26 @@ createSettingsJSON <- function(
     }
     
     jsonList[["lab"]] <- list(
-        "name" =  obj@parameterList$labname,
-        "data_db_name" = obj@dbDetailList$primDataDB,
-        "data_db" = list(
+        "name" =  obj@parameterList$labname
+    )
+    
+    jsonList[["data_db_name"]] = obj@dbDetailList$primDataDB
+    
+        
+    jsonList[["data_db"]] = list(
             "cat_table_name" = obj@parameterList$cat.ref.db.table
-        ),
-        "rnaseq_db_table" = obj@parameterList$rnaseqdbTableName,
-        "primary_gene_symbol" = obj@parameterList$geneIDcolumn,
-        "ptm_display_column" = obj@parameterList$displayPTMcolumn,
-        "heatmap" = list(
+    )
+    
+    jsonList[["rnaseq_db_table"]] = obj@parameterList$rnaseqdbTableName
+    jsonList[["primary_gene_symbol"]] = obj@parameterList$geneIDcolumn
+    jsonList[["ptm_display_column"]] = obj@parameterList$displayPTMcolumn
+    jsonList[["heatmap"]] = list(
             "upper_limit" = upper_heatmap_limit,
             "lower_limit" = lower_heatmap_limit,
             "headline" = obj@parameterList$heamap.headline.text,
             "pointer" = pointer
-        )
     )
+    
     
     ###############################################################################
     ## Create sampe list                                                         ##
