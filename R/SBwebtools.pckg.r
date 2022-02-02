@@ -2690,6 +2690,9 @@ setGeneric(
                 addCols <- gsub("~", "", addCols)
                 addCols <- unlist(strsplit(addCols, "[+]"))
                 addCols <- gsub(" ", "", addCols)
+                addCols <- sapply(addCols, function(x) unlist(strsplit(x, ":")))
+                addCols <- unique(Reduce(c, addCols))
+                
                 addCols <- addCols[addCols != "condition"]
 
                 selCols <- c("sample.id", as.vector(dfDGE[i,"comparisonID"]), addCols,"sample.group")
@@ -2740,7 +2743,7 @@ setGeneric(
 
                 contrast.vector = append("condition", contrasts)
                 colName = paste(contrasts, collapse = "_vs_")
-                colName
+                #colName
 
                 if (as.vector(dfDGE[i,"normalizeAllSamplesTogether"])) {
                     raw.counts.temp = obj@RSEMcountMatrix
