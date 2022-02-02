@@ -6320,7 +6320,7 @@ make.hm <- function(
     #         )
     #     )
     # }
-    #pdf("temp.pdf")
+    pdf("temp.pdf")
     
     if (showRowNames){
         labRowVec = row.names(m.df1)
@@ -6372,7 +6372,9 @@ make.hm <- function(
     #     dev.off()
     # }
     #dev.off()
-    #unlink(temp.pdf)
+    if (file.exists("temp.pdf")){
+        unlink(temp.pdf)
+    }
     
     sorted = m.df1[
         match(
