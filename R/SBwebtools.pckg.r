@@ -6653,7 +6653,7 @@ datatable.to.website.ptm <- function (
     ## Make col.sorted heatmap ##
     hm.res = make.hm(
         m.cluster,
-        filename = "heatmap.col.sorted",
+        filename = "",
         k.number = n.hm.cluster,
         n.colors = 20,
         hclust.method = "ward.D2",
@@ -6665,7 +6665,7 @@ datatable.to.website.ptm <- function (
     ## Make col-clustered heatmap ##
     hm.res = make.hm(
         m.cluster,
-        filename = "heatmap.col.clustered",
+        filename = "",
         k.number = n.hm.cluster,
         n.colors = 20,
         hclust.method = "ward.D2",
