@@ -1388,7 +1388,7 @@ setGeneric(
 
 ###############################################################################
 ## Create dds base object                                                    ##
-#' @title A method
+#' @title createDdsObject
 #'
 #' @description Method description
 #' @param agree TBD
@@ -1417,7 +1417,7 @@ setGeneric(
 
 
             obj@ObjDds <- DESeqDataSetFromMatrix(
-                countData = obj@RSEMcountMatrix,
+                countData = obj@RSEMcountMatrix[,row.names(colData)],
                 colData   = colData,
                 design    = ~ replicate
             )
@@ -1429,7 +1429,7 @@ setGeneric(
             colData$condition <- as.factor(colData$condition)
 
             obj@ObjDds <- DESeqDataSetFromMatrix(
-                countData = obj@RSEMcountMatrix,
+                countData = obj@RSEMcountMatrix[,row.names(colData)],
                 colData   = colData,
                 design    = ~ condition
             )
@@ -2194,7 +2194,7 @@ setGeneric(
 
 
                 dds <- DESeqDataSetFromMatrix(
-                    countData = raw.counts.temp,
+                    countData = raw.counts.temp[,row.names(colData)],
                     colData   = colData,
                     design    = designFormula
                 )
@@ -2502,7 +2502,7 @@ setGeneric(
                 }
 
                 dds <- DESeqDataSetFromMatrix(
-                    countData = raw.counts.temp,
+                    countData = raw.counts.temp[,row.names(colData)],
                     colData   = colData,
                     design    = designFormula
                 )
@@ -2752,7 +2752,7 @@ setGeneric(
 
 
                 dds <- DESeqDataSetFromMatrix(
-                    countData = raw.counts.temp,
+                    countData = raw.counts.temp[,row.names(colData)],
                     colData   = colData,
                     design    = designFormula
                 )
@@ -3095,7 +3095,7 @@ setGeneric(
                 colData$condition <- as.factor(colData$condition)
 
                 dds <- DESeqDataSetFromMatrix(
-                    countData = raw.counts.temp,
+                    countData = raw.counts.temp[,row.names(colData)],
                     colData   = colData,
                     design    = designFormula
                 )
@@ -3385,7 +3385,7 @@ do.differential.expression.analyis <- function(
 
 
             dds <- DESeqDataSetFromMatrix(
-                countData = raw.counts.filt,
+                countData = raw.counts.filt[,row.names(colData)],
                 colData   = colData,
                 design    = ~ replicate + condition
             )
@@ -3409,7 +3409,7 @@ do.differential.expression.analyis <- function(
             ## This will now determine if the difference is explained by
             ## condition
             dds <- DESeqDataSetFromMatrix(
-                countData = raw.counts.filt,
+                countData = raw.counts.filt[,row.names(colData)],
                 colData   = colData,
                 design    = ~ condition
             )
@@ -3480,7 +3480,7 @@ do.differential.expression.analyis <- function(
 
 
                 dds <- DESeqDataSetFromMatrix(
-                    countData = raw.counts.filt,
+                    countData = raw.counts.filt[,row.names(colData)],
                     colData   = colData,
                     design    = ~ replicate + condition
                 )
@@ -3504,7 +3504,7 @@ do.differential.expression.analyis <- function(
                 ## This will now determine if the difference is explained by
                 ## condition
                 dds <- DESeqDataSetFromMatrix(
-                    countData = raw.counts.filt,
+                    countData = raw.counts.filt[,row.names(colData)],
                     colData   = colData,
                     design    = ~ condition
                 )
@@ -3576,7 +3576,7 @@ do.differential.expression.analyis <- function(
 
 
             dds <- DESeqDataSetFromMatrix(
-                countData = raw.counts.filt,
+                countData = raw.counts.filt[,row.names(colData)],
                 colData   = colData,
                 design    = ~ replicate + condition
             )
@@ -3590,7 +3590,7 @@ do.differential.expression.analyis <- function(
             colData$timepoint <- as.factor(colData$timepoint)
 
             dds <- DESeqDataSetFromMatrix(
-                countData = raw.counts.filt,
+                countData = raw.counts.filt[,row.names(colData)],
                 colData   = colData,
                 design = ~ dataseries + timepoint +dataseries:timepoint
             )
@@ -3720,7 +3720,7 @@ do.differential.expression.analyis <- function(
         if (batch.mode){
             colData$replicate <- as.factor(colData$replicate)
             dds <- DESeqDataSetFromMatrix(
-                countData = raw.counts.temp,
+                countData = raw.counts.temp[,row.names(colData)],
                 colData   = colData,
                 design    = ~ replicate + condition
             )
@@ -3773,7 +3773,7 @@ do.differential.expression.analyis <- function(
 
         } else {
             dds <- DESeqDataSetFromMatrix(
-                countData = raw.counts.temp,
+                countData = raw.counts.temp[,row.names(colData)],
                 colData   = colData,
                 design    = ~ condition
             )
