@@ -6373,7 +6373,7 @@ make.hm <- function(
     # }
     #dev.off()
     if (file.exists("temp.pdf")){
-        unlink(temp.pdf)
+        unlink("temp.pdf")
     }
     
     sorted = m.df1[
