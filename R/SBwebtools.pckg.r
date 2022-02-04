@@ -2641,7 +2641,7 @@ setGeneric(
 ## Do differential gene expression                                           ##
 
 #debug <- as.vector(NULL, mode = "character")
-#' @title A method
+#' @title DGEanalysis
 #'
 #' @description Method description
 #' @param agree TBD
@@ -2786,39 +2786,39 @@ setGeneric(
                 ##################################
 
                 #Create MA plot
-                library(ggpubr)
-                library(ggplot2)
-                plotname <- paste0("MAplot_", colName)
-
-                ## Debug
-                # debug <- c(
-                #     debug,
-                #     plotname
+                # library(ggpubr)
+                # library(ggplot2)
+                # plotname <- paste0("MAplot_", colName)
+                # 
+                # ## Debug
+                # # debug <- c(
+                # #     debug,
+                # #     plotname
+                # # )
+                # ##
+                # 
+                # tryCatch({
+                #     obj@plotCollection[[plotname]] <- ggmaplot(
+                #         res, main = plotname,
+                #         fdr = 0.05, fc = 4, size = 1,
+                #         palette = c("#B31B21", "#1465AC", "darkgray"),
+                #         genenames = as.vector(row.names(res)),
+                #         legend = "top", top = 5,
+                #         font.label = c("bold", 5),
+                #         font.legend = "bold",
+                #         font.main = "bold",
+                #         ggtheme = ggplot2::theme_minimal())+
+                #         theme(plot.title = element_text(hjust = 0.5),
+                #               panel.border = element_rect(colour = "black", fill=NA, size=1)
+                #         ) + ylim(-10, 10)
+                # 
+                # 
+                #     #    obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
+                # },
+                # error = function(c) "MA plot not produced due to X11 error",
+                # warning = function(c) "warning",
+                # message = function(c) "message"
                 # )
-                ##
-
-                tryCatch({
-                    obj@plotCollection[[plotname]] <- ggmaplot(
-                        res, main = plotname,
-                        fdr = 0.05, fc = 4, size = 1,
-                        palette = c("#B31B21", "#1465AC", "darkgray"),
-                        genenames = as.vector(row.names(res)),
-                        legend = "top", top = 5,
-                        font.label = c("bold", 5),
-                        font.legend = "bold",
-                        font.main = "bold",
-                        ggtheme = ggplot2::theme_minimal())+
-                        theme(plot.title = element_text(hjust = 0.5),
-                              panel.border = element_rect(colour = "black", fill=NA, size=1)
-                        ) + ylim(-10, 10)
-
-
-                    #    obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
-                },
-                error = function(c) "MA plot not produced due to X11 error",
-                warning = function(c) "warning",
-                message = function(c) "message"
-                )
 
                 ######################################
                 ######################################
@@ -2923,57 +2923,57 @@ setGeneric(
 
                 ###############################################################
                 ## Make diagnostic Volcano plot                              ##
-                dfVplot <- res
-                dfVplot[["Significance"]] <- "NS"
-                dfVplot[dfVplot[,grep("padj", names(dfVplot))] < 0.05 & dfVplot[,grep("logFC", names(dfVplot))] > 2, "Significance"] <- "Up"
-                dfVplot[dfVplot[,grep("padj", names(dfVplot))] < 0.05 & dfVplot[,grep("logFC", names(dfVplot))] < -2, "Significance"] <- "Down"
-                nrow(dfVplot[dfVplot$Significance == "Up",])
-                nrow(dfVplot[dfVplot$Significance == "Down",])
-
-                dsize <- 1
-                alpha <- I(0.5)
-                shape <- 21
-
-                tryCatch({
-                    library(ggplot2)
-                    plotname <- paste0("Volcano_Plot_", colName)
-                    obj@plotCollection[[plotname]] <- ggplot(
-                        data=dfVplot,
-                        aes_string(
-                            x=names(res)[grep("logFC", names(res))],
-                            y=names(res)[grep("lg10p", names(res))],
-                            fill = "Significance", alpha = alpha
-                        )
-                    ) + geom_vline(xintercept = 0, color = "black", size=0.5
-                    ) + geom_hline(yintercept = 0, color = "black", size=0.5
-                    ) + geom_vline(xintercept = c(-2,2), color = "red", size=0.5,linetype = 2
-                    ) + geom_hline(yintercept = c(1.3), color = "red", size=0.5,linetype = 2
-                    ) + geom_point(shape=shape
-                    ) + labs(title = plotname, y = "-log10(padjust)"
-                    ) +  theme(
-                        axis.text.y   = element_text(size=8),
-                        axis.text.x   = element_text(size=8),
-                        axis.title.y  = element_text(size=8),
-                        axis.title.x  = element_text(size=8),
-                        axis.line = element_line(colour = "black"),
-                        panel.border = element_rect(colour = "black", fill=NA, size=1),
-                        plot.title = element_text(hjust = 0.5, size = 12),
-                        panel.grid.minor = element_blank()
-                    ) + scale_x_continuous(breaks=c(-2,2,seq(-30,30,5))
-                    ) + scale_y_continuous(breaks=c(seq(0,400,5))
-                    ) + scale_color_manual(values=c("black", "black", "black")
-                    ) + scale_fill_manual(values=c("blue", "grey", "red")
-                    ) + guides(color = FALSE
-                    )
-
-
-                    #obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
-                },
-                error = function(c) "MA plot not produced due to X11 error",
-                warning = function(c) "warning",
-                message = function(c) "message"
-
-                )
+                # dfVplot <- res
+                # dfVplot[["Significance"]] <- "NS"
+                # dfVplot[dfVplot[,grep("padj", names(dfVplot))] < 0.05 & dfVplot[,grep("logFC", names(dfVplot))] > 2, "Significance"] <- "Up"
+                # dfVplot[dfVplot[,grep("padj", names(dfVplot))] < 0.05 & dfVplot[,grep("logFC", names(dfVplot))] < -2, "Significance"] <- "Down"
+                # nrow(dfVplot[dfVplot$Significance == "Up",])
+                # nrow(dfVplot[dfVplot$Significance == "Down",])
+                # 
+                # dsize <- 1
+                # alpha <- I(0.5)
+                # shape <- 21
+                # 
+                # tryCatch({
+                #     library(ggplot2)
+                #     plotname <- paste0("Volcano_Plot_", colName)
+                #     obj@plotCollection[[plotname]] <- ggplot(
+                #         data=dfVplot,
+                #         aes_string(
+                #             x=names(res)[grep("logFC", names(res))],
+                #             y=names(res)[grep("lg10p", names(res))],
+                #             fill = "Significance", alpha = alpha
+                #         )
+                #     ) + geom_vline(xintercept = 0, color = "black", size=0.5
+                #     ) + geom_hline(yintercept = 0, color = "black", size=0.5
+                #     ) + geom_vline(xintercept = c(-2,2), color = "red", size=0.5,linetype = 2
+                #     ) + geom_hline(yintercept = c(1.3), color = "red", size=0.5,linetype = 2
+                #     ) + geom_point(shape=shape
+                #     ) + labs(title = plotname, y = "-log10(padjust)"
+                #     ) +  theme(
+                #         axis.text.y   = element_text(size=8),
+                #         axis.text.x   = element_text(size=8),
+                #         axis.title.y  = element_text(size=8),
+                #         axis.title.x  = element_text(size=8),
+                #         axis.line = element_line(colour = "black"),
+                #         panel.border = element_rect(colour = "black", fill=NA, size=1),
+                #         plot.title = element_text(hjust = 0.5, size = 12),
+                #         panel.grid.minor = element_blank()
+                #     ) + scale_x_continuous(breaks=c(-2,2,seq(-30,30,5))
+                #     ) + scale_y_continuous(breaks=c(seq(0,400,5))
+                #     ) + scale_color_manual(values=c("black", "black", "black")
+                #     ) + scale_fill_manual(values=c("blue", "grey", "red")
+                #     ) + guides(color = FALSE
+                #     )
+                # 
+                # 
+                #     #obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
+                # },
+                # error = function(c) "MA plot not produced due to X11 error",
+                # warning = function(c) "warning",
+                # message = function(c) "message"
+                # 
+                # )
                 ## Done diagnostic Volcano plot                              ##
                 ###############################################################
 
