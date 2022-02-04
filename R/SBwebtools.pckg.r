@@ -7291,7 +7291,8 @@ upload.datatable.to.database <- function(
     startOnlyWithConnectionCount1 = FALSE,
     cols2Index = NULL,
     indexName = NULL,
-    mode = "MySQL"
+    mode = "MySQL",
+    addRowNamesColumn = TRUE
 ){
 
     if (sum( nchar(names(df.data)) > 64) > 0){
@@ -7415,7 +7416,9 @@ upload.datatable.to.database <- function(
     RMySQL::dbDisconnect(dbDB)
 
     ## Ensure that df.data has a row_names column ##
-    df.data[["row_names"]] <- first.row.name.index:(first.row.name.index+nrow(df.data)-1)
+    if (addRowNamesColumn){
+        df.data[["row_names"]] <- first.row.name.index:(first.row.name.index+nrow(df.data)-1)
+    }
 
     ## Check if all columns are assigned in db.col.parameter.list ##
     all.col.string.vec <- as.vector(do.call('c', db.col.parameter.list))
@@ -8762,6 +8765,11 @@ createSettingsFile <- function(
         settingsPhpVec <- c(
             settingsPhpVec,
             "    'public_access' => TRUE,"
+        )
+    } else {
+        settingsPhpVec <- c(
+            settingsPhpVec,
+            "    'public_access' => FALSE,"
         )
     }
     
