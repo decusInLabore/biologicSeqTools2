@@ -7516,7 +7516,7 @@ upload.datatable.to.database <- function(
         uploaded = FALSE
         while (!uploaded){
             tryCatch({
-                biologicSeqTools::killDbConnections()
+                biologicSeqTools2::killDbConnections()
 
                 ## Establish connection ##
                 if (mode == "SQLite"){
