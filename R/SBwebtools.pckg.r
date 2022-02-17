@@ -2251,9 +2251,9 @@ setGeneric(
 
                 #Continue with the differential gene expression analysis
                 ## reference https://support.bioconductor.org/p/95695/
-                if (obj@parameterList$DEseq2betaPrior == FALSE) {
-                    res <- lfcShrink(dds, coef="log2FoldChange", type="apeglm")
-                }
+                # if (obj@parameterList$DEseq2betaPrior == FALSE) {
+                #     res <- lfcShrink(dds, coef="log2FoldChange", type="apeglm")
+                # }
 
                 res = data.frame(res)
                 names(res) = paste(names(res), colName, sep="_")
