@@ -8643,7 +8643,7 @@ createSettingsFile <- function(
         timepointName = "Timepoint"
     ) {
 
-        tsOrder <- as.numeric(sort(unique(dfDesign$timepoint)))
+        tsOrder <- as.numeric(sort(unique(dfDesign[,timepointName])))
         scriptVec <- as.vector(NULL, mode = "character")
         scriptVec <- c(
             scriptVec,
@@ -8686,11 +8686,11 @@ createSettingsFile <- function(
 
         for (i in 1:length(dataseriesVec)){
             dfTemp <- unique(
-                dfDesign[dfDesign$dataseries == dataseriesVec[i], c("sample.id", "dataseries", "sample.group", "timepoint")]
+                dfDesign[dfDesign$dataseries == dataseriesVec[i], c("sample.id", "dataseries", "sample.group", timepointName)]
             )
 
-            dfTemp <- dfTemp[order(dfTemp$timepoint, decreasing = F),]
-            timepointVec <- unique(dfTemp$timepoint)
+            dfTemp <- dfTemp[order(dfTemp[,timepointName], decreasing = F),]
+            timepointVec <- unique(dfTemp[,timepointName])
             sampleGroupVec <- unique(dfTemp$sample.group)
 
             scriptVec <- c(
@@ -9087,7 +9087,7 @@ createSettingsJSON <- function(
         timepointName = "Timepoint"
     ) {
         
-        tsOrder <- as.numeric(sort(unique(dfDesign$timepoint)))
+        tsOrder <- as.numeric(sort(unique(dfDesign[,timepointName])))
         scriptVec <- as.vector(NULL, mode = "character")
         
         tsList <- list()
@@ -9142,11 +9142,11 @@ createSettingsJSON <- function(
         
         for (i in 1:length(dataseriesVec)){
             dfTemp <- unique(
-                dfDesign[dfDesign$dataseries == dataseriesVec[i], c("sample.id", "dataseries", "sample.group", "timepoint")]
+                dfDesign[dfDesign$dataseries == dataseriesVec[i], c("sample.id", "dataseries", "sample.group", timepointName)]
             )
             
-            dfTemp <- dfTemp[order(dfTemp$timepoint, decreasing = F),]
-            timepointVec <- unique(dfTemp$timepoint)
+            dfTemp <- dfTemp[order(dfTemp[,timepointName], decreasing = F),]
+            timepointVec <- unique(dfTemp[,timepointName])
             sampleGroupVec <- unique(dfTemp$sample.group)
             
             datasetsList[[dataseriesVec[i]]] <- list(
