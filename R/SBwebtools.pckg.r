@@ -8713,7 +8713,7 @@ createSettingsFile <- function(
                     paste0("    'sampleDbCols' =>  array("),
 
                     paste0(
-                        sampleCols <- paste0("'norm_counts_", sort(dfTemp2$sample.id), "_TPM'"),
+                        sampleCols <- paste0("'norm_counts_", sort(dfTemp2$sample.id), "'"),
                         collapse = ","
                     ),
 
@@ -9172,10 +9172,10 @@ createSettingsJSON <- function(
                 sample_groupList[[sampleGroupVec[j]]] = list(
                     "timepoint" = timepointVec[j],
                     "sampleDbCols" = list(
-                        paste0(
-                            sampleCols <- paste0("'norm_counts_", sort(dfTemp2$sample.id), "_TPM'"),
-                            collapse = ","
-                        )
+                        #paste0(
+                           paste0("norm_counts_", sort(dfTemp2$sample.id))
+                        #    collapse = ","
+                        #)
                     )
                 )
                 
