@@ -3043,7 +3043,7 @@ setGeneric(
                 addCols <- gsub(" ", "", addCols)
                 addCols <- addCols[addCols != "condition"]
 
-                selCols <- c("sample.id", as.vector(dfDGE[i,"comparisonID"]), addCols,"sample.group")
+                selCols <- unique(c("sample.id", as.vector(dfDGE[i,"comparisonID"]), addCols,"sample.group"))
 
                 colData = unique(obj@dfDesign[, selCols])
                 names(colData) <- gsub(as.vector(paste0("^",dfDGE[i,"comparisonID"], "$")), "condition", names(colData))
@@ -3064,6 +3064,8 @@ setGeneric(
 
 
                 fCols <- c("condition", addCols)
+                fCols <- fCols[fCols %in% colnames(colData)]
+                
                 for (j in 1:length(fCols)){
                     colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
                 }
