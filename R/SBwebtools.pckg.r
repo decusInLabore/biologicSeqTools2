@@ -9087,18 +9087,14 @@ createSettingsJSON <- function(
         timepointName = "Timepoint"
     ) {
         
-        tsOrder <- as.numeric(sort(unique(dfDesign[,timepointName])))
-        scriptVec <- as.vector(NULL, mode = "character")
+        ## Add dataseries timepoint column
+        dfDesign[["tsSampleGroup"]] <- paste0(dfDesign$dataseries, "_", dfDesign[,timepointName])
         
-        tsList <- list()
-        tsList[["timecourse_chart"]] <- list(
-            "timepoint_name" = "Day",
-            "display_median" = "calculate_median",
-            "timepoint_array" = list(
-                paste(tsOrder, collapse = ",")
-            )
-            
-        )
+        tsOrder <- as.numeric(sort(unique(dfDesign[,timepointName])))
+        # scriptVec <- as.vector(NULL, mode = "character")
+        
+        
+        
         
         # scriptVec <- c(
         #     scriptVec,
@@ -9142,12 +9138,14 @@ createSettingsJSON <- function(
         
         for (i in 1:length(dataseriesVec)){
             dfTemp <- unique(
-                dfDesign[dfDesign$dataseries == dataseriesVec[i], c("sample.id", "dataseries", "sample.group", timepointName)]
+                dfDesign[dfDesign$dataseries == dataseriesVec[i], c("sample.id", "dataseries", "sample.group", timepointName, "tsSampleGroup")]
             )
             
             dfTemp <- dfTemp[order(dfTemp[,timepointName], decreasing = F),]
             timepointVec <- unique(dfTemp[,timepointName])
-            sampleGroupVec <- unique(dfTemp$sample.group)
+            
+            
+            sampleGroupVec <- unique(dfTemp[,"tsSampleGroup"])
             
             datasetsList[[dataseriesVec[i]]] <- list(
                 'color' = dataseriesColVec[i]
@@ -9163,20 +9161,22 @@ createSettingsJSON <- function(
             sample_groupList <- list()
             
             for (j in 1:length(sampleGroupVec)){
-                dfTemp3 <- unique(dfDesign[dfDesign$sample.group %in% sampleGroupVec, c(timepointName, "sample.group")])
+                dfTemp3 <- unique(dfDesign[dfDesign$tsSampleGroup %in% sampleGroupVec, c(timepointName,  "tsSampleGroup")])
                 dfTemp3 <- dfTemp3[order(dfTemp3[,timepointName], decreasing = F),]
+                
+                
                 timepointVec <- as.numeric(dfTemp3[,timepointName])
                 
-                dfTemp2 <- unique(dfTemp[dfTemp$sample.group == sampleGroupVec[j],])
+                dfTemp2 <- unique(dfTemp[dfTemp$tsSampleGroup == sampleGroupVec[j],])
                 
                 sample_groupList[[sampleGroupVec[j]]] = list(
                     "timepoint" = timepointVec[j],
-                    "sampleDbCols" = list(
+                    "sampleDbCols" =  paste0("norm_counts_", sort(dfTemp2$sample.id)) #list(
                         #paste0(
-                           paste0("norm_counts_", sort(dfTemp2$sample.id))
+                           
                         #    collapse = ","
                         #)
-                    )
+                    #)
                 )
                 
                 
@@ -9186,8 +9186,16 @@ createSettingsJSON <- function(
             #scriptVec[length(scriptVec)] <- gsub(")),", ")))),",scriptVec[length(scriptVec)])
         }
         
+        tsList <- list()
+        tsList <- list(
+            "timepoint_name" = "Day",
+            "display_median" = "calculate_median",
+            "timepoint_array" = tsOrder,
+            "datasets" = datasetsList
+        )
+        
         #scriptVec[length(scriptVec)] <- gsub(",", ")),",scriptVec[length(scriptVec)])
-        tsList[["datasets"]] = datasetsList
+        #tsList[["datasets"]] = datasetsList
         
         
         
