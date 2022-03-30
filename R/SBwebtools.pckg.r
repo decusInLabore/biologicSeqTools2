@@ -9043,7 +9043,7 @@ createSettingsFile <- function(
 #' @title createSettingsJSON
 #'
 #' @description Method description
-#' @param agree TBD
+#' @param samplesToExcludeFromTSdisplay Sample names, as presented in dfDesign$sample.id, that are to be excluded from the timeseries display.
 #' @keywords TBD
 #' @export
 #' @import jsonlite
@@ -9076,7 +9076,8 @@ createSettingsJSON <- function(
     project_id = "project_id",
     primDataTable = "p123_rna_seq_table",
     pcaDbTable = NULL,
-    pointer = "Gene Symbol:"
+    pointer = "Gene Symbol:",
+    samplesToExcludeFromTSdisplay = NULL
 ){
     
     
@@ -9084,9 +9085,16 @@ createSettingsJSON <- function(
     ## Create timecourse string from dfDesign                                    ##
     createTSparams <- function(
         dfDesign = Obio@dfDesign,
-        timepointName = "Timepoint"
+        timepointName = "Timepoint",
+        samplesToExcludeFromTSdisplay = NULL
     ) {
         
+        if (!is.null(samplesToExcludeFromTSdisplay)){
+            samplesToExcludeFromTSdisplay <- samplesToExcludeFromTSdisplay[samplesToExcludeFromTSdisplay %in% dfDesign$sample.id]
+            if (length(samplesToExcludeFromTSdisplay) > 0){
+                dfDesign <- dfDesign[!(dfDesign$sample.id %in% samplesToExcludeFromTSdisplay),]
+            }
+        }
         ## Add dataseries timepoint column
         dfDesign[["tsSampleGroup"]] <- paste0(dfDesign$dataseries, "_", dfDesign[,timepointName])
         
