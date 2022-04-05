@@ -3052,7 +3052,7 @@ setGeneric(
 
 
 
-                if (!as.vector(dfDGE[i,"normalizeAllSamplesTogether"])) {
+                if (!as.logical(dfDGE[i,"normalizeAllSamplesTogether"])) {
                     colData = droplevels(data.frame(colData[colData$condition != "",]))
                     colData <- colData[order(colData$condition),]
                 } else {
@@ -3091,7 +3091,7 @@ setGeneric(
                 contrast.vector = append("condition", contrasts)
                 colName = paste(contrasts, collapse = "_vs_")
 
-                if (as.vector(dfDGE[i,"normalizeAllSamplesTogether"])) {
+                if (as.logical(dfDGE[i,"normalizeAllSamplesTogether"])) {
                     raw.counts.temp = obj@RSEMcountMatrix
                 } else {
                     raw.counts.temp = obj@RSEMcountMatrix[,rownames(colData)]
