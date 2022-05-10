@@ -29,11 +29,12 @@ createSettingsJSON(
   project_id = "project_id",
   primDataTable = "p123_rna_seq_table",
   pcaDbTable = NULL,
-  pointer = "Gene Symbol:"
+  pointer = "Gene Symbol:",
+  samplesToExcludeFromTSdisplay = NULL
 )
 }
 \arguments{
-\item{agree}{TBD}
+\item{samplesToExcludeFromTSdisplay}{Sample names, as presented in dfDesign$sample.id, that are to be excluded from the timeseries display.}
 }
 \description{
 Method description

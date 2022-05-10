@@ -2,7 +2,7 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{createDdsObject}
 \alias{createDdsObject}
-\title{A method}
+\title{createDdsObject}
 \usage{
 createDdsObject(obj)
 }

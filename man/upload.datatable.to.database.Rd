@@ -28,7 +28,8 @@ upload.datatable.to.database(
   startOnlyWithConnectionCount1 = FALSE,
   cols2Index = NULL,
   indexName = NULL,
-  mode = "MySQL"
+  mode = "MySQL",
+  addRowNamesColumn = TRUE
 )
 }
 \arguments{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{DGEanalysis}
 \alias{DGEanalysis}
-\title{A method}
+\title{DGEanalysis}
 \usage{
 DGEanalysis(obj, createNewResultTable = TRUE)
 }

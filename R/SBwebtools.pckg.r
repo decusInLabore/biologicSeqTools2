@@ -13319,3 +13319,456 @@ createExcelWorkbook <- function(
 ## End: Create Excel Workbook                                                ##
 ###############################################################################
 
+###############################################################################
+## assembleBiologicProject                                                   ##
+
+
+#' @title assembleBiologicProject
+#'
+#' @description This function creates a settings file for a biologic data visualization project.
+#' @param excelList A list of dataframes
+#' @param outPutFN A output filepath/filename
+#' @param designFN Path to a design file. 
+#' @param modelFN Path to DGE model file
+#' @param NFcoreSettingsFN Path to NF core settings file.
+#' @param countTableFN Path to count table
+#' @param TpmTableFN Path to TPM table
+#' @param dfPcaFN Path to PCA table
+#' @param mostVariableFeaturesFN Path to most variable featurs file
+#' @param calculate_DGE If DGE instructions are present in the desing file, calculate
+#' @param calculate_LRT If LRT instructions are present in the desing file, calculate
+#' @param DEseq2External_DGE Folder in which external res(dds) results are kept 
+#' @param DEseq2External_LRT Folder in which external res(dds) results are kept
+#' @param projectFolder Path to project folder
+#' @param experiment_id Experiment ID
+#' @param title
+#' @param subtitle
+#' @param abstract
+#' @param project_name
+#' @param lims.id LIMS ID to retrieve meta data
+#' @param labname Labname
+#' @param NtopGenes Ntopgenes to use for PCA
+#' @param corGeneVec Vector with genes to calculate correlations for
+#' @param experiment.type Experiment type:  options: "bulk_rna_seq", "sc_rna_seq", "mi_rna_seq"
+#' @param species Species. Options: "homo_sapiens", "mus_musculus", "drosophila_melongaster", "daniero_rerio"
+#' @param release Ensembl release used for annotations. Option: "release-89",
+#' @param count.table.headline String to be displayed in count table headlines
+#' @param count.table.sidelabel String to be displayed as count table sidelabel
+#' @param heatmap.headline.text Heatmap headline text
+#' @param designTScol Column name of a numeric column in the design file
+#' @param timecourse.units Timecourse units
+#' @param primDataDB Primary database
+#' @param db.user Database username
+#' @param host Database host IP
+#' @param lab.categories.table Lab categories table
+#' @param HGtestEnrichmentGmtFile 
+#' @param GSEAtestEnrichmentGmtFile
+#' @param pathToSeqStorageFolder
+#' @param stranded 
+#' @param read.length 
+#' @param paired.end 
+#' @param pathToRSEMresultsFiles 
+#' @param dfRef 
+#' @export
+#'
+
+assembleBiologicProject <- function(
+    designFN = NULL,
+    modelFN = NULL,
+    NFcoreSettingsFN = NULL,
+    countTableFN = NULL,
+    TpmTableFN = NULL,
+    dfPcaFN = NULL,
+    mostVariableFeaturesFN = NULL,
+    calculate_DGE = TRUE,
+    calculate_LRT = TRUE,
+    DEseq2External_DGE = NULL,
+    DEseq2External_LRT = NULL,
+    projectFolder = NULL,
+    experiment_id = NULL,
+    title = NULL,
+    subtitle = NULL,
+    abstract = NULL,
+    project_name = NULL,
+    lims.id = NULL,
+    labname = NULL,
+    NtopGenes = NULL,
+    corGeneVec = NULL,
+    experiment.type = NULL,
+    species = NULL,
+    release = "release-89",
+    count.table.headline = "TPM-values for all Samples",
+    count.table.sidelabel = "TPM",
+    heatmap.headline.text = "Heatmap: Row-averaged Expr",
+    designTScol = NULL,
+    timecourse.units = NULL,
+    primDataDB = NULL,
+    db.user = NULL,
+    host = NULL,
+    lab.categories.table = NULL,
+    HGtestEnrichmentGmtFile = NULL,
+    GSEAtestEnrichmentGmtFile = NULL,
+    pathToSeqStorageFolder = NULL,
+    stranded = FALSE,
+    read.length = "100bp",
+    paired.end = FALSE,
+    pathToRSEMresultsFiles = NULL,
+    dfRef = NULL
+){
+    ## This function assembles the pipelinelist ##
+    pipelineList <- list()
+    
+    ## Make sure final character is a slash
+    lastChr <- substr(projectFolder, nchar(projectFolder), nchar(projectFolder))
+    if (lastChr != "/"){
+        projectFolder <- paste0(projectFolder, "/")
+    }
+    
+    pipelineList[["folder"]] <- projectFolder
+    
+    ## Path were the biologic spec file will be kept: ##
+    ## Default setting:
+    pipelineList[["biologicSettingsFN"]] <- paste0(pipelineList[["folder"]], "workdir/bulkRNAseq_workflow/design/biologic.settings.file.csv")
+    
+    ## Project parameters                       ##
+    ## This will be the name of the web project ##
+    pipelineList[["project_id"]] <- experiment_id
+    
+    ## The LIMS ID will be used to retrieve project information
+    pipelineList[["lims.id"]] <- "RN21220"
+    
+    ## This is the lab name ##
+    pipelineList[["labname"]] <- "Gould"
+    
+    ## This is the project under which this experiment will be organised in the db
+    ## The project is the umbrella under which several experiments around a similar
+    ## topic are organised. 
+    ## If a project name exists, this new experiment will be added to that umbrella
+    ## project. If the project does not exists, it will be created. 
+    
+    pipelineList[["project_name"]] <- "Drosophila Nervous System Development"
+    
+    ## Parameters for the experiment
+    ## If the parameters title, subtitle and abstract are set to NULL, 
+    ## they'll be filled automatically based on the LIMS ID
+    pipelineList[["Documentation Parameter"]] <- ""
+    pipelineList[["title"]] <- title
+    pipelineList[["subtitle"]] <- subtitle
+    pipelineList[["abstract"]] <- abstract
+    
+    ## Mumber of genes to consider as most variable ##
+    pipelineList[["NtopGenes"]] <- NtopGenes
+    
+    ## Genes to calculate a correlaiton coefficient for:
+    pipelineList[["corGeneVec"]] <- corGeneVec
+    
+    # options: "bulk_rna_seq", "sc_rna_seq", "mi_rna_seq"
+    pipelineList[["experiment.type"]] <- experiment.type
+    
+    ## This should be the reference transcriptome ##
+    ## options for pipelineList[["species"]] 
+    ## "homo_sapiens", "mus_musculus", "drosophila_melongaster", "daniero_rerio"
+    pipelineList[["species"]] <- species
+    pipelineList[["release"]] <- release
+    
+    ###############################################################################
+    ## Display parameters                                                        ##
+    pipelineList[["count.table.headline"]] <- count.table.headline
+    pipelineList[["count.table.sidelabel"]] <- count.table.sidelabel
+    pipelineList[["heamap.headline.text"]] <- heatmap.headline.text
+    ##                                                                           ##
+    ###############################################################################
+    
+    ###############################################################################
+    ## Timecourse section: Set entries to NULL if not a timecourse experiment    ##
+    
+    ## designTScol entry needs to be present as column name in the design file 
+    pipelineList[["designTScol"]] <- designTScol
+    # Default setting
+    # pipelineList[["designTScol"]] <- NULL
+    
+    #pipelineList[["timecourse.units"]] <- "Embryonic Day"
+    ## Default: pipelineList[["timecourse.units"]] <- NULL
+    
+    pipelineList[["timecourse.units"]] <- timecourse.units
+    ## Default: 
+    #pipelineList[["timecourse.units"]] <- NULL
+    
+    ## End timecourse section                                                    ##
+    ###############################################################################
+    
+    ###############################################################################
+    ## Set database parameters                                                   ##
+    
+    ## Reference data selections
+    pipelineList[["Database Parameters	"]] <- ""
+    
+    ## Enter lab database name here
+    ## One database per lab
+    ## Naming convention: Initials of the lab head followed by l for lab
+    ## For the dimitris anastasiou lab it would be dal_data, but you can also 
+    ## chose anastasioud_data, if you prefer. 
+    
+    pipelineList[["primDataDB"]] <- primDataDB
+    
+    ## These three can be left pre-set
+    pipelineList[["ref.cat.db"]] <- "reference_categories_db_new"
+    
+    ## Default settings
+    pipelineList[["db.user"]] <- db.user
+    pipelineList[["host"]] <- host
+    
+    ## Add lab categories table, if available.
+    ## The current format for lab category tables is [lab head initials]_lab_categories
+    pipelineList[["lab.categories.table"]] <- lab.categories.table
+    ## Default if no lab database table is available
+    # pipelineList[["lab.categories.table"]] <- NULL
+    
+    ## Set additional reference tables ##
+    ## Default settings:
+    if (is.null(dfRef)){
+        dfRef <- cbind(
+            c(
+                "Hallmark Signatures",
+                "Pathways",
+                "GO-BP",
+                "GO-MF",
+                "TF Motifs",
+                "Protein Complexes",
+                "Immunologic Signatures",
+                "LINCS Down",
+                "LINCS Up",
+                "Cell Type Signatures",
+                "Cell Type Signatures"
+            ),
+            c(
+                "mysigdb_h_hallmarks",
+                "mysigdb_c2_1329_canonical_pathways",
+                "mysigdb_c5_BP",
+                "mysigdb_c5_MF",
+                "TRANSFAC_and_JASPAR_PWMs",
+                "networkcategories",
+                "mysigdb_c7_immunologic_signatures",
+                "LINCS_L1000_Chem_Pert_down",
+                "LINCS_L1000_Chem_Pert_up",
+                "mysigdb_sc_sig",
+                "cibersort_L22"
+            )
+        )
+    }
+    
+    dfRef <- cbind(
+        rep("referenceTableListDB", nrow(dfRef)),
+        dfRef
+    )
+    
+    
+    
+    pipelineList[["ReferenceTable"]] <- dfRef
+    
+    ## Parameters that might be set automatically at the Crick, when information
+    # is available via asf. 
+    
+    ###############################################################################
+    ## Specify GSEA and HG gmt enrichment files                                  ##
+    ## gmt files are assumed to be in human nomanclature                         ##
+    pipelineList[["HGtestEnrichmentGmtFile"]] <- HGtestEnrichmentGmtFile
+    
+    pipelineList[["GSEAtestEnrichmentGmtFile"]] <- GSEAtestEnrichmentGmtFile
+    
+    ##                                                                           ##
+    ###############################################################################
+    
+    pipelineList[["designFN"]] <- designFN
+    
+    pipelineList[["modelFN"]] <- modelFN
+    
+    pipelineList[["NFcoreSettingsFN"]] <- NFcoreSettingsFN
+    
+    
+    ## Specify the folders in which FASTQ sequencing files are located
+    ## If specified, make sure that pathToSeqStorageFolder has a backslash at the end
+    pipelineList[["pathToSeqStorageFolder"]] <- pathToSeqStorageFolder
+    
+    ## Default setting if no alignment is required:
+    # pipelineList[["pathToSeqStorageFolder"]] <- NULL
+    pipelineList[["stranded"]] <- stranded
+    pipelineList[["read.length"]] =  read.length
+    
+    ## Legacy Alignment parameters ##
+    
+    pipelineList[["paired.end"]] <- paired.end
+    pipelineList[["scriptVec"]] <- as.vector(NULL, mode="character")
+    pipelineList[["AlignFASTQcolumn"]] <- "sample.id"
+    
+    pipelineList[["ModuleFASTQC"]] = "module load FastQC/0.11.5-Java-1.8.0_92"
+    pipelineList[["ModuleTrimGalore"]] = "Trim_Galore/0.4.2-foss-2016b"
+    pipelineList[["TrimGaloreMinLength"]] = 25
+    pipelineList[["TrimGaloreMinQuality"]] = 20
+    
+    
+    ###############################################################################
+    ## End sequencig section                                                     ##
+    ###############################################################################
+    
+    ###############################################################################
+    ## Add path to RSEM count file                                               ##
+    
+    pipelineList[["pathToRSEMresultsFiles"]] <- pathToRSEMresultsFiles
+    
+    
+    
+    pipelineList[["countTableFN"]] <- countTableFN
+    
+    pipelineList[["TpmTableFN"]]  <- TpmTableFN
+    
+    pipelineList[["dfPCA"]]  <- dfPcaFN
+    
+    pipelineList[["mostVariableFeaturesFN"]] <- mostVariableFeaturesFN
+    
+    pipelineList[["DEseq2External_DGE"]]  <- DEseq2External_DGE
+    pipelineList[["DEseq2External_LRT"]]  <- DEseq2External_LRT
+    
+    ## Set to false if no DGE results specified in the design file are to be 
+    # calculated.
+    pipelineList[["calculate_DGE"]] <- calculate_DGE
+    pipelineList[["calculate_LRT"]] <- calculate_LRT
+    
+    ###############################################################################
+    ## Create parameter File                                                     ##
+    
+    ## To create pipelineJSON, remove reference list ##
+    dfRefTab <- data.frame(pipelineList[["ReferenceTable"]])
+    
+    #pipelineList[["ReferenceTable"]] <- NULL
+    
+    #pipelineJson <- jsonlite::toJSON(pipelineList)
+    
+    
+    maxLength <- max(unlist(lapply(pipelineList, length))) + 1
+    
+    if (maxLength <= 3){
+        maxLength  <- 3
+    }
+    
+    for (i in 1:length(pipelineList)){
+        newRow <- c(
+            names(pipelineList)[i], 
+            pipelineList[[i]]
+        )
+        
+        if (length(newRow) < maxLength){
+            newRow <- c(
+                newRow, 
+                rep("", maxLength - length(newRow))
+            )
+            
+        }
+        
+        if (i == 1){
+            dfObio <- data.frame(t(newRow))
+        } else {
+            dfObio <- rbind(
+                dfObio,
+                data.frame(t(newRow))
+            )
+        }
+        
+    }
+    
+    
+    
+    
+    if (ncol(dfRefTab) < maxLength){
+        addCols <- maxLength - ncol(dfRefTab)
+        
+        for (j in 1:addCols){
+            dfRefTab <- cbind(
+                dfRefTab,
+                rep("", nrow(dfRefTab))
+            )
+        }
+        
+    }
+    
+    dfRefTab <- data.frame(dfRefTab)
+    names(dfRefTab) <- names(dfObio)
+    
+    
+    dfObio <- dplyr::bind_rows(dfObio, dfRefTab)
+    dfObio[is.na(dfObio)] <- ""
+    
+    
+    write.table(dfObio, pipelineList[["biologicSettingsFN"]]  , row.names=FALSE, col.names=FALSE, sep=",")
+    
+    print(paste0("Check settings file ", pipelineList[["biologicSettingsFN"]], " for accuracy."))
+    
+    return(pipelineList)
+    
+}
+## End: assembleBiologicProject                                              ##
+###############################################################################
+
+###############################################################################
+## (7c) createbulkRNASeqAnalysisNFcoreScript                                 ##
+#' @title createbulkRNASeqAnalysisNFcoreScript 
+#'
+#' @description Creates NF-core script
+#' @param obj Biologic Object
+#' @param NFcoreSettingsFN Path for NF core settings file
+#' @param scriptVecSlot Script vector slot
+#' @export
+#'
+#'
+createbulkRNASeqAnalysisNFcoreScript <- function(
+    obj = "biologic object",
+    NFcoreSettingsFN = "path/to/NF/core/settings",
+    scriptVecSlot = "scriptVec"
+    
+){
+    tempShellScriptVector <- as.vector(NULL, mode = "character")
+    tempShellScriptVector <- c(
+        tempShellScriptVector,
+        "###############################################################################",
+        "\n",
+        "## Creating NF-core bulk RNA-Seq cript                                       ##",
+        "\n",
+        "module purge",
+        "module load Nextflow/21.10.3",
+        "module load Singularity/3.6.4",
+        "",
+        "export NXF_WORK=`echo $PWD/work/ | sed 's:^/camp/stp/babs/working/:/camp/stp/babs/scratch/:'`",
+        "if [ ! -d '$NXF_WORK' ]; then",
+        "    ln -s $NXF_WORK .",
+        "fi",
+        "export NXF_SINGULARITY_CACHEDIR=/camp/apps/misc/stp/babs/nf-core/singularity/rnaseq/3.6/",
+        "",
+        "sbatch --time=12:00:00 --wrap ' \\",
+        "nextflow run nf-core/rnaseq \\",
+        "-r 3.6 \\",
+        paste0("--input ", NFcoreSettingsFN, " \\"),
+        paste0("--outdir ", obj@parameterList$localWorkDir, " \\"),
+        "-profile crick \\",
+        "--aligner star_rsem \\",
+        paste0("--rsem_index ", gsub("/genome$", "", obj@parameterList$genomeIndex), " \\"),
+        "--email stefan.boeing@crick.ac.uk \\",
+        paste0("--fasta ", obj@parameterList$genomeFa, " \\"),
+        paste0("--gtf ", obj@parameterList$GTFfile, " \\"),
+        paste0("' --job-name=NFCR_",
+               obj@parameterList$project_id, " -c 12 --mem-per-cpu=7000 -o NFC.slurm"
+        )
+    )
+    
+    sink(paste0(pipelineList$localWorkDir, "nf.core.script.sh"))
+    
+    scriptVec <- tempShellScriptVector
+    for (i in 1:length(scriptVec)){
+        cat(scriptVec[i])
+        cat("\n")
+    }
+    
+    sink()
+}
+
+## Done
+##########################################
