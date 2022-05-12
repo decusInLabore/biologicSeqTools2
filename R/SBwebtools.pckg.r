@@ -13435,10 +13435,10 @@ assembleBiologicProject <- function(
     pipelineList[["project_id"]] <- experiment_id
     
     ## The LIMS ID will be used to retrieve project information
-    pipelineList[["lims.id"]] <- "RN21220"
+    pipelineList[["lims.id"]] <- lims.id
     
     ## This is the lab name ##
-    pipelineList[["labname"]] <- "Gould"
+    pipelineList[["labname"]] <- labname
     
     ## This is the project under which this experiment will be organised in the db
     ## The project is the umbrella under which several experiments around a similar
@@ -13446,7 +13446,7 @@ assembleBiologicProject <- function(
     ## If a project name exists, this new experiment will be added to that umbrella
     ## project. If the project does not exists, it will be created. 
     
-    pipelineList[["project_name"]] <- "Drosophila Nervous System Development"
+    pipelineList[["project_name"]] <- project_name
     
     ## Parameters for the experiment
     ## If the parameters title, subtitle and abstract are set to NULL, 
