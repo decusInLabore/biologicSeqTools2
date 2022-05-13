@@ -9038,6 +9038,86 @@ createSettingsFile <- function(
 ## End: createSettingsFile()                                                 ##
 ###############################################################################
 
+###############################################################################
+## Identify samples to exclude from TS display                              ##
+#' @title sampleToExcludeFromTSdisplay
+#' @description This function identifies samples that need to be dropped from a timecoures display
+#' @param  Obio An Obio object
+#' @param  designTScol timeseries column
+#' 
+#' @export
+#'
+#'
+
+samplesToExcludeFromTSdisplay <- function(
+    Obio,
+    designTScol = "timepointName"
+){
+    
+    ## Goal: Find all samples that have incomplete time series
+    
+    ## Step 1:
+    ## Make a list for each timepoint
+    
+    dataseries <- unique(Obio@dfDesign$dataseries)
+    
+    timepointList <- list()
+    
+    for (i in 1:length(dataseries)){
+        timepoints <- as.vector(sort(unique(Obio@dfDesign[Obio@dfDesign$dataseries == dataseries[i], designTScol])))
+        timepointList[[dataseries[i]]] <- timepoints
+    }
+    
+    ## Step 2: Remove all dataseries with less than half of the timepoints
+    ## Idea: remove all dataseries that are only represented in a few timepoints
+    ## altogher
+    
+    maxLength <- max(unlist(lapply(timepointList, function(x) max(length(x)))))
+    halfLength <- round(maxLength/2)
+    
+    keepVec <- names(lapply(timepointList, function(x) length(x) >= halfLength))
+    timepointList[keepVec]
+    
+    
+    
+    ## Step 2 
+    ## Identify incomplete timeseries and remove those timepoints
+    
+    ## Get all timepoints across all lists ##
+    allTimepoints <- sort(unique(unlist(timepointList)))
+    
+    ## Identify timepoints that are not present in all lists ##
+    missing <- as.vector(NULL, mode="numeric")
+    for (i in 1:length(timepointList)){
+        missing <- c(
+            missing,
+            timepointList[[i]][!(allTimepoints %in% timepointList[[i]])]
+        )
+        
+    }
+    
+    ## Define samples to samplesToExcludeFromTSdisplay
+    dfDisplay <- Obio@dfDesign
+    dfDisplay <- dfDisplay[dfDisplay$dataseries %in% names(timepointList),]
+    if (length(missing) > 0){
+        dfDisplay <- dfDisplay[!(dfDisplay[,designTScol] %in% missing),]
+    }
+    
+    displaySampleIDs <- unique(dfDisplay$sample.id)
+    excludeSampleIDs <- unique(dfDesign$sample.id[!(dfDesign$sample.id %in% displaySampleIDs)])
+    
+    if (length(excludeSampleIDs) == 0){
+        excludeSampleIDs = NULL
+    }
+    
+    ## Done                                                                      ##
+    ###############################################################################
+    return(excludeSampleIDs)
+}
+
+## End: samples to exclude from TS display                                   ##
+###############################################################################
+
 ##############################################################################
 ## (2C) createSettingsJSON()                                                ##
 #' @title createSettingsJSON
