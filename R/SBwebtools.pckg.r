@@ -9104,7 +9104,7 @@ samplesToExcludeFromTSdisplay <- function(
     }
     
     displaySampleIDs <- unique(dfDisplay$sample.id)
-    excludeSampleIDs <- unique(dfDesign$sample.id[!(dfDesign$sample.id %in% displaySampleIDs)])
+    excludeSampleIDs <- unique(Obio@dfDesign$sample.id[!(Obio@dfDesign$sample.id %in% displaySampleIDs)])
     
     if (length(excludeSampleIDs) == 0){
         excludeSampleIDs = NULL
