@@ -16,9 +16,19 @@ doQuery(
 )
 }
 \arguments{
-\item{user}{}
+\item{user}{Database username}
 
-\item{password}{}
+\item{password}{Database password}
+
+\item{host}{Host URL}
+
+\item{dbname}{Databasename}
+
+\item{query}{Query}
+
+\item{resOut}{resOut}
+
+\item{geneDefault}{Default gene}
 
 \item{This}{can be MySQL or SQLite}
 }

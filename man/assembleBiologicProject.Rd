@@ -75,6 +75,14 @@ assembleBiologicProject(
 
 \item{experiment_id}{Experiment ID}
 
+\item{title}{Experiment title}
+
+\item{subtitle}{Experiment subtitle - usually labnane - lead scientis}
+
+\item{abstract}{Abstract}
+
+\item{project_name}{Project name}
+
 \item{lims.id}{LIMS ID to retrieve meta data}
 
 \item{labname}{Labname}
@@ -107,17 +115,21 @@ assembleBiologicProject(
 
 \item{lab.categories.table}{Lab categories table}
 
-\item{HGtestEnrichmentGmtFile}{}
+\item{HGtestEnrichmentGmtFile}{HGtestEnrichmentGmtFile}
 
-\item{stranded}{}
+\item{GSEAtestEnrichmentGmtFile}{GSEAtestEnrichmentGmtFile}
 
-\item{read.length}{}
+\item{pathToSeqStorageFolder}{Vector of paths to folders to Crick sequencing storage. Make sure the last character is a /}
 
-\item{paired.end}{}
+\item{stranded}{Boolean}
 
-\item{pathToRSEMresultsFiles}{}
+\item{read.length}{default 100bp}
 
-\item{dfRef}{}
+\item{paired.end}{Boolean}
+
+\item{pathToRSEMresultsFiles}{pathToRSEMresultsFiles}
+
+\item{dfRef}{Dataframe for reference files}
 
 \item{excelList}{A list of dataframes}
 
