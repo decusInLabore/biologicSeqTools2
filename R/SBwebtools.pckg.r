@@ -8751,7 +8751,7 @@ createSettingsFile <- function(
 
     if (sample.names[1] == "" | is.na(sample.names[1])){
         sample.names <- gsub("norm_counts_", "", sample.order)
-        sample.names <- gsub("_", " ", sample.names)
+        sample.names <- gsub("__", "_", sample.names)
     }
     
     
@@ -8898,7 +8898,7 @@ createSettingsFile <- function(
         Vname <- vennCols[i]
         Vname <- substr(Vname ,11,100)
         Vname <- gsub("^_", "", Vname)
-        Vname <- gsub("_", " ", Vname)
+        Vname <- gsub("__", "_", Vname)
 
         if (is.numeric(colMax) & is.numeric(colMin)){
             settingsPhpVec <- c(
@@ -8970,7 +8970,7 @@ createSettingsFile <- function(
             Sname <- scatterCols[i]
             Sname <- substr(Sname ,11,100)
             Sname <- gsub("^_", "", Sname)
-            Sname <- gsub("_", " ", Sname)
+            Sname <- gsub("__", "_", Sname)
 
             settingsPhpVec <- c(
                 settingsPhpVec,
@@ -9044,7 +9044,6 @@ createSettingsFile <- function(
 #' @description This function identifies samples that need to be dropped from a timecoures display
 #' @param  Obio An Obio object
 #' @param  designTScol timeseries column
-#' 
 #' @export
 #'
 #'
@@ -9319,7 +9318,7 @@ createSettingsJSON <- function(
     
     if (sample.names[1] == "" | is.na(sample.names[1])){
         sample.names <- gsub("norm_counts_", "", sample.order)
-        sample.names <- gsub("_", " ", sample.names)
+        sample.names <- gsub("__", "_", sample.names)
     }
     
     jsonList[["lab"]] <- list(
@@ -9429,7 +9428,7 @@ createSettingsJSON <- function(
         Vname <- vennCols[i]
         Vname <- substr(Vname ,11,100)
         Vname <- gsub("^_", "", Vname)
-        Vname <- gsub("_", " ", Vname)
+        Vname <- gsub("__", "_", Vname)
         
         if (is.numeric(colMax) & is.numeric(colMin)){
             selectionList[[vennCols[i]]] <- list(
@@ -9494,7 +9493,7 @@ createSettingsJSON <- function(
             Sname <- scatterCols[i]
             Sname <- substr(Sname ,11,100)
             Sname <- gsub("^_", "", Sname)
-            Sname <- gsub("_", " ", Sname)
+            Sname <- gsub("__", "_", Sname)
             selectionList[[scatterCols[i]]] <- list(
                 "name" = Sname
             )
@@ -9573,7 +9572,7 @@ createSeuratSettingsFile <- function(
 
     if (sample.names[1] == "" | is.na(sample.names[1])){
         sample.names <- gsub("norm_counts_", "", sample.order)
-        sample.names <- gsub("_", " ", sample.names)
+        sample.names <- gsub("__", "_", sample.names)
     }
 
     settingsPhpVec <- c(
@@ -9685,7 +9684,7 @@ createSeuratSettingsFile <- function(
         Vname <- vennCols[i]
         Vname <- substr(Vname ,11,100)
         Vname <- gsub("^_", "", Vname)
-        Vname <- gsub("_", " ", Vname)
+        Vname <- gsub("__", "_", Vname)
 
         if (is.numeric(colMax) & is.numeric(colMin)){
             settingsPhpVec <- c(
@@ -9757,7 +9756,7 @@ createSeuratSettingsFile <- function(
             Sname <- scatterCols[i]
             Sname <- substr(Sname ,11,100)
             Sname <- gsub("^_", "", Sname)
-            Sname <- gsub("_", " ", Sname)
+            Sname <- gsub("__", "_", Sname)
 
             settingsPhpVec <- c(
                 settingsPhpVec,
@@ -12579,7 +12578,7 @@ setGeneric(
         chnkVec <- as.vector(NULL, mode = "character")
         for (i in 1:length(catEnrichmentList)){
             catName <- names(catEnrichmentList)[i]
-            catNameString <- gsub("_", " ", names(catEnrichmentList)[i])
+            catNameString <- gsub("__", "_", names(catEnrichmentList)[i])
 
             dfEnr <- catEnrichmentList[[i]]
             dfEnr[["lg10p"]] <- -1*log10(dfEnr$p.adjust)
@@ -12622,7 +12621,7 @@ setGeneric(
                 axis.line = element_line(colour = "black"),
                 panel.border = element_rect(colour = "black", fill=NA, size=1),
                 plot.title = element_text(hjust = 0.5, size = 12)
-            ) + labs(title = paste0(gsub("_", " ", tag)," enriched genes") ,y = "-log10(padj)", x = ""
+            ) + labs(title = paste0(gsub("__", "_", tag)," enriched genes") ,y = "-log10(padj)", x = ""
             ) + geom_hline(yintercept = 0, color = "black", size=0.5
             ) + theme_bw()
 
@@ -12655,7 +12654,7 @@ setGeneric(
             figureCount <- figureCount + 1
 
             NewChnk <- paste0(
-                "#### ", gsub("_", " ", tag),
+                "#### ", gsub("__", "_", tag),
                 "\n```{r enrichr_", tag, ", results='asis', echo=F, eval=TRUE, warning=FALSE, fig.cap='",
                 figLegend,"'}\n",
                 "\n",
@@ -13275,13 +13274,13 @@ uploadDbTableInfile <- function(
 #' @title doQuery
 #'
 #'
-#' @param user 
-#' @param password 
-#' @param host
-#' @param dbname
-#' @param query
-#' @param resOut
-#' @param geneDefault
+#' @param user Database username
+#' @param password Database password
+#' @param host Host URL
+#' @param dbname Databasename
+#' @param query Query
+#' @param resOut resOut
+#' @param geneDefault Default gene
 #' @param This can be MySQL or SQLite
 #' @import RMySQL
 #' @import DBI
@@ -13421,10 +13420,10 @@ createExcelWorkbook <- function(
 #' @param DEseq2External_LRT Folder in which external res(dds) results are kept
 #' @param projectFolder Path to project folder
 #' @param experiment_id Experiment ID
-#' @param title
-#' @param subtitle
-#' @param abstract
-#' @param project_name
+#' @param title Experiment title
+#' @param subtitle Experiment subtitle - usually labnane - lead scientis
+#' @param abstract Abstract
+#' @param project_name Project name
 #' @param lims.id LIMS ID to retrieve meta data
 #' @param labname Labname
 #' @param NtopGenes Ntopgenes to use for PCA
@@ -13441,14 +13440,14 @@ createExcelWorkbook <- function(
 #' @param db.user Database username
 #' @param host Database host IP
 #' @param lab.categories.table Lab categories table
-#' @param HGtestEnrichmentGmtFile 
-#' @param GSEAtestEnrichmentGmtFile
-#' @param pathToSeqStorageFolder
-#' @param stranded 
-#' @param read.length 
-#' @param paired.end 
-#' @param pathToRSEMresultsFiles 
-#' @param dfRef 
+#' @param HGtestEnrichmentGmtFile HGtestEnrichmentGmtFile 
+#' @param GSEAtestEnrichmentGmtFile GSEAtestEnrichmentGmtFile
+#' @param pathToSeqStorageFolder Vector of paths to folders to Crick sequencing storage. Make sure the last character is a /
+#' @param stranded Boolean
+#' @param read.length default 100bp
+#' @param paired.end Boolean
+#' @param pathToRSEMresultsFiles pathToRSEMresultsFiles
+#' @param dfRef Dataframe for reference files
 #' @export
 #'
 
@@ -13852,3 +13851,272 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
 
 ## Done
 ##########################################
+
+###############################################################################
+## Function loadDESeq2outputFromFile                                         ##
+
+
+#' @title loadDESeq2outputFromFile 
+#'
+#' @description This function creates a settings file for a biologic data visualization project.
+#' @param Obio biologic object
+#' @param DEseq2resultDir Path to DEseq2 results(dds) output directory. Make sure the last character is a /
+#' @param mode LRT or DGE
+#' @return Obio
+#' @export
+#' 
+############################################################
+## Function load DGE results from file
+loadDESeq2outputFromFile <- function(
+    Obio,
+    DEseq2resultDir = "Obio@parameterList$DEseq2External_DGE",
+    replace = FALSE,
+    mode = NULL # Can be DGE or LRT
+){
+    
+    if (is.null(mode)){
+        if (DEseq2resultDir == "DEseq2External_LRT"){
+            mode = "LRT"
+        } else {
+            mode = "DGE"
+        }
+    }
+    
+    allfiles <- paste0(DEseq2resultDir, "/", list.files(DEseq2resultDir))
+    allfiles <- allfiles[grep(".txt", allfiles)]
+    allfiles <- gsub("//", "/", allfiles)
+    contrastNames <- gsub(gsub("//", "/", paste0(DEseq2resultDir, "/")), "", allfiles)
+    contrastNames <- gsub(".txt", "", contrastNames)
+    ###############################################################################
+    ## For this project only: Add ENSMUSG column                                 ##
+    dfAnno <- Obio@dfGeneAnnotation
+    dfAnno <- unique(
+        Obio@dfGeneAnnotation[,c(Obio@parameterList$primaryAlignmentGeneID, Obio@parameterList$geneIDcolumn)]
+    )
+    
+    ## Done adding ENSMUSG column                                                ##
+    ###############################################################################
+    for (i in 1:length(allfiles)){
+        colName <- contrastNames[i]
+        res <- read.delim(allfiles[i], header = T, sep="\t")
+        
+        
+        ## In case gene_ids were saved in row names
+        pos <- grep("gene_id", names(res))
+        if (length(pos) == 0){
+            res[["gene_id"]] <- row.names(res)  
+        } else if (length(pos) == 1){
+            row.names(res) <- res$gene_id
+        }
+        
+        ################################
+        ## This project only 
+        
+        
+        selVec <- c("gene_id", "baseMean", "log2FoldChange", "lfcSE",  "pvalue", "padj")
+        
+        if (!sum(selVec %in% names(res)) == length(selVec)){
+            stop(paste0("Check DESeq2 input files. Mandantory columns: ", paste0(selVec, collapse = ", ")))
+        }
+        
+        res <- unique(res[,selVec])
+        
+        res <- res[!(duplicated(res[,"gene_id"])),]
+        res[is.na(res)] <- 0
+        res <- res[res$baseMean > 0,]
+        res$baseMean <- log2(res$baseMean)
+        ## Done 
+        ################################
+        
+        
+        #row.names(res) <- res[,Obio@parameterList$primaryAlignmentGeneID]
+        
+        names(res) = paste(names(res), colName, sep="_")
+        names(res) <- gsub(paste0("gene_id_", colName), "gene_id", names(res))
+        names(res) <- gsub("^gene_id$", Obio@parameterList$primaryAlignmentGeneID, names(res))
+        #res[[Obio@parameterList$primaryAlignmentGeneID]] = rownames(res)
+        
+        ## log2 the base mean for lrt applications
+        
+        
+        if (mode == "DGE"){
+            names(res) = gsub("log2FoldChange", "logFC", names(res))
+            names(res) = gsub(
+                "logFC",
+                paste("contrast_D", i, "_logFC", sep=""),
+                names(res)
+            )
+            
+            names(res) = gsub(
+                "padj",
+                paste("contrast_D", i, "_padj", sep=""),
+                names(res)
+            )
+            
+            names(res) = gsub(
+                "stat",
+                paste("contrast_D", i, "_stat", sep=""),
+                names(res)
+            )
+            
+            names(res) = gsub(
+                "baseMean",
+                paste("contrast_D", i, "_lg2BaseMean", sep=""),
+                names(res)
+            )
+            
+            #Remove all rows without a padj
+            padj.col = grep("padj", names(res))[1]
+            res[,padj.col][is.na(res[,padj.col])] = ""
+            res = res[res[,padj.col] != "", ]
+            res[,padj.col] <- as.numeric(res[,padj.col])
+            
+            ## Add log10p column ##
+            padj  <- names(res)[grep("_padj_", names(res))]
+            lg10p <- gsub("padj", "lg10p", padj)
+            
+            for (z in 1:length(padj)){
+                preprocess <- as.numeric(res[,padj[z]])
+                minNum <- min(preprocess[preprocess != 0])
+                preprocess[preprocess == 0] <- minNum
+                
+                # if (length(grep("padj_LRT", padj[i])) > 0){
+                #     preprocess <- as.numeric(res[,padj[z]])
+                #     minNum <- min(preprocess[preprocess != 0])
+                #     preprocess[preprocess == 0] <- minNum
+                # } else {
+                #     preprocess <- as.numeric(res[,padj[z]])
+                # }
+                
+                temp <- -1*log10(preprocess)
+                #temp[temp >= 50] = 50
+                res[,lg10p[z]] <- temp
+            }
+            
+            col.vector = c(
+                Obio@parameterList$primaryAlignmentGeneID,
+                names(res)[grep("contrast", names(res))]
+            )
+            
+            res = res[,col.vector]
+            
+            ## Make all numeric columns numeric ##
+            res[,grep("contrast_", names(res))] <- apply(res[,grep("contrast_", names(res))], 2, as.numeric)
+        }
+        
+        if (mode == "LRT"){
+            #res[[Obio@parameterList$primaryAlignmentGeneID]] = rownames(res)
+            res$stat <- NULL
+            
+            names(res) = gsub(
+                "baseMean",
+                paste0("contrast_L_lg2BaseMean_"),
+                names(res)
+            )
+            names(res) = gsub(
+                "padj",
+                paste0("contrast_L_padj_"),
+                names(res)
+            )
+            #Remove all rows without a padj
+            padj.col = grep("padj", names(res))[1]
+            res[,padj.col][is.na(res[,padj.col])] = ""
+            res = res[res[,padj.col] != "", ]
+            res[,padj.col] <- as.numeric(res[,padj.col])
+            ## Add log10p column ##
+            padj  <- names(res)[grep("_padj_", names(res))]
+            lg10p <- gsub("padj", "lg10p", padj)
+            for (z in 1:length(padj)){
+                preprocess <- as.numeric(res[,padj[z]])
+                minNum <- min(preprocess[preprocess != 0])
+                preprocess[preprocess == 0] <- minNum
+                # if (length(grep("padj_LRT", padj[i])) > 0){
+                #     preprocess <- as.numeric(res[,padj[z]])
+                #     minNum <- min(preprocess[preprocess != 0])
+                #     preprocess[preprocess == 0] <- minNum
+                # } else {
+                #     preprocess <- as.numeric(res[,padj[z]])
+                # }
+                temp <- -1*log10(preprocess)
+                #temp[temp >= 50] = 50
+                res[,lg10p[z]] <- temp
+            }
+            col.vector = c(
+                Obio@parameterList$primaryAlignmentGeneID,
+                names(res)[grep("contrast", names(res))]
+            )
+            res = res[,col.vector]
+            ## Make all numeric columns numierc ##
+            ## Make all numeric columns numierc ##
+            res[,grep("contrast_", names(res))] <- apply(res[,grep("contrast_", names(res))], 2, as.numeric)
+        } # end LRT mode
+        
+        if (i == 1){
+            dfContrastTable <- res
+        } else {
+            dfContrastTable <- merge(
+                dfContrastTable,
+                res,
+                by.x = Obio@parameterList$primaryAlignmentGeneID,
+                by.y = Obio@parameterList$primaryAlignmentGeneID,
+                all = TRUE
+            )
+            dfContrastTable[is.na(dfContrastTable)] <- 0
+        }
+    }
+    
+    
+    # head(dfContrastTable)
+    
+    dfContrastTable<- dfContrastTable[rowSums(dfContrastTable[,2:ncol(dfContrastTable)]) != 0, ]
+    names(dfContrastTable) <- gsub("__", "_", names(dfContrastTable))
+    
+    if (mode == "LRT"){
+        if (replace){
+            Obio@DEseq2LRTtable <- data.frame(NULL)
+            Obio@DEseq2LRTtable <- dfContrastTable
+        } else if (nrow(Obio@DEseq2LRTtable) > 0){
+            Obio@DEseq2LRTtable <- merge(
+                Obio@DEseq2LRTtable,
+                dfContrastTable,
+                by.x = Obio@parameterList$primaryAlignmentGeneID,
+                by.y = Obio@parameterList$primaryAlignmentGeneID,
+                all = TRUE
+            )
+            Obio@DEseq2LRTtable[is.na(Obio@DEseq2LRTtable)] <- 0 
+        } else {
+            Obio@DEseq2LRTtable <- dfContrastTable
+        }
+    }
+    
+    if (mode == "DGE"){
+        if (replace){
+            Obio@DEseq2contrastTable <- data.frame(NULL)
+            Obio@DEseq2contrastTable <- dfContrastTable
+        } else if (nrow(Obio@DEseq2contrastTable) > 0){
+            Obio@DEseq2contrastTable <- merge(
+                Obio@DEseq2contrastTable,
+                dfContrastTable,
+                by.x = Obio@parameterList$primaryAlignmentGeneID,
+                by.y = Obio@parameterList$primaryAlignmentGeneID,
+                all = TRUE
+            )
+            Obio@DEseq2contrastTable[is.na(Obio@DEseq2contrastTable)] <- 0 
+        } else {
+            Obio@DEseq2contrastTable <- dfContrastTable
+        }
+    }
+    
+    
+    
+    
+    if (mode == "LRT"){
+        print("DESeq2 results loaded into Obio@DEseq2LRTtable")
+    } else {
+        print("DESeq2 results loaded into Obio@DEseq2contrastTable")
+    }
+    
+    return(Obio)
+}
+## Done with function                                                        ##
+###############################################################################
