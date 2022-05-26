@@ -13412,7 +13412,7 @@ createExcelWorkbook <- function(
 #' @param NFcoreSettingsFN Path to NF core settings file.
 #' @param countTableFN Path to count table
 #' @param TpmTableFN Path to TPM table
-#' @param dfPcaFN Path to PCA table
+#' @param PcaFN Path to PCA table
 #' @param mostVariableFeaturesFN Path to most variable featurs file
 #' @param calculate_DGE If DGE instructions are present in the desing file, calculate
 #' @param calculate_LRT If LRT instructions are present in the desing file, calculate
@@ -13457,7 +13457,7 @@ assembleBiologicProject <- function(
     NFcoreSettingsFN = NULL,
     countTableFN = NULL,
     TpmTableFN = NULL,
-    dfPcaFN = NULL,
+    PcaFN = NULL,
     mostVariableFeaturesFN = NULL,
     calculate_DGE = TRUE,
     calculate_LRT = TRUE,
@@ -13701,7 +13701,7 @@ assembleBiologicProject <- function(
     
     pipelineList[["TpmTableFN"]]  <- TpmTableFN
     
-    pipelineList[["dfPCA"]]  <- dfPcaFN
+    pipelineList[["PcaFN"]]  <- PcaFN
     
     pipelineList[["mostVariableFeaturesFN"]] <- mostVariableFeaturesFN
     
