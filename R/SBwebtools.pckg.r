@@ -9389,7 +9389,8 @@ createSettingsJSON <- function(
     if (!is.null(timepointName)){
         tsList <- createTSparams(
             dfDesign = Obio@dfDesign,
-            timepointName = timepointName
+            timepointName = timepointName,
+            timecourse.units = Obio@parameterList$timecourse.units
         )
         
         jsonList[["timecourse_chart"]] <-  tsList 
