@@ -7160,7 +7160,7 @@ upload.pca.table.to.db <- function(
     # Create color pallets
     if (length(grep("sample_group_color", names(df.pca))) == 0){
         sample.group.vec <- names(df.pca)[grep("sample_group", names(df.pca))]
-        sample.group.color.vec <- gsub("sample_group", "sample_group_color", sample.group.vec)
+        sample.group.color.vec <- gsub("sample_group", "sample_group_colors", sample.group.vec)
         for (i in 1:length(sample.group.vec)){
             group.size <- length(unique(df.pca[,sample.group.vec[i]]))
             #library(RColorBrewer)
@@ -7210,7 +7210,7 @@ upload.pca.table.to.db <- function(
     )
 
     # Assign sample group and sample group color columns
-    var.char.50.cols <- names(df.pca)[grep("sample.group", names(df.pca))]
+    var.char.50.cols <- names(df.pca)[grep("sample_group", names(df.pca))]
     if (length(var.char.50.cols) > 0){
         for (i in 1:length(var.char.50.cols)){
             dbGetQuery(dbDB, paste0(
