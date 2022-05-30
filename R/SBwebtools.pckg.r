@@ -9165,7 +9165,8 @@ createSettingsJSON <- function(
     createTSparams <- function(
         dfDesign = Obio@dfDesign,
         timepointName = "Timepoint",
-        samplesToExcludeFromTSdisplay = NULL
+        samplesToExcludeFromTSdisplay = NULL,
+        timecourse.units = "Days"
     ) {
         
         if (!is.null(samplesToExcludeFromTSdisplay)){
@@ -9217,7 +9218,18 @@ createSettingsJSON <- function(
                 dataseriesColVec <- as.vector(dfO$ts_color)
             } else {
                 dataseriesVec <- sort(unique(dfDesign$dataseries))
-                dataseriesColVec <- rainbow(length(dataseriesVec))
+                
+                pos <- grep("dataseries_color", names(dfDesign))
+                if (length(pos) == 1){
+                    dfColor <- unique(dfDesign[,c("dataseries", "dataseries_color")])
+                    row.names(dfColor) <- dfColor$dataseries
+                    dfColor <- dfColor[dataseriesVec,]
+                    dataseriesColVec <- as.vector(dfColor$dataseries_color)
+                } else {
+                    dataseriesColVec <- rainbow(length(dataseriesVec))
+                }
+                
+                
             }
         }
         
@@ -9275,7 +9287,7 @@ createSettingsJSON <- function(
         
         tsList <- list()
         tsList <- list(
-            "timepoint_name" = "Day",
+            "timepoint_name" = timecourse.units,
             "display_median" = "calculate_median",
             "timepoint_array" = tsOrder,
             "datasets" = datasetsList
