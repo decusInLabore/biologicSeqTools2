@@ -7158,9 +7158,9 @@ upload.pca.table.to.db <- function(
     PCAdbTableName = "P79_VTL_ES_PCA"){
 
     # Create color pallets
-    if (length(grep("sample.group_colors", names(df.pca))) == 0){
+    if (length(grep("sample_group_color", names(df.pca))) == 0){
         sample.group.vec <- names(df.pca)[grep("sample_group", names(df.pca))]
-        sample.group.color.vec <- gsub("sample_group", "sample_group_colors", sample.group.vec)
+        sample.group.color.vec <- gsub("sample_group", "sample_group_color", sample.group.vec)
         for (i in 1:length(sample.group.vec)){
             group.size <- length(unique(df.pca[,sample.group.vec[i]]))
             #library(RColorBrewer)
