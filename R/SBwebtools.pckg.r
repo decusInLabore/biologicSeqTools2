@@ -7078,7 +7078,7 @@ inferDBcategories <- function(
 ){
     dbCatList <- list()
 
-    for (i in 1:length(dfData)){
+    for (i in 1:ncol(dfData)){
         classLabel <- ""
         maxStringLength <- max(nchar(as.character(dfData[,i])), na.rm = T) + 2
 
