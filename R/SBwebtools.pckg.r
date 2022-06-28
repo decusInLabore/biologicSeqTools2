@@ -13307,8 +13307,6 @@ uploadDbTableInfile <- function(
 ## Function createPowerpointPresentation                                     ##
 
 #' @title doQuery
-#'
-#'
 #' @param user Database username
 #' @param password Database password
 #' @param host Host URL

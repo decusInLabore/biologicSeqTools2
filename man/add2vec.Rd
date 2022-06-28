@@ -7,9 +7,12 @@
 add2vec(obj, slot_name, value)
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A bioLOGIC data object}
+
+\item{slot_name}{character vector slot (e.g. reportVec, scriptVec or documentationVector) to which an element is to be added}
+
+\item{value}{Element or string to be added to the above vector in the bioLOGIC object}
 }
 \description{
 Method description
 }
-\keyword{TBD}

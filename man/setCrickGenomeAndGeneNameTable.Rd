@@ -2,7 +2,7 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{setCrickGenomeAndGeneNameTable}
 \alias{setCrickGenomeAndGeneNameTable}
-\title{A method}
+\title{setCrickGenomeAndGeneNameTable}
 \usage{
 setCrickGenomeAndGeneNameTable(
   obj,
@@ -10,9 +10,8 @@ setCrickGenomeAndGeneNameTable(
 )
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A bioLOGIC data object}
 }
 \description{
-Method description
+Method to define genome and genename tables
 }
-\keyword{TBD}

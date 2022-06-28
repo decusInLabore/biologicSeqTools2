@@ -2,7 +2,7 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{addTPMorFPKMtable}
 \alias{addTPMorFPKMtable}
-\title{A method}
+\title{addTPMorFPKMtable}
 \usage{
 addTPMorFPKMtable(obj = "biologic objec", addTPM = TRUE, addFPKM = FALSE)
 }

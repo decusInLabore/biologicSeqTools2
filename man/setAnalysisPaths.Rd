@@ -2,14 +2,13 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{setAnalysisPaths}
 \alias{setAnalysisPaths}
-\title{A method}
+\title{setAnalysisPaths}
 \usage{
 setAnalysisPaths(obj)
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A bioLOGIC data object}
 }
 \description{
-Method description
+Method to set analysis paths
 }
-\keyword{TBD}
