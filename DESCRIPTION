@@ -9,8 +9,8 @@ Authors@R:
            comment = c(ORCID = "0000-0003-0495-5659"))
 Description: Contains analysis functions for sequencing data.
 biocViews:
-    DESeq2
 Imports:
+    DESeq2,
     methods,
     openxlsx,
     DBI, 
