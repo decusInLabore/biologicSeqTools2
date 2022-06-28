@@ -1,15 +1,43 @@
+###############################################################################
+## Defining the class bioLOGIC                                               ##
+
+
 #' @title bioLOGIC
 #'
-#' @description This function allows you to express your love for the superior furry animal.
-#' @param agree Do you agree dogs are the best pet? Defaults to TRUE.
-#' @keywords dogs
+#' @description This function defines the bioLOGIC data storage object
+#' @param clusterSigEnrichmentList A list to store cluster signature enrichments
+#' @param documentationParams A list to store documentation parameters
+#' @param sampleDetailList A list to store sample details
+#' @param dbDetailList A list to store database login details
+#' @param projectDetailList A list to store project details
+#' @param scDetailList A list to store single-cell sample details
+#' @param referenceTableList A list to store reference tables
+#' @param dfGeneAnnotation A data.frame to store gene annotation information
+#' @param dfPCA A data.frame to store PCA results
+#' @param dfPCAgenes A data.frame to store PCA genes
+#' @param PCApercentVar A numeric vector to store PCA variation per dimension
+#' @param dfTPM A data.frame to store the TPM table
+#' @param dfFPKM A data.frame to store the TPM table
+#' @param RSEMcountMatrix A RSEM count matrix. Matrix. 
+#' @param dfDesign A design data.frame. Should mimimally contain the columns sample.id, sample.group and dataseries. The ideal sample.id format is dataseries_sampleGroup_replicate. Example: WT_Treated0h_Rep1
+#' @param dfSummary A slot for the summary data.frame
+#' @param databaseTable Slot for a database table data.frame
+#' @param reportVec A character vector containing information for the report
+#' @param scriptVec A character vector containing details on used scripts
+#' @param GSEAtableList A list to store GSEA result tables
+#' @param documentationVector A character vector containing details for the documentation
+#' @param categoryViewTableList A list storing categoryView tables
+#' @param plotCollection A list to store plots
+#' @param ObjDds A slot to store a DESeq2 dds object
+#' @param DESeqNormReadCountsTable A data.frame for Normalised DEseq2 readcounts
+#' @param DEseq2contrastTable A data.frame to store the DESeq2 contrast result table
+#' @param DEseq2LRTtable A data.frame to store the DESeq2 LRT result table. 
+#' @param enrichmentList A list for enrichment results
+#' @param dataTableList A list to store result tables
 #' @export
 #' @import DESeq2
 #' @import methods
 
-
-#library("methods")
-#library(DESeq2)
 
 setClass(
     "bioLOGIC",
@@ -49,30 +77,8 @@ setClass(
     )
 )
 
-
-
-setClass(
-    "bioLOGIC_proteomics",
-    contains = "bioLOGIC",
-    slots = c(
-        extra = "character"
-    )
-)
-
-setClass(
-    "bioLOGIC_singleCell",
-    contains = "bioLOGIC"
-)
-
-setClass(
-    "bioLOGIC_ATACseq",
-    contains = "bioLOGIC"
-)
-
-setClass(
-    "bioLOGIC_bulkRNAseq",
-    contains = "bioLOGIC"
-)
+## Done Defining class bioLOGIC                                              ##
+###############################################################################
 
 
 
@@ -83,10 +89,12 @@ setClass(
 #' @title A method
 #'
 #' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @param obj A bioLOGIC data object
+#' @param slot_name character vector slot (e.g. reportVec, scriptVec or documentationVector) to which an element is to be added
+#' @param value Element or string to be added to the above vector in the bioLOGIC object 
 #' @export
-#'
+
+
 setGeneric(
     name="add2vec",
     def=function(obj, slot_name, value) {
@@ -94,16 +102,17 @@ setGeneric(
     }
 )
 
+## Add to script vector                                                      ##
+###############################################################################
 
 ###############################################################################
-## Add to script vector                                                      ##
-#' @title A method
+## setMountingPoint                                                          ##
+#' @title setMountingPoint
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to set mounting points. Setting the moutning point according to the local environment.
+#' @param obj A bioLOGIC object
 #' @export
-#'
+
 setGeneric(
     name="setMountingPoint",
     def=function(obj) {
@@ -125,15 +134,18 @@ setGeneric(
     }
 )
 
+## setMountingPoint                                                          ##
+###############################################################################
 
-#' @title A method
+
+###############################################################################
+## setAnalysisPaths                                                          ##
+
+#' @title setAnalysisPaths
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to set analysis paths
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
 
 setGeneric(
     name="setAnalysisPaths",
@@ -147,14 +159,19 @@ setGeneric(
     }
 )
 
-#' @title A method
+
+## setAnalysisPaths                                                          ##
+###############################################################################
+
+###############################################################################
+## setDataBaseParameters                                                     ##
+
+#' @title setDataBaseParameters
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to set base parameters
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="setDataBaseParameters",
     def=function(obj){
@@ -200,14 +217,19 @@ setGeneric(
     }
 )
 
-#' @title A method
+
+## setDataBaseParameters                                                     ##
+###############################################################################
+
+###############################################################################
+## setCrickGenomeAndGeneNameTable                                            ##
+
+#' @title setCrickGenomeAndGeneNameTable
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to define genome and genename tables
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="setCrickGenomeAndGeneNameTable",
     def=function(obj, genomeDir="/camp/svc/reference/Genomics/babs"){
@@ -640,16 +662,17 @@ setGeneric(
 )
 
 
+## setCrickGenomeAndGeneNameTable                                            ##
+###############################################################################
+
 ###############################################################################
 ## Create required folders                                                   ##
-#' @title A method
+#' @title createAnalysisFolders
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to create the analysis folder
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="createAnalysisFolders",
     def=function(
@@ -727,14 +750,13 @@ setGeneric(
 
 ###############################################################################
 ## Add annotation                                                            ##
-#' @title A method
+#' @title addGeneAnnotation
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to add a gene annotation
+#' @param addUniprotColumn Boolean: Adding a uniprot column?
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="addGeneAnnotation",
     def=function(
@@ -766,7 +788,7 @@ setGeneric(
 
 ###############################################################################
 ## Add FPKM/TPM                                                              ##
-#' @title A method
+#' @title addTPMorFPKMtable
 #'
 #' @description Method description
 #' @param agree TBD
