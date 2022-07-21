@@ -13542,8 +13542,10 @@ assembleBiologicProject <- function(
     ## Path were the biologic spec file will be kept: ##
     ## Default setting:
 
-    if (is.null(pipelineList[["biologicSettingsFN"]])){
+    if (is.null(biologicSettingsFN )){
         pipelineList[["biologicSettingsFN"]] <- paste0(pipelineList[["folder"]], "workdir/bulkRNAseq_workflow/design/biologic.settings.file.csv")
+    } else {
+        pipelineList[["biologicSettingsFN"]] <- biologicSettingsFN
     }
 
     ## Project parameters                       ##
