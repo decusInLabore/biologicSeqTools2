@@ -2,14 +2,13 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{setMountingPoint}
 \alias{setMountingPoint}
-\title{A method}
+\title{setMountingPoint}
 \usage{
 setMountingPoint(obj)
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A bioLOGIC object}
 }
 \description{
-Method description
+Method to set mounting points. Setting the moutning point according to the local environment.
 }
-\keyword{TBD}

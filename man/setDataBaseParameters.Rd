@@ -2,14 +2,13 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{setDataBaseParameters}
 \alias{setDataBaseParameters}
-\title{A method}
+\title{setDataBaseParameters}
 \usage{
 setDataBaseParameters(obj)
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A bioLOGIC data object}
 }
 \description{
-Method description
+Method to set base parameters
 }
-\keyword{TBD}

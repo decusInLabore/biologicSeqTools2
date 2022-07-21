@@ -2,14 +2,15 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{addGeneAnnotation}
 \alias{addGeneAnnotation}
-\title{A method}
+\title{addGeneAnnotation}
 \usage{
 addGeneAnnotation(obj, addUniprotColumn = FALSE)
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A bioLOGIC data object}
+
+\item{addUniprotColumn}{Boolean: Adding a uniprot column?}
 }
 \description{
-Method description
+Method to add a gene annotation
 }
-\keyword{TBD}

@@ -2,14 +2,13 @@
 % Please edit documentation in R/SBwebtools.pckg.r
 \name{createAnalysisFolders}
 \alias{createAnalysisFolders}
-\title{A method}
+\title{createAnalysisFolders}
 \usage{
 createAnalysisFolders(obj)
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A bioLOGIC data object}
 }
 \description{
-Method description
+Method to create the analysis folder
 }
-\keyword{TBD}

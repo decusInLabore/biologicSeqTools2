@@ -1,15 +1,43 @@
+###############################################################################
+## Defining the class bioLOGIC                                               ##
+
+
 #' @title bioLOGIC
 #'
-#' @description This function allows you to express your love for the superior furry animal.
-#' @param agree Do you agree dogs are the best pet? Defaults to TRUE.
-#' @keywords dogs
+#' @description This function defines the bioLOGIC data storage object
+#' @param clusterSigEnrichmentList A list to store cluster signature enrichments
+#' @param documentationParams A list to store documentation parameters
+#' @param sampleDetailList A list to store sample details
+#' @param dbDetailList A list to store database login details
+#' @param projectDetailList A list to store project details
+#' @param scDetailList A list to store single-cell sample details
+#' @param referenceTableList A list to store reference tables
+#' @param dfGeneAnnotation A data.frame to store gene annotation information
+#' @param dfPCA A data.frame to store PCA results
+#' @param dfPCAgenes A data.frame to store PCA genes
+#' @param PCApercentVar A numeric vector to store PCA variation per dimension
+#' @param dfTPM A data.frame to store the TPM table
+#' @param dfFPKM A data.frame to store the TPM table
+#' @param RSEMcountMatrix A RSEM count matrix. Matrix.
+#' @param dfDesign A design data.frame. Should mimimally contain the columns sample.id, sample.group and dataseries. The ideal sample.id format is dataseries_sampleGroup_replicate. Example: WT_Treated0h_Rep1
+#' @param dfSummary A slot for the summary data.frame
+#' @param databaseTable Slot for a database table data.frame
+#' @param reportVec A character vector containing information for the report
+#' @param scriptVec A character vector containing details on used scripts
+#' @param GSEAtableList A list to store GSEA result tables
+#' @param documentationVector A character vector containing details for the documentation
+#' @param categoryViewTableList A list storing categoryView tables
+#' @param plotCollection A list to store plots
+#' @param ObjDds A slot to store a DESeq2 dds object
+#' @param DESeqNormReadCountsTable A data.frame for Normalised DEseq2 readcounts
+#' @param DEseq2contrastTable A data.frame to store the DESeq2 contrast result table
+#' @param DEseq2LRTtable A data.frame to store the DESeq2 LRT result table.
+#' @param enrichmentList A list for enrichment results
+#' @param dataTableList A list to store result tables
 #' @export
 #' @import DESeq2
 #' @import methods
 
-
-#library("methods")
-#library(DESeq2)
 
 setClass(
     "bioLOGIC",
@@ -49,30 +77,8 @@ setClass(
     )
 )
 
-
-
-setClass(
-    "bioLOGIC_proteomics",
-    contains = "bioLOGIC",
-    slots = c(
-        extra = "character"
-    )
-)
-
-setClass(
-    "bioLOGIC_singleCell",
-    contains = "bioLOGIC"
-)
-
-setClass(
-    "bioLOGIC_ATACseq",
-    contains = "bioLOGIC"
-)
-
-setClass(
-    "bioLOGIC_bulkRNAseq",
-    contains = "bioLOGIC"
-)
+## Done Defining class bioLOGIC                                              ##
+###############################################################################
 
 
 
@@ -83,10 +89,12 @@ setClass(
 #' @title A method
 #'
 #' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @param obj A bioLOGIC data object
+#' @param slot_name character vector slot (e.g. reportVec, scriptVec or documentationVector) to which an element is to be added
+#' @param value Element or string to be added to the above vector in the bioLOGIC object
 #' @export
-#'
+
+
 setGeneric(
     name="add2vec",
     def=function(obj, slot_name, value) {
@@ -94,16 +102,17 @@ setGeneric(
     }
 )
 
+## Add to script vector                                                      ##
+###############################################################################
 
 ###############################################################################
-## Add to script vector                                                      ##
-#' @title A method
+## setMountingPoint                                                          ##
+#' @title setMountingPoint
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to set mounting points. Setting the moutning point according to the local environment.
+#' @param obj A bioLOGIC object
 #' @export
-#'
+
 setGeneric(
     name="setMountingPoint",
     def=function(obj) {
@@ -125,15 +134,18 @@ setGeneric(
     }
 )
 
+## setMountingPoint                                                          ##
+###############################################################################
 
-#' @title A method
+
+###############################################################################
+## setAnalysisPaths                                                          ##
+
+#' @title setAnalysisPaths
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to set analysis paths
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
 
 setGeneric(
     name="setAnalysisPaths",
@@ -147,14 +159,19 @@ setGeneric(
     }
 )
 
-#' @title A method
+
+## setAnalysisPaths                                                          ##
+###############################################################################
+
+###############################################################################
+## setDataBaseParameters                                                     ##
+
+#' @title setDataBaseParameters
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to set base parameters
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="setDataBaseParameters",
     def=function(obj){
@@ -200,14 +217,19 @@ setGeneric(
     }
 )
 
-#' @title A method
+
+## setDataBaseParameters                                                     ##
+###############################################################################
+
+###############################################################################
+## setCrickGenomeAndGeneNameTable                                            ##
+
+#' @title setCrickGenomeAndGeneNameTable
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to define genome and genename tables
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="setCrickGenomeAndGeneNameTable",
     def=function(obj, genomeDir="/camp/svc/reference/Genomics/babs"){
@@ -640,16 +662,17 @@ setGeneric(
 )
 
 
+## setCrickGenomeAndGeneNameTable                                            ##
+###############################################################################
+
 ###############################################################################
 ## Create required folders                                                   ##
-#' @title A method
+#' @title createAnalysisFolders
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to create the analysis folder
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="createAnalysisFolders",
     def=function(
@@ -727,14 +750,13 @@ setGeneric(
 
 ###############################################################################
 ## Add annotation                                                            ##
-#' @title A method
+#' @title addGeneAnnotation
 #'
-#' @description Method description
-#' @param agree TBD
-#' @keywords TBD
+#' @description Method to add a gene annotation
+#' @param addUniprotColumn Boolean: Adding a uniprot column?
+#' @param obj A bioLOGIC data object
 #' @export
-#'
-#'
+
 setGeneric(
     name="addGeneAnnotation",
     def=function(
@@ -766,7 +788,7 @@ setGeneric(
 
 ###############################################################################
 ## Add FPKM/TPM                                                              ##
-#' @title A method
+#' @title addTPMorFPKMtable
 #'
 #' @description Method description
 #' @param agree TBD
@@ -1774,7 +1796,7 @@ setGeneric(
         # error = function(c) "Plot error",
         # warning = function(c) "warning",
         # message = function(c) "message"
-        # 
+        #
         # )
 
         ###########################################################################
@@ -2083,7 +2105,7 @@ setGeneric(
         # error = function(c) "Plot error",
         # warning = function(c) "warning",
         # message = function(c) "message"
-        # 
+        #
         # )
 
 
@@ -2231,8 +2253,8 @@ setGeneric(
                 #         theme(plot.title = element_text(hjust = 0.5),
                 #               panel.border = element_rect(colour = "black", fill=NA, size=1)
                 #         ) + ylim(-10, 10)
-                # 
-                # 
+                #
+                #
                 #     #    obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
                 # },
                 # error = function(c) "MA plot not produced due to X11 error",
@@ -2379,14 +2401,14 @@ setGeneric(
                 #     ) + scale_fill_manual(values=c("blue", "grey", "red")
                 #     ) + guides(color = FALSE
                 #     )
-                # 
-                # 
+                #
+                #
                 #     #obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
                 # },
                 # error = function(c) "MA plot not produced due to X11 error",
                 # warning = function(c) "warning",
                 # message = function(c) "message"
-                # 
+                #
                 # )
                 ## Done diagnostic Volcano plot                              ##
                 ###############################################################
@@ -2692,7 +2714,7 @@ setGeneric(
                 addCols <- gsub(" ", "", addCols)
                 addCols <- sapply(addCols, function(x) unlist(strsplit(x, ":")))
                 addCols <- unique(Reduce(c, addCols))
-                
+
                 addCols <- addCols[addCols != "condition"]
 
                 selCols <- c("sample.id", as.vector(dfDGE[i,"comparisonID"]), addCols,"sample.group")
@@ -2789,14 +2811,14 @@ setGeneric(
                 # library(ggpubr)
                 # library(ggplot2)
                 # plotname <- paste0("MAplot_", colName)
-                # 
+                #
                 # ## Debug
                 # # debug <- c(
                 # #     debug,
                 # #     plotname
                 # # )
                 # ##
-                # 
+                #
                 # tryCatch({
                 #     obj@plotCollection[[plotname]] <- ggmaplot(
                 #         res, main = plotname,
@@ -2811,8 +2833,8 @@ setGeneric(
                 #         theme(plot.title = element_text(hjust = 0.5),
                 #               panel.border = element_rect(colour = "black", fill=NA, size=1)
                 #         ) + ylim(-10, 10)
-                # 
-                # 
+                #
+                #
                 #     #    obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
                 # },
                 # error = function(c) "MA plot not produced due to X11 error",
@@ -2929,11 +2951,11 @@ setGeneric(
                 # dfVplot[dfVplot[,grep("padj", names(dfVplot))] < 0.05 & dfVplot[,grep("logFC", names(dfVplot))] < -2, "Significance"] <- "Down"
                 # nrow(dfVplot[dfVplot$Significance == "Up",])
                 # nrow(dfVplot[dfVplot$Significance == "Down",])
-                # 
+                #
                 # dsize <- 1
                 # alpha <- I(0.5)
                 # shape <- 21
-                # 
+                #
                 # tryCatch({
                 #     library(ggplot2)
                 #     plotname <- paste0("Volcano_Plot_", colName)
@@ -2965,14 +2987,14 @@ setGeneric(
                 #     ) + scale_fill_manual(values=c("blue", "grey", "red")
                 #     ) + guides(color = FALSE
                 #     )
-                # 
-                # 
+                #
+                #
                 #     #obj@plotCollection[[plotname]] = print(plotMA(res, main=colName))
                 # },
                 # error = function(c) "MA plot not produced due to X11 error",
                 # warning = function(c) "warning",
                 # message = function(c) "message"
-                # 
+                #
                 # )
                 ## Done diagnostic Volcano plot                              ##
                 ###############################################################
@@ -3065,7 +3087,7 @@ setGeneric(
 
                 fCols <- c("condition", addCols)
                 fCols <- fCols[fCols %in% colnames(colData)]
-                
+
                 for (j in 1:length(fCols)){
                     colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
                 }
@@ -6323,7 +6345,7 @@ make.hm <- function(
     #     )
     # }
     pdf("temp.pdf")
-    
+
     if (showRowNames){
         labRowVec = row.names(m.df1)
     } else {
@@ -6377,7 +6399,7 @@ make.hm <- function(
     if (file.exists("temp.pdf")){
         unlink("temp.pdf")
     }
-    
+
     sorted = m.df1[
         match(
             rev(
@@ -7301,7 +7323,7 @@ upload.datatable.to.database <- function(
         print("Table names clipped to 64 characters.")
         names(df.data) <- substr(names(df.data), 1, 64)
     }
-    
+
 
     if (startOnlyWithConnectionCount1){
 
@@ -8753,16 +8775,16 @@ createSettingsFile <- function(
         sample.names <- gsub("norm_counts_", "", sample.order)
         sample.names <- gsub("__", "_", sample.names)
     }
-    
-    
-    
+
+
+
 
     settingsPhpVec <- c(
         "<?php",
         "",
         "return array("
     )
-    
+
     if (publicDataset){
         settingsPhpVec <- c(
             settingsPhpVec,
@@ -8774,7 +8796,7 @@ createSettingsFile <- function(
             "    'public_access' => FALSE,"
         )
     }
-    
+
     settingsPhpVec <- c(
         settingsPhpVec,
         "    'lab' => array(",
@@ -9052,39 +9074,39 @@ samplesToExcludeFromTSdisplay <- function(
     Obio,
     designTScol = "timepointName"
 ){
-    
+
     ## Goal: Find all samples that have incomplete time series
-    
+
     ## Step 1:
     ## Make a list for each timepoint
-    
+
     dataseries <- unique(Obio@dfDesign$dataseries)
-    
+
     timepointList <- list()
-    
+
     for (i in 1:length(dataseries)){
         timepoints <- as.vector(sort(unique(Obio@dfDesign[Obio@dfDesign$dataseries == dataseries[i], designTScol])))
         timepointList[[dataseries[i]]] <- timepoints
     }
-    
+
     ## Step 2: Remove all dataseries with less than half of the timepoints
     ## Idea: remove all dataseries that are only represented in a few timepoints
     ## altogher
-    
+
     maxLength <- max(unlist(lapply(timepointList, function(x) max(length(x)))))
     halfLength <- round(maxLength/2)
-    
+
     keepVec <- names(lapply(timepointList, function(x) length(x) >= halfLength))
     timepointList[keepVec]
-    
-    
-    
-    ## Step 2 
+
+
+
+    ## Step 2
     ## Identify incomplete timeseries and remove those timepoints
-    
+
     ## Get all timepoints across all lists ##
     allTimepoints <- sort(unique(unlist(timepointList)))
-    
+
     ## Identify timepoints that are not present in all lists ##
     missing <- as.vector(NULL, mode="numeric")
     for (i in 1:length(timepointList)){
@@ -9092,23 +9114,23 @@ samplesToExcludeFromTSdisplay <- function(
             missing,
             timepointList[[i]][!(allTimepoints %in% timepointList[[i]])]
         )
-        
+
     }
-    
+
     ## Define samples to samplesToExcludeFromTSdisplay
     dfDisplay <- Obio@dfDesign
     dfDisplay <- dfDisplay[dfDisplay$dataseries %in% names(timepointList),]
     if (length(missing) > 0){
         dfDisplay <- dfDisplay[!(dfDisplay[,designTScol] %in% missing),]
     }
-    
+
     displaySampleIDs <- unique(dfDisplay$sample.id)
     excludeSampleIDs <- unique(Obio@dfDesign$sample.id[!(Obio@dfDesign$sample.id %in% displaySampleIDs)])
-    
+
     if (length(excludeSampleIDs) == 0){
         excludeSampleIDs = NULL
     }
-    
+
     ## Done                                                                      ##
     ###############################################################################
     return(excludeSampleIDs)
@@ -9158,8 +9180,8 @@ createSettingsJSON <- function(
     pointer = "Gene Symbol:",
     samplesToExcludeFromTSdisplay = NULL
 ){
-    
-    
+
+
     ###############################################################################
     ## Create timecourse string from dfDesign                                    ##
     createTSparams <- function(
@@ -9168,7 +9190,7 @@ createSettingsJSON <- function(
         samplesToExcludeFromTSdisplay = NULL,
         timecourse.units = "Days"
     ) {
-        
+
         if (!is.null(samplesToExcludeFromTSdisplay)){
             samplesToExcludeFromTSdisplay <- samplesToExcludeFromTSdisplay[samplesToExcludeFromTSdisplay %in% dfDesign$sample.id]
             if (length(samplesToExcludeFromTSdisplay) > 0){
@@ -9177,13 +9199,13 @@ createSettingsJSON <- function(
         }
         ## Add dataseries timepoint column
         dfDesign[["tsSampleGroup"]] <- paste0(dfDesign$dataseries, "_", dfDesign[,timepointName])
-        
+
         tsOrder <- as.numeric(sort(unique(dfDesign[,timepointName])))
         # scriptVec <- as.vector(NULL, mode = "character")
-        
-        
-        
-        
+
+
+
+
         # scriptVec <- c(
         #     scriptVec,
         #     "// New Begin: Timecourse",
@@ -9194,8 +9216,8 @@ createSettingsJSON <- function(
         #     "    'datasets' => array("
         # )
         datasetsList <- list()
-        
-        
+
+
         if (length(grep("dataseries_order", names(dfDesign))) > 0){
             if (length(grep("ts_color", names(dfDesign))) > 0){
                 dfO <- unique(dfDesign[,c("dataseries", "dataseries_order","ts_color")])
@@ -9208,8 +9230,8 @@ createSettingsJSON <- function(
                 dataseriesVec <- as.vector(dfO$dataseries)
                 dataseriesColVec <- rainbow(length(dataseriesVec))
             }
-            
-            
+
+
         } else {
             if (length(grep("ts_color", names(dfDesign))) > 0){
                 dfO <- unique(dfDesign[,c("dataseries", "ts_color")])
@@ -9218,7 +9240,7 @@ createSettingsJSON <- function(
                 dataseriesColVec <- as.vector(dfO$ts_color)
             } else {
                 dataseriesVec <- sort(unique(dfDesign$dataseries))
-                
+
                 pos <- grep("dataseries_color", names(dfDesign))
                 if (length(pos) == 1){
                     dfColor <- unique(dfDesign[,c("dataseries", "dataseries_color")])
@@ -9228,63 +9250,63 @@ createSettingsJSON <- function(
                 } else {
                     dataseriesColVec <- rainbow(length(dataseriesVec))
                 }
-                
-                
+
+
             }
         }
-        
-        
-        
+
+
+
         for (i in 1:length(dataseriesVec)){
             dfTemp <- unique(
                 dfDesign[dfDesign$dataseries == dataseriesVec[i], c("sample.id", "dataseries", "sample.group", timepointName, "tsSampleGroup")]
             )
-            
+
             dfTemp <- dfTemp[order(dfTemp[,timepointName], decreasing = F),]
             timepointVec <- unique(dfTemp[,timepointName])
-            
-            
+
+
             sampleGroupVec <- unique(dfTemp[,"tsSampleGroup"])
-            
+
             datasetsList[[dataseriesVec[i]]] <- list(
                 'color' = dataseriesColVec[i]
             )
-            
+
             # scriptVec <- c(
             #     scriptVec,
             #     paste0("'",dataseriesVec[i],"' => array("),
             #     paste0("    'color' => '",dataseriesColVec[i],"',"),
             #     paste0("    'sample_group' => array(")
             # )
-            
+
             sample_groupList <- list()
-            
+
             for (j in 1:length(sampleGroupVec)){
                 dfTemp3 <- unique(dfDesign[dfDesign$tsSampleGroup %in% sampleGroupVec, c(timepointName,  "tsSampleGroup")])
                 dfTemp3 <- dfTemp3[order(dfTemp3[,timepointName], decreasing = F),]
-                
-                
+
+
                 timepointVec <- as.numeric(dfTemp3[,timepointName])
-                
+
                 dfTemp2 <- unique(dfTemp[dfTemp$tsSampleGroup == sampleGroupVec[j],])
-                
+
                 sample_groupList[[sampleGroupVec[j]]] = list(
                     "timepoint" = timepointVec[j],
                     "sampleDbCols" =  paste0("norm_counts_", sort(dfTemp2$sample.id)) #list(
                         #paste0(
-                           
+
                         #    collapse = ","
                         #)
                     #)
                 )
-                
-                
+
+
             } ## End for loop
-            
+
             datasetsList[[dataseriesVec[i]]] [["sample_group"]] <- sample_groupList
             #scriptVec[length(scriptVec)] <- gsub(")),", ")))),",scriptVec[length(scriptVec)])
         }
-        
+
         tsList <- list()
         tsList <- list(
             "timepoint_name" = timecourse.units,
@@ -9292,19 +9314,19 @@ createSettingsJSON <- function(
             "timepoint_array" = tsOrder,
             "datasets" = datasetsList
         )
-        
+
         #scriptVec[length(scriptVec)] <- gsub(",", ")),",scriptVec[length(scriptVec)])
         #tsList[["datasets"]] = datasetsList
-        
-        
-        
+
+
+
         return(tsList)
-        
+
     }
-    
+
     ##                                                                           ##
-    ###############################################################################    
-    
+    ###############################################################################
+
     jsonList <- list()
     ###############################################################################
     ## Public access                                                             ##
@@ -9315,35 +9337,35 @@ createSettingsJSON <- function(
     }
     ##                                                                           ##
     ###############################################################################
-    
-    
+
+
     ###############################################################################
-    ## Base parameters                                                           ##    
-    
+    ## Base parameters                                                           ##
+
     if (sample.order[1] == "" | is.na(sample.order[1])){
         sample.order <- sort(names(database.table)[grep("norm_counts_", names(database.table))])
     }
-    
+
     if (count.sample.colors[1] == "" | is.na(count.sample.colors[1])){
         count.sample.colors <- rainbow(length(sample.order))
     }
-    
+
     if (sample.names[1] == "" | is.na(sample.names[1])){
         sample.names <- gsub("norm_counts_", "", sample.order)
         sample.names <- gsub("__", "_", sample.names)
     }
-    
+
     jsonList[["lab"]] <- list(
         "name" =  obj@parameterList$labname
     )
-    
+
     jsonList[["data_db_name"]] = obj@dbDetailList$primDataDB
-    
-        
+
+
     jsonList[["data_db"]] = list(
             "cat_table_name" = obj@parameterList$cat.ref.db.table
     )
-    
+
     jsonList[["rnaseq_db_table"]] = obj@parameterList$rnaseqdbTableName
     jsonList[["primary_gene_symbol"]] = obj@parameterList$geneIDcolumn
     jsonList[["ptm_display_column"]] = obj@parameterList$displayPTMcolumn
@@ -9353,63 +9375,63 @@ createSettingsJSON <- function(
             "headline" = obj@parameterList$heamap.headline.text,
             "pointer" = pointer
     )
-    
-    
+
+
     ###############################################################################
     ## Create sampe list                                                         ##
     samplesList <- list()
-    
+
     for (i in 1:length(sample.order)){
         samplesList[[sample.order[i]]] <- list(
             "color" = sample.colors[i],
             "name" = sample.names[i]
         )
-        
+
     }
-    
+
     jsonList[["samples"]] <- samplesList
     ##                                                                           ##
     ###############################################################################
-    
+
     ###############################################################################
     ## Add barchart parameters                                                   ##
     jsonList[["count_table"]] <- list(
         "headline" = obj@parameterList$count.table.headline,
         "sidelabel" = obj@parameterList$count.table.sidelabel
     )
-    
-    
+
+
     ## Done                                                                      ##
-    ###############################################################################    
-    
+    ###############################################################################
+
     ###############################################################################
     ## Timecourse parameters                                                     ##
-    
-    
+
+
     if (!is.null(timepointName)){
         tsList <- createTSparams(
             dfDesign = Obio@dfDesign,
             timepointName = timepointName,
             timecourse.units = Obio@parameterList$timecourse.units
         )
-        
-        jsonList[["timecourse_chart"]] <-  tsList 
-    }    
-    
-    
+
+        jsonList[["timecourse_chart"]] <-  tsList
+    }
+
+
     ## Done                                                                      ##
-    ###############################################################################  
-    
+    ###############################################################################
+
     ###############################################################################
     ## Venn parameters                                                           ##
-    
+
     if (heatmapSampleOrder[1] == ""){
         heatmapSampleOrder <- names(df.data)[grep("lg2_avg", names(df.data))]
     }
-    
+
     heatMapString <- paste(heatmapSampleOrder, collapse = '\\",\\"')
     #heatMapString <- paste0("'", heatMapString,"'")
-    
+
     vennList <- list(
         "experiments" = heatmapSampleOrder,
         "table" = list(
@@ -9418,31 +9440,31 @@ createSettingsJSON <- function(
             "high_highlight" = 1
         )
     )
-    
+
     ## Make selectionList
     selectionList <- list()
-    
+
     vennCols <- as.vector(NULL, mode = "character")
-    
+
     ## Make sure all venn cols are numeric ##
     df.data[,vennCols] <- apply(df.data[,vennCols], 2, as.numeric)
-    
+
     for (i in 1:length(venn.slider.selector.strings)){
         vennCols <- c(
             vennCols,
             names(df.data)[grep(venn.slider.selector.strings[i], names(df.data))]
         )
     }
-    
+
     for (i in 1:length(vennCols)){
         colMax <- ceiling(max(as.numeric(df.data[,vennCols[i]]), na.rm = TRUE))
         colMin <- floor(min(as.numeric(df.data[,vennCols[i]]), na.rm = TRUE))
-        
+
         Vname <- vennCols[i]
         Vname <- substr(Vname ,11,100)
         Vname <- gsub("^_", "", Vname)
         Vname <- gsub("__", "_", Vname)
-        
+
         if (is.numeric(colMax) & is.numeric(colMin)){
             selectionList[[vennCols[i]]] <- list(
                 "name"  = Vname,
@@ -9450,33 +9472,33 @@ createSettingsJSON <- function(
                 "slider_max" = colMax,
                 "default_low" = colMin,
                 "default_high" = colMax
-            ) 
-            
+            )
+
         } # end if
     }
-    
+
     vennList[["selection"]] <- selectionList
-    
+
     jsonList[["venn"]] <- vennList
-    
-    
-    
+
+
+
     ## Done                                                                      ##
-    ###############################################################################   
-    
+    ###############################################################################
+
     ###############################################################################
     ## Add PCA                                                                   ##
     if (!is.null(pcaDbTable)){
         jsonList[["pca"]] <- pcaDbTable
     }
-    
+
     ## Done                                                                      ##
-    ############################################################################### 
-    
+    ###############################################################################
+
     ###############################################################################
     ## Add scatterplot                                                           ##
-    
-    
+
+
     scatterCols <- as.vector(NULL, mode = "character")
     for (i in 1:length(plot.selection.strings)){
         scatterCols <- c(
@@ -9484,24 +9506,24 @@ createSettingsJSON <- function(
             names(df.data)[grep(plot.selection.strings[i], names(df.data))]
         )
     }
-    
+
     if (length(scatterCols) > 0){
         scatterplotList <- list()
         if (is.null(defaultXcolName)){
             defaultXcolName <- scatterCols[1]
         }
-        
+
         if (is.null(defaultYcolName)){
             defaultXcolName <- scatterCols[2]
         }
-        
+
         scatterplotList[["default-x"]] <- defaultXcolName
         scatterplotList[["default-y"]] <- defaultYcolName
-        
+
         selectionList <- list()
-        
-        
-        
+
+
+
         for (i in 1:length(scatterCols)){
             Sname <- scatterCols[i]
             Sname <- substr(Sname ,11,100)
@@ -9510,20 +9532,20 @@ createSettingsJSON <- function(
             selectionList[[scatterCols[i]]] <- list(
                 "name" = Sname
             )
-            
+
         }
-        
+
         scatterplotList[["selection"]] <- selectionList
         jsonList[["scatterplot"]] <-  scatterplotList
-        
-        
+
+
     }
-    
+
     ## Done                                                                      ##
     ###############################################################################
     json <- jsonlite::toJSON(jsonList,pretty=TRUE,auto_unbox=TRUE)
     return(json)
-    
+
 }
 
 ## End: createSettingsFile()                                                 ##
@@ -12958,15 +12980,15 @@ assignDbUsersAndPrivileges <- function(
     dbAdminPwd = "db.pwd",
     dataMode = "MySQL"
 ) {
-    
+
     ## Maximum length for app user name is 16
     appUserName <- substr(appUserName, 1, 15)
-    
+
     ############################
-    ## Helper function 
+    ## Helper function
     doQuery <- function(
-        user = "db.user", 
-        password = "db.upload.pwd", 
+        user = "db.user",
+        password = "db.upload.pwd",
         host = "host",
         dbname = "primDataDB",
         query = "mysql db query",
@@ -12976,26 +12998,26 @@ assignDbUsersAndPrivileges <- function(
     ){
         library(RMySQL)
         dbDB <- dbConnect(
-            drv = RMySQL::MySQL(), 
-            user = user, 
-            password = password, 
+            drv = RMySQL::MySQL(),
+            user = user,
+            password = password,
             host = host,
             dbname = dbname
-        ) 
-        
+        )
+
         tryCatch(res <- DBI::dbGetQuery(dbDB, query), error = function(c) {
             c$message <- stop(paste0("Error in ", query, "."))
         })
-        
-        
+
+
         DBI::dbDisconnect(dbDB)
         if (resOut){
             return(res)
         }
-        
+
     }
-    
-    
+
+
     if (file.exists(paste0(accessFilePath, "db.txt"))){
         df <- read.delim(paste0(accessFilePath, "db.txt"), header = T, sep="\t", stringsAsFactors = F)
         sPwd <- as.vector(df$id2)
@@ -13005,29 +13027,29 @@ assignDbUsersAndPrivileges <- function(
         sPwd <-c(2:9,letters,LETTERS)
         sPwd <- paste(sample(sPwd,8),collapse="")
     }
-    
+
     if (!file.exists(paste0(accessFilePath, "db.txt"))){
         ## Create user in db
         for (k in 1:length(domains)) {
             query0 <- paste0("SELECT User, Host FROM mysql.user WHERE User = '",sUser,"' AND Host = '",domains[k],"';")
-            
+
             res <- doQuery(
-                user = dbAdminUser, 
-                password = dbAdminPwd, 
+                user = dbAdminUser,
+                password = dbAdminPwd,
                 host = hostDbUrl,
                 dbname = dbname,
                 query = query0,
                 #existingAccessFileName = existingAccessFileName
                 resOut = TRUE
             )
-            
+
             if (nrow(res) > 0){
-                query0a <- paste0("DROP USER '",sUser,"'@'",domains[k],"';")   
+                query0a <- paste0("DROP USER '",sUser,"'@'",domains[k],"';")
                 #doQuery(Obio, query = query0a)
-                
+
                 doQuery(
-                    user = dbAdminUser, 
-                    password = dbAdminPwd, 
+                    user = dbAdminUser,
+                    password = dbAdminPwd,
                     host = hostDbUrl,
                     dbname = dbname,
                     query = query0a,
@@ -13035,18 +13057,18 @@ assignDbUsersAndPrivileges <- function(
                     resOut = FALSE
                 )
             }
-            
+
             query1 <- paste0(
                 "CREATE USER '",
-                sUser, 
+                sUser,
                 "'@'",domains[k],"' IDENTIFIED BY '",
                 sPwd,
                 "';"
             )
-            
+
             doQuery(
-                user = dbAdminUser, 
-                password = dbAdminPwd, 
+                user = dbAdminUser,
+                password = dbAdminPwd,
                 host = hostDbUrl,
                 dbname = dbname,
                 query = query1,
@@ -13054,12 +13076,12 @@ assignDbUsersAndPrivileges <- function(
                 resOut = FALSE
             )
         } # End for k-loop user fix
-        
-        
-        ## Make password file 
+
+
+        ## Make password file
         ## Create log-in file ##
-        
-        
+
+
         dfID <- data.frame(
             type = "main",
             dataMode = dataMode,
@@ -13072,18 +13094,18 @@ assignDbUsersAndPrivileges <- function(
             geneTb = tables["geneTb"],
             default = geneDefault
         )
-        
+
         if (!file.exists(accessFilePath)){
             dir.create(accessFilePath, recursive = T)
         }
-        
+
         write.table(dfID, paste0(accessFilePath, "db.txt"), row.names = F, sep="\t")
-        ## Done making password file 
+        ## Done making password file
     }
-    
+
     ## Done creating users for all domains                                   ##
     ###########################################################################
-    
+
     ###########################################################################
     ## GRANT access to the app user to all relevant tables                   ##
     for (i in 1:length(tables)){
@@ -13091,10 +13113,10 @@ assignDbUsersAndPrivileges <- function(
             query7 <- paste0(
                 "GRANT SELECT on ", dbname,".",tables[i], " TO '",sUser,"'@'",domains[k],"';"
             )
-            
+
             doQuery(
-                user = dbAdminUser, 
-                password = dbAdminPwd, 
+                user = dbAdminUser,
+                password = dbAdminPwd,
                 host = hostDbUrl,
                 dbname = dbname,
                 query = query7,
@@ -13105,8 +13127,8 @@ assignDbUsersAndPrivileges <- function(
     }
     ## Done                                                                  ##
     ###########################################################################
-    
-}    
+
+}
 ## End of function assignDbUsersAndPrivileges                                ##
 ###############################################################################
 
@@ -13144,13 +13166,13 @@ uploadDbTableInfile <- function(
     indexName = NULL,
     mode = "MySQL",
     tempFileName = "temp.upload.csv"
-    
+
 ){
     ############################
-    ## Helper function 
+    ## Helper function
     doQuery <- function(
-        user = "db.user", 
-        password = "db.upload.pwd", 
+        user = "db.user",
+        password = "db.upload.pwd",
         host = "host",
         dbname = "primDataDB",
         query = "mysql db query",
@@ -13159,114 +13181,114 @@ uploadDbTableInfile <- function(
     ){
         library(RMySQL)
         dbDB <- dbConnect(
-            drv = RMySQL::MySQL(), 
-            user = user, 
-            password = password, 
+            drv = RMySQL::MySQL(),
+            user = user,
+            password = password,
             host = host,
             dbname = dbname
-        ) 
-        
+        )
+
         tryCatch(res <- DBI::dbGetQuery(dbDB, query), error = function(c) {
             c$message <- stop(paste0("Error in ", query, "."))
         })
-        
-        
+
+
         DBI::dbDisconnect(dbDB)
         if (resOut){
             return(res)
         }
-        
+
     }
-    
+
     ###########################################################################
     ## save table locally for in file upload                                 ##
-    
+
     write.csv(df.data, tempFileName, row.names = F)
     rm(df.data)
-    
+
     ##                                                                       ##
     ###########################################################################
-    
+
     ## Drop existing table if exists
-    
+
     query1 <- paste0("DROP TABLE IF EXISTS ", dbTableName, ";\n")
-    
+
     doQuery(
-        user = user, 
-        password = password, 
+        user = user,
+        password = password,
         host = host,
         dbname = prim.data.db,
         query = query1,
         #existingAccessFileName = existingAccessFileName
         resOut = FALSE
     )
-    
-    
+
+
     query2 <- paste0(
         #query,
         "CREATE TABLE IF NOT EXISTS ",
         dbTableName,
         " (gene VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci, cellID VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci, lg10Expr DECIMAL(6,3) NULL DEFAULT NULL, row_names INT(10) NOT NULL AUTO_INCREMENT,PRIMARY KEY (row_names)); "
     )
-    
+
     doQuery(
-        user = user, 
-        password = password, 
+        user = user,
+        password = password,
         host = host,
         dbname = prim.data.db,
         query = query2,
         #existingAccessFileName = existingAccessFileName
         resOut = FALSE
     )
-    
+
     print("Data is being rendered. This may take a few minutes for larger datasets.")
-    
+
     ## infile upload
     query3 <- paste0(
         #query,
         "LOAD DATA LOCAL INFILE '",
         tempFileName,
         "' INTO TABLE ",
-        dbTableName, 
+        dbTableName,
         " FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES (gene, cellID, lg10Expr, row_names);"
     )
-    
-    
+
+
     doQuery(
-        user = user, 
-        password = password, 
+        user = user,
+        password = password,
         host = host,
         dbname = prim.data.db,
         query = query3,
         #existingAccessFileName = existingAccessFileName
         resOut = FALSE
     )
-    
-    ## alter and index 
+
+    ## alter and index
     query4 <- paste0(
         #query,
         "ALTER TABLE ", dbTableName, " ADD UNIQUE(row_names);"
     )
-    
+
     doQuery(
-        user = user, 
-        password = password, 
+        user = user,
+        password = password,
         host = host,
         dbname = prim.data.db,
         query = query4,
         #existingAccessFileName = existingAccessFileName
         resOut = FALSE
     )
-    
-    
+
+
     query5 <- paste0(
         #query,
         "CREATE INDEX idx_gene ON ", dbTableName, " (gene);"
     )
-    
+
     doQuery(
-        user = user, 
-        password = password, 
+        user = user,
+        password = password,
         host = host,
         dbname = prim.data.db,
         query = query5,
@@ -13285,8 +13307,6 @@ uploadDbTableInfile <- function(
 ## Function createPowerpointPresentation                                     ##
 
 #' @title doQuery
-#'
-#'
 #' @param user Database username
 #' @param password Database password
 #' @param host Host URL
@@ -13301,8 +13321,8 @@ uploadDbTableInfile <- function(
 #' @return Res
 #' @export
 doQuery <- function(
-    user = "db.user", 
-    password = "db.upload.pwd", 
+    user = "db.user",
+    password = "db.upload.pwd",
     host = "host",
     dbname = "primDataDB",
     query = "mysql db query",
@@ -13313,14 +13333,14 @@ doQuery <- function(
 ){
     #library(RMySQL)
     if (mode == "SQLite"){
-        
+
         dbDB <- DBI::dbConnect(
             drv = RSQLite::SQLite(),
             dbname = dbname
         )
-        
+
     } else {
-        
+
         dbDB <- DBI::dbConnect(
             drv = RMySQL::MySQL(),
             user = user,
@@ -13328,19 +13348,19 @@ doQuery <- function(
             host = host,
             dbname = dbname
         )
-        
+
     }
-    
+
     tryCatch(res <- DBI::dbGetQuery(dbDB, query), error = function(c) {
         c$message <- stop(paste0("Error in ", query, "."))
     })
-    
-    
+
+
     DBI::dbDisconnect(dbDB)
     if (resOut){
         return(res)
     }
-    
+
 }
 
 ##                                                                           ##
@@ -13352,7 +13372,7 @@ doQuery <- function(
 
 #' @title createExcelWorkbook
 #'
-#' @description This function creates an Excel workbook from a list with 
+#' @description This function creates an Excel workbook from a list with
 #' data.frames. Each item of the list will become a sheet in the Excel
 #' output file
 #' @param excelList A list of dataframes
@@ -13366,19 +13386,19 @@ createExcelWorkbook <- function(
     excelList,
     outPutFN = "result.table.xlsx"
 ){
-    
+
     ## Check if all names are less than 32 characters ##
     names(excelList) <- sapply(names(excelList), function(x) substr(x, 1, 32))
-    
+
     ## Make sure all entries are unique - particularly after shortening ##
     if (length(unique(names(excelList))) != length(names(excelList))){
         names(excelList) <- sapply(names(excelList), function(x) substr(names(excelList),1, 29))
         names(excelList) <- paste(names(excelList), "_", 1:lenght(names(excelList)))
     }
-    
-    
+
+
     wb <- openxlsx::createWorkbook()
-    
+
     ## Style headers ##
     hs1 <- openxlsx::createStyle(
         fontColour = "#ffffff",
@@ -13386,22 +13406,22 @@ createExcelWorkbook <- function(
         halign = "CENTER",
         textDecoration = "Bold"
     )
-    
+
     for (i in 1:length(excelList)){
         sheet <- names(excelList)[i]
         dfOutput <- data.frame(excelList[[i]])
         openxlsx::addWorksheet(wb, sheet)
         openxlsx::freezePane(wb, sheet ,  firstActiveRow = 2)
         openxlsx::writeData(wb, sheet = sheet, dfOutput, startRow = 1, startCol = 1, headerStyle = hs1)
-        
+
     }
-    
+
     openxlsx::saveWorkbook(
         wb,
         outPutFN ,
         overwrite = TRUE
     )
-    
+
     print(paste0("Excel output files create and depoisted in ", outPutFN))
 }
 
@@ -13420,7 +13440,7 @@ createExcelWorkbook <- function(
 #' @description This function creates a settings file for a biologic data visualization project.
 #' @param excelList A list of dataframes
 #' @param outPutFN A output filepath/filename
-#' @param designFN Path to a design file. 
+#' @param designFN Path to a design file.
 #' @param modelFN Path to DGE model file
 #' @param NFcoreSettingsFN Path to NF core settings file.
 #' @param countTableFN Path to count table
@@ -13429,7 +13449,7 @@ createExcelWorkbook <- function(
 #' @param mostVariableFeaturesFN Path to most variable featurs file
 #' @param calculate_DGE If DGE instructions are present in the desing file, calculate
 #' @param calculate_LRT If LRT instructions are present in the desing file, calculate
-#' @param DEseq2External_DGE Folder in which external res(dds) results are kept 
+#' @param DEseq2External_DGE Folder in which external res(dds) results are kept
 #' @param DEseq2External_LRT Folder in which external res(dds) results are kept
 #' @param projectFolder Path to project folder
 #' @param experiment_id Experiment ID
@@ -13453,7 +13473,7 @@ createExcelWorkbook <- function(
 #' @param db.user Database username
 #' @param host Database host IP
 #' @param lab.categories.table Lab categories table
-#' @param HGtestEnrichmentGmtFile HGtestEnrichmentGmtFile 
+#' @param HGtestEnrichmentGmtFile HGtestEnrichmentGmtFile
 #' @param GSEAtestEnrichmentGmtFile GSEAtestEnrichmentGmtFile
 #' @param pathToSeqStorageFolder Vector of paths to folders to Crick sequencing storage. Make sure the last character is a /
 #' @param stranded Boolean
@@ -13505,64 +13525,68 @@ assembleBiologicProject <- function(
     read.length = "100bp",
     paired.end = FALSE,
     pathToRSEMresultsFiles = NULL,
-    dfRef = NULL
+    dfRef = NULL,
+    biologicSettingsFN = NULL
 ){
     ## This function assembles the pipelinelist ##
     pipelineList <- list()
-    
+
     ## Make sure final character is a slash
     lastChr <- substr(projectFolder, nchar(projectFolder), nchar(projectFolder))
     if (lastChr != "/"){
         projectFolder <- paste0(projectFolder, "/")
     }
-    
+
     pipelineList[["folder"]] <- projectFolder
-    
+
     ## Path were the biologic spec file will be kept: ##
     ## Default setting:
-    pipelineList[["biologicSettingsFN"]] <- paste0(pipelineList[["folder"]], "workdir/bulkRNAseq_workflow/design/biologic.settings.file.csv")
-    
+
+    if (is.null(pipelineList[["biologicSettingsFN"]])){
+        pipelineList[["biologicSettingsFN"]] <- paste0(pipelineList[["folder"]], "workdir/bulkRNAseq_workflow/design/biologic.settings.file.csv")
+    }
+
     ## Project parameters                       ##
     ## This will be the name of the web project ##
     pipelineList[["project_id"]] <- experiment_id
-    
+
     ## The LIMS ID will be used to retrieve project information
     pipelineList[["lims.id"]] <- lims.id
-    
+
     ## This is the lab name ##
     pipelineList[["labname"]] <- labname
-    
+
     ## This is the project under which this experiment will be organised in the db
     ## The project is the umbrella under which several experiments around a similar
-    ## topic are organised. 
+    ## topic are organised.
     ## If a project name exists, this new experiment will be added to that umbrella
-    ## project. If the project does not exists, it will be created. 
-    
+    ## project. If the project does not exists, it will be created.
+
     pipelineList[["project_name"]] <- project_name
-    
+
     ## Parameters for the experiment
-    ## If the parameters title, subtitle and abstract are set to NULL, 
+    ## If the parameters title, subtitle and abstract are set to NULL,
     ## they'll be filled automatically based on the LIMS ID
     pipelineList[["Documentation Parameter"]] <- ""
     pipelineList[["title"]] <- title
     pipelineList[["subtitle"]] <- subtitle
     pipelineList[["abstract"]] <- abstract
-    
+
     ## Mumber of genes to consider as most variable ##
     pipelineList[["NtopGenes"]] <- NtopGenes
-    
+
     ## Genes to calculate a correlaiton coefficient for:
     pipelineList[["corGeneVec"]] <- corGeneVec
-    
+
     # options: "bulk_rna_seq", "sc_rna_seq", "mi_rna_seq"
     pipelineList[["experiment.type"]] <- experiment.type
-    
+
     ## This should be the reference transcriptome ##
-    ## options for pipelineList[["species"]] 
+    ## options for pipelineList[["species"]]
     ## "homo_sapiens", "mus_musculus", "drosophila_melongaster", "daniero_rerio"
     pipelineList[["species"]] <- species
     pipelineList[["release"]] <- release
-    
+
     ###############################################################################
     ## Display parameters                                                        ##
     pipelineList[["count.table.headline"]] <- count.table.headline
@@ -13570,52 +13594,52 @@ assembleBiologicProject <- function(
     pipelineList[["heamap.headline.text"]] <- heatmap.headline.text
     ##                                                                           ##
     ###############################################################################
-    
+
     ###############################################################################
     ## Timecourse section: Set entries to NULL if not a timecourse experiment    ##
-    
-    ## designTScol entry needs to be present as column name in the design file 
+
+    ## designTScol entry needs to be present as column name in the design file
     pipelineList[["designTScol"]] <- designTScol
     # Default setting
     # pipelineList[["designTScol"]] <- NULL
-    
+
     #pipelineList[["timecourse.units"]] <- "Embryonic Day"
     ## Default: pipelineList[["timecourse.units"]] <- NULL
-    
+
     pipelineList[["timecourse.units"]] <- timecourse.units
-    ## Default: 
+    ## Default:
     #pipelineList[["timecourse.units"]] <- NULL
-    
+
     ## End timecourse section                                                    ##
     ###############################################################################
-    
+
     ###############################################################################
     ## Set database parameters                                                   ##
-    
+
     ## Reference data selections
     pipelineList[["Database Parameters	"]] <- ""
-    
+
     ## Enter lab database name here
     ## One database per lab
     ## Naming convention: Initials of the lab head followed by l for lab
-    ## For the dimitris anastasiou lab it would be dal_data, but you can also 
-    ## chose anastasioud_data, if you prefer. 
-    
+    ## For the dimitris anastasiou lab it would be dal_data, but you can also
+    ## chose anastasioud_data, if you prefer.
+
     pipelineList[["primDataDB"]] <- primDataDB
-    
+
     ## These three can be left pre-set
     pipelineList[["ref.cat.db"]] <- "reference_categories_db_new"
-    
+
     ## Default settings
     pipelineList[["db.user"]] <- db.user
     pipelineList[["host"]] <- host
-    
+
     ## Add lab categories table, if available.
     ## The current format for lab category tables is [lab head initials]_lab_categories
     pipelineList[["lab.categories.table"]] <- lab.categories.table
     ## Default if no lab database table is available
     # pipelineList[["lab.categories.table"]] <- NULL
-    
+
     ## Set additional reference tables ##
     ## Default settings:
     if (is.null(dfRef)){
@@ -13648,115 +13672,115 @@ assembleBiologicProject <- function(
             )
         )
     }
-    
+
     dfRef <- cbind(
         rep("referenceTableListDB", nrow(dfRef)),
         dfRef
     )
-    
-    
-    
+
+
+
     pipelineList[["ReferenceTable"]] <- dfRef
-    
+
     ## Parameters that might be set automatically at the Crick, when information
-    # is available via asf. 
-    
+    # is available via asf.
+
     ###############################################################################
     ## Specify GSEA and HG gmt enrichment files                                  ##
     ## gmt files are assumed to be in human nomanclature                         ##
     pipelineList[["HGtestEnrichmentGmtFile"]] <- HGtestEnrichmentGmtFile
-    
+
     pipelineList[["GSEAtestEnrichmentGmtFile"]] <- GSEAtestEnrichmentGmtFile
-    
+
     ##                                                                           ##
     ###############################################################################
-    
+
     pipelineList[["designFN"]] <- designFN
-    
+
     pipelineList[["modelFN"]] <- modelFN
-    
+
     pipelineList[["NFcoreSettingsFN"]] <- NFcoreSettingsFN
-    
-    
+
+
     ## Specify the folders in which FASTQ sequencing files are located
     ## If specified, make sure that pathToSeqStorageFolder has a backslash at the end
     pipelineList[["pathToSeqStorageFolder"]] <- pathToSeqStorageFolder
-    
+
     ## Default setting if no alignment is required:
     # pipelineList[["pathToSeqStorageFolder"]] <- NULL
     pipelineList[["stranded"]] <- stranded
     pipelineList[["read.length"]] =  read.length
-    
+
     ## Legacy Alignment parameters ##
-    
+
     pipelineList[["paired.end"]] <- paired.end
     pipelineList[["scriptVec"]] <- as.vector(NULL, mode="character")
     pipelineList[["AlignFASTQcolumn"]] <- "sample.id"
-    
+
     pipelineList[["ModuleFASTQC"]] = "module load FastQC/0.11.5-Java-1.8.0_92"
     pipelineList[["ModuleTrimGalore"]] = "Trim_Galore/0.4.2-foss-2016b"
     pipelineList[["TrimGaloreMinLength"]] = 25
     pipelineList[["TrimGaloreMinQuality"]] = 20
-    
-    
+
+
     ###############################################################################
     ## End sequencig section                                                     ##
     ###############################################################################
-    
+
     ###############################################################################
     ## Add path to RSEM count file                                               ##
-    
+
     pipelineList[["pathToRSEMresultsFiles"]] <- pathToRSEMresultsFiles
-    
-    
-    
+
+
+
     pipelineList[["countTableFN"]] <- countTableFN
-    
+
     pipelineList[["TpmTableFN"]]  <- TpmTableFN
-    
+
     pipelineList[["PcaFN"]]  <- PcaFN
-    
+
     pipelineList[["mostVariableFeaturesFN"]] <- mostVariableFeaturesFN
-    
+
     pipelineList[["DEseq2External_DGE"]]  <- DEseq2External_DGE
     pipelineList[["DEseq2External_LRT"]]  <- DEseq2External_LRT
-    
-    ## Set to false if no DGE results specified in the design file are to be 
+
+    ## Set to false if no DGE results specified in the design file are to be
     # calculated.
     pipelineList[["calculate_DGE"]] <- calculate_DGE
     pipelineList[["calculate_LRT"]] <- calculate_LRT
-    
+
     ###############################################################################
     ## Create parameter File                                                     ##
-    
+
     ## To create pipelineJSON, remove reference list ##
     dfRefTab <- data.frame(pipelineList[["ReferenceTable"]])
-    
+
     #pipelineList[["ReferenceTable"]] <- NULL
-    
+
     #pipelineJson <- jsonlite::toJSON(pipelineList)
-    
-    
+
+
     maxLength <- max(unlist(lapply(pipelineList, length))) + 1
-    
+
     if (maxLength <= 3){
         maxLength  <- 3
     }
-    
+
     for (i in 1:length(pipelineList)){
         newRow <- c(
-            names(pipelineList)[i], 
+            names(pipelineList)[i],
             pipelineList[[i]]
         )
-        
+
         if (length(newRow) < maxLength){
             newRow <- c(
-                newRow, 
+                newRow,
                 rep("", maxLength - length(newRow))
             )
-            
+
         }
-        
+
         if (i == 1){
             dfObio <- data.frame(t(newRow))
         } else {
@@ -13765,45 +13789,45 @@ assembleBiologicProject <- function(
                 data.frame(t(newRow))
             )
         }
-        
+
     }
-    
-    
-    
-    
+
+
+
+
     if (ncol(dfRefTab) < maxLength){
         addCols <- maxLength - ncol(dfRefTab)
-        
+
         for (j in 1:addCols){
             dfRefTab <- cbind(
                 dfRefTab,
                 rep("", nrow(dfRefTab))
             )
         }
-        
+
     }
-    
+
     dfRefTab <- data.frame(dfRefTab)
     names(dfRefTab) <- names(dfObio)
-    
-    
+
+
     dfObio <- dplyr::bind_rows(dfObio, dfRefTab)
     dfObio[is.na(dfObio)] <- ""
-    
-    
+
+
     write.table(dfObio, pipelineList[["biologicSettingsFN"]]  , row.names=FALSE, col.names=FALSE, sep=",")
-    
+
     print(paste0("Check settings file ", pipelineList[["biologicSettingsFN"]], " for accuracy."))
-    
+
     return(pipelineList)
-    
+
 }
 ## End: assembleBiologicProject                                              ##
 ###############################################################################
 
 ###############################################################################
 ## (7c) createbulkRNASeqAnalysisNFcoreScript                                 ##
-#' @title createbulkRNASeqAnalysisNFcoreScript 
+#' @title createbulkRNASeqAnalysisNFcoreScript
 #'
 #' @description Creates NF-core script
 #' @param obj Biologic Object
@@ -13816,7 +13840,7 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
     obj = "biologic object",
     NFcoreSettingsFN = "path/to/NF/core/settings",
     scriptVecSlot = "scriptVec"
-    
+
 ){
     tempShellScriptVector <- as.vector(NULL, mode = "character")
     tempShellScriptVector <- c(
@@ -13850,15 +13874,15 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
                obj@parameterList$project_id, " -c 12 --mem-per-cpu=7000 -o NFC.slurm"
         )
     )
-    
+
     sink(paste0(pipelineList$localWorkDir, "nf.core.script.sh"))
-    
+
     scriptVec <- tempShellScriptVector
     for (i in 1:length(scriptVec)){
         cat(scriptVec[i])
         cat("\n")
     }
-    
+
     sink()
 }
 
@@ -13869,7 +13893,7 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
 ## Function loadDESeq2outputFromFile                                         ##
 
 
-#' @title loadDESeq2outputFromFile 
+#' @title loadDESeq2outputFromFile
 #'
 #' @description This function creates a settings file for a biologic data visualization project.
 #' @param Obio biologic object
@@ -13877,7 +13901,7 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
 #' @param mode LRT or DGE
 #' @return Obio
 #' @export
-#' 
+#'
 ############################################################
 ## Function load DGE results from file
 loadDESeq2outputFromFile <- function(
@@ -13886,7 +13910,7 @@ loadDESeq2outputFromFile <- function(
     replace = FALSE,
     mode = NULL # Can be DGE or LRT
 ){
-    
+
     if (is.null(mode)){
         if (DEseq2resultDir == "DEseq2External_LRT"){
             mode = "LRT"
@@ -13894,7 +13918,7 @@ loadDESeq2outputFromFile <- function(
             mode = "DGE"
         }
     }
-    
+
     allfiles <- paste0(DEseq2resultDir, "/", list.files(DEseq2resultDir))
     allfiles <- allfiles[grep(".txt", allfiles)]
     allfiles <- gsub("//", "/", allfiles)
@@ -13906,52 +13930,52 @@ loadDESeq2outputFromFile <- function(
     dfAnno <- unique(
         Obio@dfGeneAnnotation[,c(Obio@parameterList$primaryAlignmentGeneID, Obio@parameterList$geneIDcolumn)]
     )
-    
+
     ## Done adding ENSMUSG column                                                ##
     ###############################################################################
     for (i in 1:length(allfiles)){
         colName <- contrastNames[i]
         res <- read.delim(allfiles[i], header = T, sep="\t")
-        
-        
+
+
         ## In case gene_ids were saved in row names
         pos <- grep("gene_id", names(res))
         if (length(pos) == 0){
-            res[["gene_id"]] <- row.names(res)  
+            res[["gene_id"]] <- row.names(res)
         } else if (length(pos) == 1){
             row.names(res) <- res$gene_id
         }
-        
+
         ################################
-        ## This project only 
-        
-        
+        ## This project only
+
+
         selVec <- c("gene_id", "baseMean", "log2FoldChange", "lfcSE",  "pvalue", "padj")
-        
+
         if (!sum(selVec %in% names(res)) == length(selVec)){
             stop(paste0("Check DESeq2 input files. Mandantory columns: ", paste0(selVec, collapse = ", ")))
         }
-        
+
         res <- unique(res[,selVec])
-        
+
         res <- res[!(duplicated(res[,"gene_id"])),]
         res[is.na(res)] <- 0
         res <- res[res$baseMean > 0,]
         res$baseMean <- log2(res$baseMean)
-        ## Done 
+        ## Done
         ################################
-        
-        
+
+
         #row.names(res) <- res[,Obio@parameterList$primaryAlignmentGeneID]
-        
+
         names(res) = paste(names(res), colName, sep="_")
         names(res) <- gsub(paste0("gene_id_", colName), "gene_id", names(res))
         names(res) <- gsub("^gene_id$", Obio@parameterList$primaryAlignmentGeneID, names(res))
         #res[[Obio@parameterList$primaryAlignmentGeneID]] = rownames(res)
-        
+
         ## log2 the base mean for lrt applications
-        
-        
+
+
         if (mode == "DGE"){
             names(res) = gsub("log2FoldChange", "logFC", names(res))
             names(res) = gsub(
@@ -13959,40 +13983,40 @@ loadDESeq2outputFromFile <- function(
                 paste("contrast_D", i, "_logFC", sep=""),
                 names(res)
             )
-            
+
             names(res) = gsub(
                 "padj",
                 paste("contrast_D", i, "_padj", sep=""),
                 names(res)
             )
-            
+
             names(res) = gsub(
                 "stat",
                 paste("contrast_D", i, "_stat", sep=""),
                 names(res)
             )
-            
+
             names(res) = gsub(
                 "baseMean",
                 paste("contrast_D", i, "_lg2BaseMean", sep=""),
                 names(res)
             )
-            
+
             #Remove all rows without a padj
             padj.col = grep("padj", names(res))[1]
             res[,padj.col][is.na(res[,padj.col])] = ""
             res = res[res[,padj.col] != "", ]
             res[,padj.col] <- as.numeric(res[,padj.col])
-            
+
             ## Add log10p column ##
             padj  <- names(res)[grep("_padj_", names(res))]
             lg10p <- gsub("padj", "lg10p", padj)
-            
+
             for (z in 1:length(padj)){
                 preprocess <- as.numeric(res[,padj[z]])
                 minNum <- min(preprocess[preprocess != 0])
                 preprocess[preprocess == 0] <- minNum
-                
+
                 # if (length(grep("padj_LRT", padj[i])) > 0){
                 #     preprocess <- as.numeric(res[,padj[z]])
                 #     minNum <- min(preprocess[preprocess != 0])
@@ -14000,27 +14024,27 @@ loadDESeq2outputFromFile <- function(
                 # } else {
                 #     preprocess <- as.numeric(res[,padj[z]])
                 # }
-                
+
                 temp <- -1*log10(preprocess)
                 #temp[temp >= 50] = 50
                 res[,lg10p[z]] <- temp
             }
-            
+
             col.vector = c(
                 Obio@parameterList$primaryAlignmentGeneID,
                 names(res)[grep("contrast", names(res))]
             )
-            
+
             res = res[,col.vector]
-            
+
             ## Make all numeric columns numeric ##
             res[,grep("contrast_", names(res))] <- apply(res[,grep("contrast_", names(res))], 2, as.numeric)
         }
-        
+
         if (mode == "LRT"){
             #res[[Obio@parameterList$primaryAlignmentGeneID]] = rownames(res)
             res$stat <- NULL
-            
+
             names(res) = gsub(
                 "baseMean",
                 paste0("contrast_L_lg2BaseMean_"),
@@ -14063,7 +14087,7 @@ loadDESeq2outputFromFile <- function(
             ## Make all numeric columns numierc ##
             res[,grep("contrast_", names(res))] <- apply(res[,grep("contrast_", names(res))], 2, as.numeric)
         } # end LRT mode
-        
+
         if (i == 1){
             dfContrastTable <- res
         } else {
@@ -14077,13 +14101,13 @@ loadDESeq2outputFromFile <- function(
             dfContrastTable[is.na(dfContrastTable)] <- 0
         }
     }
-    
-    
+
+
     # head(dfContrastTable)
-    
+
     dfContrastTable<- dfContrastTable[rowSums(dfContrastTable[,2:ncol(dfContrastTable)]) != 0, ]
     names(dfContrastTable) <- gsub("__", "_", names(dfContrastTable))
-    
+
     if (mode == "LRT"){
         if (replace){
             Obio@DEseq2LRTtable <- data.frame(NULL)
@@ -14096,12 +14120,12 @@ loadDESeq2outputFromFile <- function(
                 by.y = Obio@parameterList$primaryAlignmentGeneID,
                 all = TRUE
             )
-            Obio@DEseq2LRTtable[is.na(Obio@DEseq2LRTtable)] <- 0 
+            Obio@DEseq2LRTtable[is.na(Obio@DEseq2LRTtable)] <- 0
         } else {
             Obio@DEseq2LRTtable <- dfContrastTable
         }
     }
-    
+
     if (mode == "DGE"){
         if (replace){
             Obio@DEseq2contrastTable <- data.frame(NULL)
@@ -14114,21 +14138,21 @@ loadDESeq2outputFromFile <- function(
                 by.y = Obio@parameterList$primaryAlignmentGeneID,
                 all = TRUE
             )
-            Obio@DEseq2contrastTable[is.na(Obio@DEseq2contrastTable)] <- 0 
+            Obio@DEseq2contrastTable[is.na(Obio@DEseq2contrastTable)] <- 0
         } else {
             Obio@DEseq2contrastTable <- dfContrastTable
         }
     }
-    
-    
-    
-    
+
+
+
+
     if (mode == "LRT"){
         print("DESeq2 results loaded into Obio@DEseq2LRTtable")
     } else {
         print("DESeq2 results loaded into Obio@DEseq2contrastTable")
     }
-    
+
     return(Obio)
 }
 ## Done with function                                                        ##

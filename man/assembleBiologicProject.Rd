@@ -10,7 +10,7 @@ assembleBiologicProject(
   NFcoreSettingsFN = NULL,
   countTableFN = NULL,
   TpmTableFN = NULL,
-  dfPcaFN = NULL,
+  PcaFN = NULL,
   mostVariableFeaturesFN = NULL,
   calculate_DGE = TRUE,
   calculate_LRT = TRUE,
@@ -59,7 +59,7 @@ assembleBiologicProject(
 
 \item{TpmTableFN}{Path to TPM table}
 
-\item{dfPcaFN}{Path to PCA table}
+\item{PcaFN}{Path to PCA table}
 
 \item{mostVariableFeaturesFN}{Path to most variable featurs file}
 
