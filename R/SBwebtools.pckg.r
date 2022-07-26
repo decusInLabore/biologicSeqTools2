@@ -13567,6 +13567,19 @@ createExcelWorkbook <- function(
 #' @title assembleBiologicProject
 #'
 #' @description This function creates a settings file for a biologic data visualization project.
+#' @param genome Genome ID, e.g. GRCm38
+#' @param primaryAlignmentGeneID
+#' @param release
+#' @param path2GeneIDtable
+#' @param GTFfile
+#' @param genomeFa
+#' @param genomeFai
+#' @param rRNAfile
+#' @param geneIDcolumn
+#' @param refFlatFile
+#' @param ribosomalIntervalList
+#' @param genomeidx
+#' @param bowtieGenomeidx
 #' @param excelList A list of dataframes
 #' @param outPutFN A output filepath/filename
 #' @param designFN Path to a design file.
@@ -13602,8 +13615,8 @@ createExcelWorkbook <- function(
 #' @param db.user Database username
 #' @param host Database host IP
 #' @param lab.categories.table Lab categories table
-#' @param HGtestEnrichmentGmtFile HGtestEnrichmentGmtFile
-#' @param GSEAtestEnrichmentGmtFile GSEAtestEnrichmentGmtFile
+#' @param HGtestEnrichmentGmtFile HGtestEnrichmentGmtFile vector
+#' @param GSEAtestEnrichmentGmtFile GSEAtestEnrichmentGmtFile vector
 #' @param pathToSeqStorageFolder Vector of paths to folders to Crick sequencing storage. Make sure the last character is a /
 #' @param stranded Boolean
 #' @param read.length default 100bp
@@ -13614,6 +13627,20 @@ createExcelWorkbook <- function(
 #'
 
 assembleBiologicProject <- function(
+    genome = NULL,
+    primaryAlignmentGeneID = NULL,
+    release = "release-89",
+    species = NULL,
+    path2GeneIDtable = NULL,
+    GTFfile = NULL,
+    genomeFa = NULL,
+    genomeFai = NULL,
+    rRNAfile = NULL,
+    geneIDcolumn = NULL,
+    refFlatFile = NULL,
+    ribosomalIntervalList = NULL,
+    genomeidx = NULL,
+    bowtieGenomeidx = NULL,
     designFN = NULL,
     modelFN = NULL,
     NFcoreSettingsFN = NULL,
@@ -13636,8 +13663,6 @@ assembleBiologicProject <- function(
     NtopGenes = NULL,
     corGeneVec = NULL,
     experiment.type = NULL,
-    species = NULL,
-    release = "release-89",
     count.table.headline = "TPM-values for all Samples",
     count.table.sidelabel = "TPM",
     heatmap.headline.text = "Heatmap: Row-averaged Expr",
@@ -13703,6 +13728,26 @@ assembleBiologicProject <- function(
     pipelineList[["subtitle"]] <- subtitle
     pipelineList[["abstract"]] <- abstract
 
+    #############################################################################
+    ## Parameters if alignment is required                                     ##
+
+    pipelineList[["genome"]] <- genome
+    pipelineList[["primaryAlignmentGeneID"]] <- primaryAlignmentGeneID
+    pipelineList[["species"]] <- species
+    pipelineList[["release"]] <- release
+    pipelineList[["path2GeneIDtable"]] <- path2GeneIDtable
+    pipelineList[["GTFfile"]] <- GTFfile
+    pipelineList[["genomeFa"]] <- genomeFa
+    pipelineList[["genomeFai"]] <- genomeFai
+    pipelineList[["rRNAfile"]] <- rRNAfile
+    pipelineList[["geneIDcolumn"]] <- geneIDcolumn
+    pipelineList[["ribosomalIntervalList"]] <- ribosomalIntervalList
+    pipelineList[["genomeidx"]] <- genomeidx
+    pipelineList[["bowtieGenomeidx"]] <- bowtieGenomeidx
+
+    ## Done                                                                    ##
+    #############################################################################
+
     ## Mumber of genes to consider as most variable ##
     pipelineList[["NtopGenes"]] <- NtopGenes
 
@@ -13715,8 +13760,7 @@ assembleBiologicProject <- function(
     ## This should be the reference transcriptome ##
     ## options for pipelineList[["species"]]
     ## "homo_sapiens", "mus_musculus", "drosophila_melongaster", "daniero_rerio"
-    pipelineList[["species"]] <- species
-    pipelineList[["release"]] <- release
+
 
     ###############################################################################
     ## Display parameters                                                        ##
@@ -13955,6 +13999,7 @@ assembleBiologicProject <- function(
 }
 ## End: assembleBiologicProject                                              ##
 ###############################################################################
+
 
 ###############################################################################
 ## (7c) createbulkRNASeqAnalysisNFcoreScript                                 ##
