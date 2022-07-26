@@ -154,7 +154,7 @@ setGeneric(
         obj@parameterList$AlignOutputEnsDir <- paste0(obj@parameterList$workdir, "RSEM/Ensembl/")
         obj@parameterList$FASTQCdir <- paste0(obj@parameterList$workdir, "FASTQC/")
         obj@parameterList$logDir <- paste0(obj@parameterList$workdir, "logs/")
-        obj@parameterList$DEseq2Dir <- paste0(obj@parameterList$localWorkDir, "DESeq2/")
+        obj@parameterList$DEseq2Dir <- paste0(obj@parameterList$workdir, "DESeq2/")
         return(obj)
     }
 )
@@ -217,6 +217,135 @@ setGeneric(
     }
 )
 
+
+## setDataBaseParameters                                                     ##
+###############################################################################
+
+
+###############################################################################
+## createGeneNameTable                                                       ##
+
+#' @title createGeneNameTable
+#'
+#' @description Method to define genome and genename tables
+#' @param obj A bioLOGIC data object
+#' @import biomaRt
+#' @export
+
+## Essential columns
+# primaryAlignmentGeneID/ENSMUSG, geneIDcolumn/mgi_symbol, gene_description
+## Optional columns
+# "gene_type"
+# "associated_gene_name" "gene_description"     "Gene.description"
+# "entrezgene"           "uniprot"              "hgnc_symbol"
+
+
+setGeneric(
+    name="createGeneNameTable",
+    def=function(
+        obj,
+        biomart = "ENSEMBL_MART_ENSEMBL",
+        genomeDir = "/camp/svc/reference/Genomics/babs",
+        selString = "mmusculus_gene_ensembl",
+        host= "http://may2017.archive.ensembl.org",
+        primaryAlignmentGeneID = "ENSMUSG",
+        geneIDcolumn = "mgi_symbol"
+    ){
+
+        ensembl_mart = biomaRt::useMart(biomart, host = host)
+
+        ensembl_dataset = biomaRt::useDataset(selString, mart=ensembl_mart)
+
+        selected_attributes = c(
+            #"ensembl_transcript_id",
+            "ensembl_gene_id",
+            "external_gene_name",
+            "strand",
+            "chromosome_name",
+            "start_position",
+            "end_position",
+            "gene_biotype",
+            "description"
+            #"transcript_biotype"
+        )
+
+        data = biomaRt::getBM(attributes = selected_attributes, mart = ensembl_dataset)
+
+        names(data) <- gsub("ensembl_gene_id", primaryAlignmentGeneID, names(data))
+        names(data) <- gsub("external_gene_name", geneIDcolumn, names(data))
+        names(data) <- gsub("^description$", "gene_description", names(data))
+        names(data) <- gsub("^gene_biotype$", "gene_type", names(data))
+
+
+        return(data)
+
+    }
+)
+
+## createGeneNameTable                                                       ##
+###############################################################################
+
+
+###############################################################################
+## setGenomeAndGeneNameTable                                            ##
+
+#' @title setGenomeAndGeneNameTable
+#'
+#' @description Method to define genome and genename tables
+#' @param obj A bioLOGIC data object
+#' @param genome Genome ID, e.g. GRCm38
+#' @param primaryAlignmentGeneID
+#' @param release
+#' @param path2GeneIDtable
+#' @param GTFfile
+#' @param genomeFa
+#' @param genomeFai
+#' @param rRNAfile
+#' @param geneIDcolumn
+#' @param refFlatFile
+#' @param ribosomalIntervalList
+#' @param genomeidx
+#' @param bowtieGenomeidx
+#' @export
+
+setGeneric(
+    name="setGenomeAndGeneNameTable",
+    def=function(
+        obj,
+        #genomeDir="/camp/svc/reference/Genomics/babs"),
+        genome = "GRCm38",
+        primaryAlignmentGeneID = "ENSMUSG",
+        release = NULL,
+        path2GeneIDtable = "paste0(obj@parameterList$hpcMount, 'Projects/reference_data/gene_id_annotation_files/','20171206.release-89.mm.ENSMUSG.mgi.entrez.uniprot.description.hgnc.table.txt')",
+        GTFfile = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/gtf/Mus_musculus.GRCm38.', releaseID, '.rnaseqc.gtf')",
+        genomeFa = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/genome/Mus_musculus.GRCm38.dna_sm.toplevel.fa')",
+        genomeFai = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/genome/Mus_musculus.GRCm38.dna_sm.toplevel.fai')",
+        rRNAfile = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/', obj@parameterList$release, '/gtf/Mus_musculus.GRCm38.',releaseID,'.rRNA.list')",
+        geneIDcolumn =  "mgi_symbol",
+        bedFile = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/', obj@parameterList$release,'/gtf/Mus_musculus.GRCm38.',releaseID,'.bed')",
+        refFlatFile = NULL,
+        ribosomalIntervalList  = NULL,
+        genomeidx = NULL,
+        bowtieGenomeidx = NULL
+    ){
+        obj@parameterList$genome  <- genome
+        obj@parameterList$primaryAlignmentGeneID <- primaryAlignmentGeneID
+        obj@parameterList$release <- release
+        obj@parameterList$path2GeneIDtable <- path2GeneIDtable
+        obj@parameterList$GTFfile <- GTFfile
+        obj@parameterList$genomeFa <- genomeFa
+        obj@parameterList$genomeFai <- genomeFai
+        obj@parameterList$rRNAfile <- rRNAfile
+        obj@parameterList$geneIDcolumn <- geneIDcolumn
+        obj@parameterList$bedFile <- bedFile
+        obj@parameterList$refFlatFile <- refFlatFile
+        obj@parameterList$ribosomalIntervalList  <- ribosomalIntervalList
+        obj@parameterList$genomeidx <- genomeidx
+        obj@parameterList$bowtieGenomeidx <- bowtieGenomeidx
+        return(obj)
+
+    }
+)
 
 ## setDataBaseParameters                                                     ##
 ###############################################################################

@@ -45,7 +45,8 @@ assembleBiologicProject(
   read.length = "100bp",
   paired.end = FALSE,
   pathToRSEMresultsFiles = NULL,
-  dfRef = NULL
+  dfRef = NULL,
+  biologicSettingsFN = NULL
 )
 }
 \arguments{
