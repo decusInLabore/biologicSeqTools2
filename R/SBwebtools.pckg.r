@@ -891,7 +891,7 @@ setGeneric(
     name="addGeneAnnotation",
     def=function(
         obj,
-        geneIDfn = NULL
+        geneIDfn = NULL,
         addUniprotColumn = FALSE
     ){
 
