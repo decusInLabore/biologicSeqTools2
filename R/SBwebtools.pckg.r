@@ -884,15 +884,22 @@ setGeneric(
 #' @description Method to add a gene annotation
 #' @param addUniprotColumn Boolean: Adding a uniprot column?
 #' @param obj A bioLOGIC data object
+#' @param geneIDfn GeneID definiton file. Expected columns: primaryAlignmentGeneID, geneIDcolumn optional addition: hgnc_symbol, gene_description, gene_type
 #' @export
 
 setGeneric(
     name="addGeneAnnotation",
     def=function(
         obj,
+        geneIDfn = NULL
         addUniprotColumn = FALSE
     ){
-        dfAnno <- read.delim(
+
+        if (is.null(obj@parameterList$path2GeneIDtable)){
+            obj@parameterList[["path2GeneIDtable"]] <- geneIDfn
+        }
+
+         dfAnno <- read.delim(
             obj@parameterList$path2GeneIDtable,
             header = TRUE,
             sep = "\t",
@@ -2795,7 +2802,7 @@ setGeneric(
 #' @title DGEanalysis
 #'
 #' @description Method description
-#' @param agree TBD
+#' @param obj A biologic object
 #' @keywords TBD
 #' @export
 #'
@@ -2873,7 +2880,10 @@ setGeneric(
 
                 fCols <- c("condition", addCols)
                 for (j in 1:length(fCols)){
-                    colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    if (!is.numeric(colData[,fCols[j]])){
+                        colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    }
+
                 }
 
                 colData[,"condition"] = as.factor(colData[,"condition"])
@@ -3218,7 +3228,10 @@ setGeneric(
                 fCols <- fCols[fCols %in% colnames(colData)]
 
                 for (j in 1:length(fCols)){
-                    colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    if (!is.numeric(colData[,fCols[j]])){
+                        colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    }
+
                 }
 
                 colData[,"condition"] = as.factor(colData[,"condition"])
@@ -14006,18 +14019,30 @@ assembleBiologicProject <- function(
 #' @title createbulkRNASeqAnalysisNFcoreScript
 #'
 #' @description Creates NF-core script
-#' @param obj Biologic Object
+#' @param outdir NF core output directory
 #' @param NFcoreSettingsFN Path for NF core settings file
 #' @param scriptVecSlot Script vector slot
+#' @param genomeFa genomeFa file
+#' @param GTFfile GTFfile
+#' @param project_id ProjectID
+#' @param scriptOutdir Scriptoutputdirectory
 #' @export
 #'
 #'
 createbulkRNASeqAnalysisNFcoreScript <- function(
-    obj = "biologic object",
+    outdir = "script_output_directory",
+    genomeFa = "genomeFa",
+    GTFfile = "GTFfile",
+    project_id = "RN20202",
+    scriptOutdir = NULL,
     NFcoreSettingsFN = "path/to/NF/core/settings",
     scriptVecSlot = "scriptVec"
 
 ){
+    if (is.null(scriptOutdir)){
+        scriptOutdir <- outdir
+    }
+
     tempShellScriptVector <- as.vector(NULL, mode = "character")
     tempShellScriptVector <- c(
         tempShellScriptVector,
@@ -14039,19 +14064,18 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
         "nextflow run nf-core/rnaseq \\",
         "-r 3.6 \\",
         paste0("--input ", NFcoreSettingsFN, " \\"),
-        paste0("--outdir ", obj@parameterList$localWorkDir, " \\"),
+        paste0("--outdir ", outdir, " \\"),
         "-profile crick \\",
         "--aligner star_rsem \\",
-        paste0("--rsem_index ", gsub("/genome$", "", obj@parameterList$genomeIndex), " \\"),
         "--email stefan.boeing@crick.ac.uk \\",
-        paste0("--fasta ", obj@parameterList$genomeFa, " \\"),
-        paste0("--gtf ", obj@parameterList$GTFfile, " \\"),
+        paste0("--fasta ", genomeFa, " \\"),
+        paste0("--gtf ", GTFfile, " \\"),
         paste0("' --job-name=NFCR_",
-               obj@parameterList$project_id, " -c 12 --mem-per-cpu=7000 -o NFC.slurm"
+               project_id, " -c 12 --mem-per-cpu=7000 -o NFC.slurm"
         )
     )
 
-    sink(paste0(pipelineList$localWorkDir, "nf.core.script.sh"))
+    sink(paste0(scriptOutdir, "nf.core.script.sh"))
 
     scriptVec <- tempShellScriptVector
     for (i in 1:length(scriptVec)){
@@ -14060,6 +14084,8 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
     }
 
     sink()
+
+    print(paste0("NF-core script created in: ", scriptOutdir, "nf.core.script.sh"))
 }
 
 ## Done
