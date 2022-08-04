@@ -884,15 +884,22 @@ setGeneric(
 #' @description Method to add a gene annotation
 #' @param addUniprotColumn Boolean: Adding a uniprot column?
 #' @param obj A bioLOGIC data object
+#' @param geneIDfn GeneID definiton file. Expected columns: primaryAlignmentGeneID, geneIDcolumn optional addition: hgnc_symbol, gene_description, gene_type
 #' @export
 
 setGeneric(
     name="addGeneAnnotation",
     def=function(
         obj,
+        geneIDfn = NULL
         addUniprotColumn = FALSE
     ){
-        dfAnno <- read.delim(
+
+        if (is.null(obj@parameterList$path2GeneIDtable)){
+            obj@parameterList[["path2GeneIDtable"]] <- geneIDfn
+        }
+
+         dfAnno <- read.delim(
             obj@parameterList$path2GeneIDtable,
             header = TRUE,
             sep = "\t",
@@ -2795,7 +2802,7 @@ setGeneric(
 #' @title DGEanalysis
 #'
 #' @description Method description
-#' @param agree TBD
+#' @param obj A biologic object
 #' @keywords TBD
 #' @export
 #'
@@ -2873,7 +2880,10 @@ setGeneric(
 
                 fCols <- c("condition", addCols)
                 for (j in 1:length(fCols)){
-                    colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    if (!is.numeric(colData[,fCols[j]])){
+                        colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    }
+
                 }
 
                 colData[,"condition"] = as.factor(colData[,"condition"])
@@ -3218,7 +3228,10 @@ setGeneric(
                 fCols <- fCols[fCols %in% colnames(colData)]
 
                 for (j in 1:length(fCols)){
-                    colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    if (!is.numeric(colData[,fCols[j]])){
+                        colData[,fCols[j]] <- as.factor(colData[,fCols[j]])
+                    }
+
                 }
 
                 colData[,"condition"] = as.factor(colData[,"condition"])
@@ -13567,6 +13580,19 @@ createExcelWorkbook <- function(
 #' @title assembleBiologicProject
 #'
 #' @description This function creates a settings file for a biologic data visualization project.
+#' @param genome Genome ID, e.g. GRCm38
+#' @param primaryAlignmentGeneID
+#' @param release
+#' @param path2GeneIDtable
+#' @param GTFfile
+#' @param genomeFa
+#' @param genomeFai
+#' @param rRNAfile
+#' @param geneIDcolumn
+#' @param refFlatFile
+#' @param ribosomalIntervalList
+#' @param genomeidx
+#' @param bowtieGenomeidx
 #' @param excelList A list of dataframes
 #' @param outPutFN A output filepath/filename
 #' @param designFN Path to a design file.
@@ -13602,8 +13628,8 @@ createExcelWorkbook <- function(
 #' @param db.user Database username
 #' @param host Database host IP
 #' @param lab.categories.table Lab categories table
-#' @param HGtestEnrichmentGmtFile HGtestEnrichmentGmtFile
-#' @param GSEAtestEnrichmentGmtFile GSEAtestEnrichmentGmtFile
+#' @param HGtestEnrichmentGmtFile HGtestEnrichmentGmtFile vector
+#' @param GSEAtestEnrichmentGmtFile GSEAtestEnrichmentGmtFile vector
 #' @param pathToSeqStorageFolder Vector of paths to folders to Crick sequencing storage. Make sure the last character is a /
 #' @param stranded Boolean
 #' @param read.length default 100bp
@@ -13614,6 +13640,20 @@ createExcelWorkbook <- function(
 #'
 
 assembleBiologicProject <- function(
+    genome = NULL,
+    primaryAlignmentGeneID = NULL,
+    release = "release-89",
+    species = NULL,
+    path2GeneIDtable = NULL,
+    GTFfile = NULL,
+    genomeFa = NULL,
+    genomeFai = NULL,
+    rRNAfile = NULL,
+    geneIDcolumn = NULL,
+    refFlatFile = NULL,
+    ribosomalIntervalList = NULL,
+    genomeidx = NULL,
+    bowtieGenomeidx = NULL,
     designFN = NULL,
     modelFN = NULL,
     NFcoreSettingsFN = NULL,
@@ -13636,8 +13676,6 @@ assembleBiologicProject <- function(
     NtopGenes = NULL,
     corGeneVec = NULL,
     experiment.type = NULL,
-    species = NULL,
-    release = "release-89",
     count.table.headline = "TPM-values for all Samples",
     count.table.sidelabel = "TPM",
     heatmap.headline.text = "Heatmap: Row-averaged Expr",
@@ -13703,6 +13741,26 @@ assembleBiologicProject <- function(
     pipelineList[["subtitle"]] <- subtitle
     pipelineList[["abstract"]] <- abstract
 
+    #############################################################################
+    ## Parameters if alignment is required                                     ##
+
+    pipelineList[["genome"]] <- genome
+    pipelineList[["primaryAlignmentGeneID"]] <- primaryAlignmentGeneID
+    pipelineList[["species"]] <- species
+    pipelineList[["release"]] <- release
+    pipelineList[["path2GeneIDtable"]] <- path2GeneIDtable
+    pipelineList[["GTFfile"]] <- GTFfile
+    pipelineList[["genomeFa"]] <- genomeFa
+    pipelineList[["genomeFai"]] <- genomeFai
+    pipelineList[["rRNAfile"]] <- rRNAfile
+    pipelineList[["geneIDcolumn"]] <- geneIDcolumn
+    pipelineList[["ribosomalIntervalList"]] <- ribosomalIntervalList
+    pipelineList[["genomeidx"]] <- genomeidx
+    pipelineList[["bowtieGenomeidx"]] <- bowtieGenomeidx
+
+    ## Done                                                                    ##
+    #############################################################################
+
     ## Mumber of genes to consider as most variable ##
     pipelineList[["NtopGenes"]] <- NtopGenes
 
@@ -13715,8 +13773,7 @@ assembleBiologicProject <- function(
     ## This should be the reference transcriptome ##
     ## options for pipelineList[["species"]]
     ## "homo_sapiens", "mus_musculus", "drosophila_melongaster", "daniero_rerio"
-    pipelineList[["species"]] <- species
-    pipelineList[["release"]] <- release
+
 
     ###############################################################################
     ## Display parameters                                                        ##
@@ -13956,23 +14013,36 @@ assembleBiologicProject <- function(
 ## End: assembleBiologicProject                                              ##
 ###############################################################################
 
+
 ###############################################################################
 ## (7c) createbulkRNASeqAnalysisNFcoreScript                                 ##
 #' @title createbulkRNASeqAnalysisNFcoreScript
 #'
 #' @description Creates NF-core script
-#' @param obj Biologic Object
+#' @param outdir NF core output directory
 #' @param NFcoreSettingsFN Path for NF core settings file
 #' @param scriptVecSlot Script vector slot
+#' @param genomeFa genomeFa file
+#' @param GTFfile GTFfile
+#' @param project_id ProjectID
+#' @param scriptOutdir Scriptoutputdirectory
 #' @export
 #'
 #'
 createbulkRNASeqAnalysisNFcoreScript <- function(
-    obj = "biologic object",
+    outdir = "script_output_directory",
+    genomeFa = "genomeFa",
+    GTFfile = "GTFfile",
+    project_id = "RN20202",
+    scriptOutdir = NULL,
     NFcoreSettingsFN = "path/to/NF/core/settings",
     scriptVecSlot = "scriptVec"
 
 ){
+    if (is.null(scriptOutdir)){
+        scriptOutdir <- outdir
+    }
+
     tempShellScriptVector <- as.vector(NULL, mode = "character")
     tempShellScriptVector <- c(
         tempShellScriptVector,
@@ -13994,19 +14064,18 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
         "nextflow run nf-core/rnaseq \\",
         "-r 3.6 \\",
         paste0("--input ", NFcoreSettingsFN, " \\"),
-        paste0("--outdir ", obj@parameterList$localWorkDir, " \\"),
+        paste0("--outdir ", outdir, " \\"),
         "-profile crick \\",
         "--aligner star_rsem \\",
-        paste0("--rsem_index ", gsub("/genome$", "", obj@parameterList$genomeIndex), " \\"),
         "--email stefan.boeing@crick.ac.uk \\",
-        paste0("--fasta ", obj@parameterList$genomeFa, " \\"),
-        paste0("--gtf ", obj@parameterList$GTFfile, " \\"),
+        paste0("--fasta ", genomeFa, " \\"),
+        paste0("--gtf ", GTFfile, " \\"),
         paste0("' --job-name=NFCR_",
-               obj@parameterList$project_id, " -c 12 --mem-per-cpu=7000 -o NFC.slurm"
+               project_id, " -c 12 --mem-per-cpu=7000 -o NFC.slurm"
         )
     )
 
-    sink(paste0(pipelineList$localWorkDir, "nf.core.script.sh"))
+    sink(paste0(scriptOutdir, "nf.core.script.sh"))
 
     scriptVec <- tempShellScriptVector
     for (i in 1:length(scriptVec)){
@@ -14015,6 +14084,8 @@ createbulkRNASeqAnalysisNFcoreScript <- function(
     }
 
     sink()
+
+    print(paste0("NF-core script created in: ", scriptOutdir, "nf.core.script.sh"))
 }
 
 ## Done

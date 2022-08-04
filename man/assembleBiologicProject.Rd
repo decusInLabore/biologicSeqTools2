@@ -5,6 +5,20 @@
 \title{assembleBiologicProject}
 \usage{
 assembleBiologicProject(
+  genome = NULL,
+  primaryAlignmentGeneID = NULL,
+  release = "release-89",
+  species = NULL,
+  path2GeneIDtable = NULL,
+  GTFfile = NULL,
+  genomeFa = NULL,
+  genomeFai = NULL,
+  rRNAfile = NULL,
+  geneIDcolumn = NULL,
+  refFlatFile = NULL,
+  ribosomalIntervalList = NULL,
+  genomeidx = NULL,
+  bowtieGenomeidx = NULL,
   designFN = NULL,
   modelFN = NULL,
   NFcoreSettingsFN = NULL,
@@ -27,8 +41,6 @@ assembleBiologicProject(
   NtopGenes = NULL,
   corGeneVec = NULL,
   experiment.type = NULL,
-  species = NULL,
-  release = "release-89",
   count.table.headline = "TPM-values for all Samples",
   count.table.sidelabel = "TPM",
   heatmap.headline.text = "Heatmap: Row-averaged Expr",
@@ -50,6 +62,12 @@ assembleBiologicProject(
 )
 }
 \arguments{
+\item{genome}{Genome ID, e.g. GRCm38}
+
+\item{release}{Ensembl release used for annotations. Option: "release-89",}
+
+\item{species}{Species. Options: "homo_sapiens", "mus_musculus", "drosophila_melongaster", "daniero_rerio"}
+
 \item{designFN}{Path to a design file.}
 
 \item{modelFN}{Path to DGE model file}
@@ -94,10 +112,6 @@ assembleBiologicProject(
 
 \item{experiment.type}{Experiment type:  options: "bulk_rna_seq", "sc_rna_seq", "mi_rna_seq"}
 
-\item{species}{Species. Options: "homo_sapiens", "mus_musculus", "drosophila_melongaster", "daniero_rerio"}
-
-\item{release}{Ensembl release used for annotations. Option: "release-89",}
-
 \item{count.table.headline}{String to be displayed in count table headlines}
 
 \item{count.table.sidelabel}{String to be displayed as count table sidelabel}
@@ -116,9 +130,9 @@ assembleBiologicProject(
 
 \item{lab.categories.table}{Lab categories table}
 
-\item{HGtestEnrichmentGmtFile}{HGtestEnrichmentGmtFile}
+\item{HGtestEnrichmentGmtFile}{HGtestEnrichmentGmtFile vector}
 
-\item{GSEAtestEnrichmentGmtFile}{GSEAtestEnrichmentGmtFile}
+\item{GSEAtestEnrichmentGmtFile}{GSEAtestEnrichmentGmtFile vector}
 
 \item{pathToSeqStorageFolder}{Vector of paths to folders to Crick sequencing storage. Make sure the last character is a /}
 
