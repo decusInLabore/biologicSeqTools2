@@ -5,13 +5,25 @@
 \title{createbulkRNASeqAnalysisNFcoreScript}
 \usage{
 createbulkRNASeqAnalysisNFcoreScript(
-  obj = "biologic object",
+  outdir = "script_output_directory",
+  genomeFa = "genomeFa",
+  GTFfile = "GTFfile",
+  project_id = "RN20202",
+  scriptOutdir = NULL,
   NFcoreSettingsFN = "path/to/NF/core/settings",
   scriptVecSlot = "scriptVec"
 )
 }
 \arguments{
-\item{obj}{Biologic Object}
+\item{outdir}{NF core output directory}
+
+\item{genomeFa}{genomeFa file}
+
+\item{GTFfile}{GTFfile}
+
+\item{project_id}{ProjectID}
+
+\item{scriptOutdir}{Scriptoutputdirectory}
 
 \item{NFcoreSettingsFN}{Path for NF core settings file}
 

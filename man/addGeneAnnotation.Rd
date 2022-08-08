@@ -4,10 +4,12 @@
 \alias{addGeneAnnotation}
 \title{addGeneAnnotation}
 \usage{
-addGeneAnnotation(obj, addUniprotColumn = FALSE)
+addGeneAnnotation(obj, geneIDfn = NULL, addUniprotColumn = FALSE)
 }
 \arguments{
 \item{obj}{A bioLOGIC data object}
+
+\item{geneIDfn}{GeneID definiton file. Expected columns: primaryAlignmentGeneID, geneIDcolumn optional addition: hgnc_symbol, gene_description, gene_type}
 
 \item{addUniprotColumn}{Boolean: Adding a uniprot column?}
 }
