@@ -7,7 +7,7 @@
 DGEanalysis(obj, createNewResultTable = TRUE)
 }
 \arguments{
-\item{agree}{TBD}
+\item{obj}{A biologic object}
 }
 \description{
 Method description
