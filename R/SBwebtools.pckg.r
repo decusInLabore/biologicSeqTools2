@@ -300,7 +300,6 @@ setGeneric(
             
         }
         
-        
         return(data)
         
     }
