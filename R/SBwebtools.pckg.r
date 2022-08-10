@@ -247,15 +247,15 @@ setGeneric(
         biomart = "ENSEMBL_MART_ENSEMBL",
         genomeDir = "/camp/svc/reference/Genomics/babs",
         selString = "mmusculus_gene_ensembl",
-        host= "http://may2017.archive.ensembl.org",
+        host= "http://jan2019.archive.ensembl.org",
         primaryAlignmentGeneID = "ENSMUSG",
         geneIDcolumn = "mgi_symbol"
     ){
-
+        
         ensembl_mart = biomaRt::useMart(biomart, host = host)
-
+        
         ensembl_dataset = biomaRt::useDataset(selString, mart=ensembl_mart)
-
+        
         selected_attributes = c(
             #"ensembl_transcript_id",
             "ensembl_gene_id",
@@ -268,20 +268,43 @@ setGeneric(
             "description"
             #"transcript_biotype"
         )
-
+        
         data = biomaRt::getBM(attributes = selected_attributes, mart = ensembl_dataset)
-
+        
         names(data) <- gsub("ensembl_gene_id", primaryAlignmentGeneID, names(data))
         names(data) <- gsub("external_gene_name", geneIDcolumn, names(data))
         names(data) <- gsub("^description$", "gene_description", names(data))
         names(data) <- gsub("^gene_biotype$", "gene_type", names(data))
-
-
+        
+        ## Create human/mouse gene name translation table if the species is not human ## 
+        if (selString != "hsapiens_gene_ensembl"){
+            ensembl_mart_hs = biomaRt::useMart(biomart, host = host, dataset = "hsapiens_gene_ensembl")
+            
+            annot_table <- getLDS(
+                mart = ensembl_dataset,
+                attributes = c('external_gene_name'),
+                martL = ensembl_mart_hs,
+                attributesL = c('external_gene_name'))
+            
+            names(annot_table) <- c(geneIDcolumn, "hgnc_symbol")
+            
+            annot_table <- annot_table[annot_table[,geneIDcolumn] %in% data[,geneIDcolumn], ]
+            
+            data <- dplyr::full_join(
+                data,
+                annot_table, 
+                by = geneIDcolumn
+            )
+            
+            data[is.na(data)] <- ""
+            
+        }
+        
+        
         return(data)
-
+        
     }
 )
-
 ## createGeneNameTable                                                       ##
 ###############################################################################
 
