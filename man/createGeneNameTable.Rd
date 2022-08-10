@@ -9,7 +9,7 @@ createGeneNameTable(
   biomart = "ENSEMBL_MART_ENSEMBL",
   genomeDir = "/camp/svc/reference/Genomics/babs",
   selString = "mmusculus_gene_ensembl",
-  host = "http://may2017.archive.ensembl.org",
+  host = "http://jan2019.archive.ensembl.org",
   primaryAlignmentGeneID = "ENSMUSG",
   geneIDcolumn = "mgi_symbol"
 )
