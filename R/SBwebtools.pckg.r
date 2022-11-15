@@ -280,7 +280,7 @@ setGeneric(
         if (selString != "hsapiens_gene_ensembl"){
             ensembl_mart_hs = biomaRt::useMart(biomart, host = host, dataset = "hsapiens_gene_ensembl")
             
-            annot_table <- getLDS(
+            annot_table <- biomaRt::getLDS(
                 mart = ensembl_dataset,
                 attributes = c('external_gene_name'),
                 martL = ensembl_mart_hs,
