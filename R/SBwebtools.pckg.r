@@ -290,11 +290,18 @@ setGeneric(
             
             annot_table <- annot_table[annot_table[,geneIDcolumn] %in% data[,geneIDcolumn], ]
             
+            ## deal with empty entries ##
+            data[["h"]] <- data[,geneIDcolumn]
+            data[data[,geneIDcolumn] == "", geneIDcolumn] <- data[data[,geneIDcolumn] == "", primaryAlignmentGeneID]
+            
             data <- dplyr::full_join(
                 data,
                 annot_table, 
                 by = geneIDcolumn
             )
+            data[is.na(data)] <- ""
+            data[, geneIDcolumn] <- data$h
+            data$h <- NULL
             
             data[is.na(data)] <- ""
             
