@@ -7290,7 +7290,7 @@ inferDBcategories <- function(
                 } else if (max(dfData[,i], na.rm = T) <= 10000){
                     classLabel <- "DECIMAL(6,1) NULL DEFAULT NULL"
                 } else {
-                    classLabel <- "DECIMAL(8,0) NULL DEFAULT NULL"
+                    classLabel <- "DECIMAL(9,1) NULL DEFAULT NULL"
                 }
             }
         } else {
