@@ -269,7 +269,11 @@ setGeneric(
             #"transcript_biotype"
         )
         
-        data = biomaRt::getBM(attributes = selected_attributes, mart = ensembl_dataset)
+        data = biomaRt::getBM(
+            attributes = selected_attributes, 
+            mart = ensembl_dataset,
+            useCache = FALSE
+        )
         
         names(data) <- gsub("ensembl_gene_id", primaryAlignmentGeneID, names(data))
         names(data) <- gsub("external_gene_name", geneIDcolumn, names(data))
