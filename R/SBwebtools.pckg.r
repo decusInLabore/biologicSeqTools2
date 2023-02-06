@@ -1590,7 +1590,7 @@ setGeneric(
 #'
 setGeneric(
     name="createDdsObject",
-    def=function(obj) {
+    def=function(obj, saveDEseq2output = FALSE) {
 
         library(DESeq2)
 
@@ -1652,6 +1652,21 @@ setGeneric(
                 )
             )
         )
+        
+        ## Save to file 
+        if (saveDEseq2output){
+            FN <- paste0(
+                obj@parameterList$reportTableDir,
+                "DESeq2.normalized.counts.all.samples.txt"
+            )
+            
+            write.table(
+                obj@DESeqNormReadCountsTable,
+                FN,
+                sep="\t"
+            )
+            
+        }
 
         #Remove all rows 0 counts for all samples from df.normCounts
         obj@DESeqNormReadCountsTable <- obj@DESeqNormReadCountsTable[rowSums(obj@DESeqNormReadCountsTable)!=0,]
@@ -2844,7 +2859,8 @@ setGeneric(
     name="DGEanalysis",
     def=function(
         obj,
-        createNewResultTable = TRUE
+        createNewResultTable = TRUE,
+        saveDEseq2outputForEachComparison = FALSE
     ) {
 
         #######################################################################
@@ -2948,7 +2964,7 @@ setGeneric(
                 colData$condition <- as.factor(colData$condition)
 
 
-                dds <- DESeqDataSetFromMatrix(
+                dds <- DESeq2::DESeqDataSetFromMatrix(
                     countData = raw.counts.temp[,row.names(colData)],
                     colData   = colData,
                     design    = designFormula
@@ -2961,14 +2977,31 @@ setGeneric(
                     betaPrior <- FALSE
                 }
 
-                dds <- DESeq(
+                dds <- DESeq2::DESeq(
                     dds,
                     test = as.vector(dfDGE[i, "test"]),
                     parallel = obj@parameterList$parallelProcessing,
                     betaPrior = betaPrior
                 )
 
-                res <- results(dds, contrast = contrast.vector)
+                res <- DESeq2::results(dds, contrast = contrast.vector)
+                
+                
+                ## Save to file if 
+                if (saveDEseq2outputForEachComparison){
+                    FN <- paste0(
+                        obj@parameterList$reportTableDir,
+                        colName,
+                        ".txt"
+                    )
+                    
+                    write.table(
+                        res,
+                        FN,
+                        sep = "\t"
+                    )
+                }
+                
                 #https://support.bioconductor.org/p/83773/
                 #res <- results(dds, contrast=list("conditioncell_type_A","conditioncell_type_B"))
 
