@@ -9,15 +9,15 @@ create.rnaseqc.script(
   sample.column = "sample.id",
   project.code = "p103",
   project = "SB_RNAseqQC",
- 
-    basedataDir = "/camp/stp/babs/working/boeings/Projects/103_VTL_ES_RNA_seq_BAFF_timecourse_hs/workdir/RSEM/Ensembl",
+  basedataDir =
+    "/camp/stp/babs/working/boeings/Projects/103_VTL_ES_RNA_seq_BAFF_timecourse_hs/workdir/RSEM/Ensembl",
   bam.suffix = "STAR.genome.bam",
- 
-    GTFfile = "/camp/stp/babs/working/data/genomes/homo_sapiens/ensembl/GRCh38/release-86/gtf/Homo_sapiens.GRCh38.86.rnaseqc.gtf",
- 
-    rRNAfile = "/camp/stp/babs/working/data/genomes/homo_sapiens/ensembl/GRCh38/release-86/gtf/Homo_sapiens.GRCh38.86.rRNA.list",
- 
-    genome.fa = "/camp/stp/babs/working/data/genomes/homo_sapiens/ensembl/GRCh38/release-86/genome/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+  GTFfile =
+    "/camp/stp/babs/working/data/genomes/homo_sapiens/ensembl/GRCh38/release-86/gtf/Homo_sapiens.GRCh38.86.rnaseqc.gtf",
+  rRNAfile =
+    "/camp/stp/babs/working/data/genomes/homo_sapiens/ensembl/GRCh38/release-86/gtf/Homo_sapiens.GRCh38.86.rRNA.list",
+  genome.fa =
+    "/camp/stp/babs/working/data/genomes/homo_sapiens/ensembl/GRCh38/release-86/genome/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
   refFlatFile = "",
   ribosomalIntervalList = "",
   bedFile = "",

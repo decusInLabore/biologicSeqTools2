@@ -19,10 +19,10 @@ createSettingsFile(
   count.table.headline = "PTM ratio H/L counts for all samples",
   count.table.sidelabel = "Counts",
   venn.slider.selector.strings = "c(\\"contrast_x_logFC\\", \\"constrast_x_padj\\")",
- 
-    plot.selection.strings = "c(\\n    \\"_logFC\\",\\n    \\"_PCA_\\",\\n    \\"_lg10p\\"\\n)",
- 
-    webSiteDir = "/camp/stp/babs/working/boeings/Stefan/protocol_files/github/biologic/src/experiments",
+  plot.selection.strings =
+    "c(\\n    \\"_logFC\\",\\n    \\"_PCA_\\",\\n    \\"_lg10p\\"\\n)",
+  webSiteDir =
+    "/camp/stp/babs/working/boeings/Stefan/protocol_files/github/biologic/src/experiments",
   upper_heatmap_limit = 3,
   lower_heatmap_limit = -3,
   heamap.headline.text = "heamap.headline.text",

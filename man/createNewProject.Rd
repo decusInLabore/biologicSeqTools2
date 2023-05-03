@@ -10,8 +10,8 @@ createNewProject(
   password = db.pwd,
   project_name = "G2 Cell Cycle Checkpoint",
   project_lab = ";Parker;",
- 
-    project_description = "This project investigates the influence of protein kinase C variants on the G2 cell cycle checkpoint."
+  project_description =
+    "This project investigates the influence of protein kinase C variants on the G2 cell cycle checkpoint."
 )
 }
 \arguments{

@@ -6,8 +6,8 @@
 \usage{
 readAndPrepareCountMatrix(
   count.data.fn = "paste0(raw.count.dir, \\"/\\",count.data.file)",
- 
-    string.to.be.deleted.in.raw.counts.columns = "paste0(\\"X\\", gsub(\\"/\\", \\".\\",paste0(workdir, \\"RSEM/Ensembl/\\")))",
+  string.to.be.deleted.in.raw.counts.columns =
+    "paste0(\\"X\\", gsub(\\"/\\", \\".\\",paste0(workdir, \\"RSEM/Ensembl/\\")))",
   df.design = "dfDesign"
 )
 }
