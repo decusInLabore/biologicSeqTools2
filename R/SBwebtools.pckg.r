@@ -1817,10 +1817,10 @@ setGeneric(
         ## Determine DESEQ2 variation estimate                                 ##
         if(!is.null(obj@ObjDds)){
             library(DESeq2)
-            if (length(unique(obj@dfDesign$sample.id)) > 42) {
-                rld <- vst(obj@ObjDds)
+            if (length(unique(obj@dfDesign$sample.id)) > 50) {
+                rld <- DESeq2::varianceStabilizingTransformation(obj@ObjDds)
             } else {
-                rld <- rlog(obj@ObjDds)
+                rld <- DESeq2::rlog(obj@ObjDds)
             }
 
             #########################################################################
@@ -1891,8 +1891,8 @@ setGeneric(
         if (obj@parameterList$batchMode){
             library(limma)
 
-            if (length(unique(obj@dfDesign$sample.id)) > 42) {
-                mPCA <- removeBatchEffect(assay(vst(obj@ObjDds)), obj@ObjDds$replicate)
+            if (length(unique(obj@dfDesign$sample.id)) > 50) {
+                mPCA <- removeBatchEffect(assay(DESeq2::varianceStabilizingTransformation(obj@ObjDds)), obj@ObjDds$replicate)
             } else {
                 mPCA <- removeBatchEffect(assay(rlog(obj@ObjDds)), obj@ObjDds$replicate)
             }
@@ -1902,8 +1902,8 @@ setGeneric(
 
             #rld <- rlog(ddsPCA, blind=FALSE)
         } else {
-            if (length(unique(obj@dfDesign$sample.id)) > 42) {
-                rld <- vst(obj@ObjDds)
+            if (length(unique(obj@dfDesign$sample.id)) > 50) {
+                rld <- DESeq2::varianceStabilizingTransformation(obj@ObjDds)
             } else {
                 rld <- rlog(obj@ObjDds)
             }
@@ -2131,8 +2131,8 @@ setGeneric(
 
     designColSelector = unique(c(designColSelector, "sample.id"))
 
-    if (length(unique(obj@dfDesign$sample.id)) > 42) {
-        rld <- vst(obj@ObjDds)
+    if (length(unique(obj@dfDesign$sample.id)) > 50) {
+        rld <- DESeq2::varianceStabilizingTransformation(obj@ObjDds)
     } else {
         rld <- rlog(obj@ObjDds)
     }
@@ -2254,8 +2254,8 @@ setGeneric(
         ###########################################################################
         ## Create dendrogram                                                     ##
 
-        if (length(unique(obj@dfDesign$sample.id)) > 42) {
-            rld <- vst(obj@ObjDds)
+        if (length(unique(obj@dfDesign$sample.id)) > 50) {
+            rld <- DESeq2::varianceStabilizingTransformation(obj@ObjDds)
         } else {
             rld <- rlog(obj@ObjDds)
         }
@@ -4080,8 +4080,8 @@ do.differential.expression.analyis <- function(
         #Create PCA plot based on the most variable genes in the dataset
         if (doPCA){
 
-            if (length(unique(obj@dfDesign$sample.id)) > 42) {
-                rld <- vst(obj@ObjDds)
+            if (length(unique(obj@dfDesign$sample.id)) > 50) {
+                rld <- DESeq2::varianceStabilizingTransformation(obj@ObjDds)
             } else {
                 rld <- rlog(obj@ObjDds)
             }

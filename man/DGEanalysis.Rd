@@ -4,7 +4,11 @@
 \alias{DGEanalysis}
 \title{DGEanalysis}
 \usage{
-DGEanalysis(obj, createNewResultTable = TRUE)
+DGEanalysis(
+  obj,
+  createNewResultTable = TRUE,
+  saveDEseq2outputForEachComparison = FALSE
+)
 }
 \arguments{
 \item{obj}{A biologic object}

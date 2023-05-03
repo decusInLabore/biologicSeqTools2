@@ -11,10 +11,10 @@ upload.datatable.to.database(
   prim.data.db = "project.database",
   dbTableName = "rnaseqdbTableName",
   df.data = "df.data.to.upload",
- 
-    db.col.parameter.list = list(`VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci`
-    = c("gene_description"), `VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci`
-    = c("ENSG", "ENSMUSG", "hgnc_symbol", "mgi_symbol", "uniprot", "entrezgene",
+  db.col.parameter.list =
+    list(`VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci` =
+    c("gene_description"), `VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci` =
+    c("ENSG", "ENSMUSG", "hgnc_symbol", "mgi_symbol", "uniprot", "entrezgene",
     "display_ptm", "^sequence_window", "p_site_env", "for_GSEA_gene_chip",
     "associated_gene_name", "gene_type"),
     `VARCHAR(1) CHARACTER SET latin1 COLLATE latin1_swedish_ci` = c("ppos", "amino_acid",

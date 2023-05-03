@@ -9,19 +9,19 @@ setGenomeAndGeneNameTable(
   genome = "GRCm38",
   primaryAlignmentGeneID = "ENSMUSG",
   release = NULL,
- 
-    path2GeneIDtable = "paste0(obj@parameterList$hpcMount, 'Projects/reference_data/gene_id_annotation_files/','20171206.release-89.mm.ENSMUSG.mgi.entrez.uniprot.description.hgnc.table.txt')",
- 
-    GTFfile = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/gtf/Mus_musculus.GRCm38.', releaseID, '.rnaseqc.gtf')",
- 
-    genomeFa = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/genome/Mus_musculus.GRCm38.dna_sm.toplevel.fa')",
- 
-    genomeFai = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/genome/Mus_musculus.GRCm38.dna_sm.toplevel.fai')",
- 
-    rRNAfile = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/', obj@parameterList$release, '/gtf/Mus_musculus.GRCm38.',releaseID,'.rRNA.list')",
+  path2GeneIDtable =
+    "paste0(obj@parameterList$hpcMount, 'Projects/reference_data/gene_id_annotation_files/','20171206.release-89.mm.ENSMUSG.mgi.entrez.uniprot.description.hgnc.table.txt')",
+  GTFfile =
+    "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/gtf/Mus_musculus.GRCm38.', releaseID, '.rnaseqc.gtf')",
+  genomeFa =
+    "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/genome/Mus_musculus.GRCm38.dna_sm.toplevel.fa')",
+  genomeFai =
+    "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/',obj@parameterList$release,'/genome/Mus_musculus.GRCm38.dna_sm.toplevel.fai')",
+  rRNAfile =
+    "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/', obj@parameterList$release, '/gtf/Mus_musculus.GRCm38.',releaseID,'.rRNA.list')",
   geneIDcolumn = "mgi_symbol",
- 
-    bedFile = "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/', obj@parameterList$release,'/gtf/Mus_musculus.GRCm38.',releaseID,'.bed')",
+  bedFile =
+    "paste0('/camp/svc/reference/Genomics/babs/mus_musculus/ensembl/GRCm38/', obj@parameterList$release,'/gtf/Mus_musculus.GRCm38.',releaseID,'.bed')",
   refFlatFile = NULL,
   ribosomalIntervalList = NULL,
   genomeidx = NULL,

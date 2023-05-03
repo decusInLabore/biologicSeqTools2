@@ -10,8 +10,7 @@ addProject2ProjectTable(
   password = db.pwd,
   experiment_id = project_id,
   experiment_question = "Which genes are candidates for G2M checkpoint regulation?",
- 
-    experiment_description = "<b>RNAi screen</b> for genes that affect the G2M checkpoint",
+  experiment_description = "<b>RNAi screen</b> for genes that affect the G2M checkpoint",
   experiment_owner = ";Katharina Deiss;Nicola Longwood;",
   experiment_lab = paste0(";", labname, ";"),
   experiment_viewers = paste0(";", paste(user_ids, collapse = ";"), ";"),

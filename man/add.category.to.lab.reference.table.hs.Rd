@@ -12,8 +12,8 @@ add.category.to.lab.reference.table.hs(
   cat.ref.db.table = "cs_lab_categories",
   gene.vector = gene.vec,
   gene.id = "hgnc_symbol",
- 
-    mm.hs.conversion.file = "Y:/working/boeings/Projects/reference_data/20160303.homologene.data.txt",
+  mm.hs.conversion.file =
+    "Y:/working/boeings/Projects/reference_data/20160303.homologene.data.txt",
   cat_name = "lung_cancer_late_subclonal_driver_genes",
   cat_type = "cs_lab",
   data_source = "Swanton lab",

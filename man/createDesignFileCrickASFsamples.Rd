@@ -6,8 +6,8 @@
 \usage{
 createDesignFileCrickASFsamples(
   pathToSeqStorageFolder = "pathToSeqStorageFolder",
- 
-    FNsampleAnnotation = "paste0(\\n    S4LvariableListing$localWorkDir,\\n    \\"sample.ids.txt\\")",
+  FNsampleAnnotation =
+    "paste0(\\n    S4LvariableListing$localWorkDir,\\n    \\"sample.ids.txt\\")",
   paired.end = "paired.end",
   fastqDir = "fastqDir",
   baseMount = ""

@@ -4,7 +4,7 @@
 \alias{createDdsObject}
 \title{createDdsObject}
 \usage{
-createDdsObject(obj)
+createDdsObject(obj, saveDEseq2output = FALSE)
 }
 \arguments{
 \item{agree}{TBD}

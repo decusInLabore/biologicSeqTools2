@@ -8,8 +8,8 @@ createSRAdownloadScript(
   sra.id.vector = "sra.id.vector",
   gse.id.vector = "",
   datadir = "",
- 
-    module.load.cmd = "module use /camp/stp/babs/working/software/modules/all;module load sratoolkit/2.8.2-1",
+  module.load.cmd =
+    "module use /camp/stp/babs/working/software/modules/all;module load sratoolkit/2.8.2-1",
   fastqDir = "./"
 )
 }
