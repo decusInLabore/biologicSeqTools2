@@ -7,6 +7,7 @@
 msigdb.gmt2refDB(
   df.gmt = "read.delim(gmt.file, header=FALSE, sep = '\\t', stringsAsFactors = FALSE)",
   host = "www.biologic-db.org",
+  port = port,
   db.user = "boeings",
   pwd = "pwd",
   ref.db = "reference_database",

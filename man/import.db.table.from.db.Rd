@@ -9,7 +9,8 @@ import.db.table.from.db(
   dbname = "reference_categories_db_new",
   user = "boeings",
   password = "",
-  host = "www.biologic-db.org"
+  host = "www.biologic-db.org",
+  port = 6008
 )
 }
 \arguments{

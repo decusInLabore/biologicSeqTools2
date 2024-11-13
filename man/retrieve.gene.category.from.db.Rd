@@ -10,6 +10,7 @@ retrieve.gene.category.from.db(
   user = "boeings",
   password = "",
   host = "www.biologic-db.org",
+  port = 6008,
   gene.symbol = "mgi_symbol",
   print.cat.name = TRUE
 )

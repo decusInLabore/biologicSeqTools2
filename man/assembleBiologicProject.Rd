@@ -49,6 +49,7 @@ assembleBiologicProject(
   primDataDB = NULL,
   db.user = NULL,
   host = NULL,
+  port = 6008,
   lab.categories.table = NULL,
   HGtestEnrichmentGmtFile = NULL,
   GSEAtestEnrichmentGmtFile = NULL,

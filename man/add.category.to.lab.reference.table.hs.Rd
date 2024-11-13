@@ -6,6 +6,7 @@
 \usage{
 add.category.to.lab.reference.table.hs(
   host = "www.biologic-db.org",
+  port = 6008,
   pwd = db.pwd,
   user = "boeings",
   cat.ref.db = "reference_categories_db_new",

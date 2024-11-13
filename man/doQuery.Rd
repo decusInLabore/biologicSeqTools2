@@ -8,6 +8,7 @@ doQuery(
   user = "db.user",
   password = "db.upload.pwd",
   host = "host",
+  port = 6008,
   dbname = "primDataDB",
   query = "mysql db query",
   resOut = FALSE,

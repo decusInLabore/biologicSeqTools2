@@ -7,6 +7,7 @@
 upload.pca.table.to.db(
   df.pca,
   host = "www.biologic-db.org",
+  port = 6008,
   prim.data.db = "vtl_data",
   password = "",
   db.user = "boeings",

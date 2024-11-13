@@ -8,6 +8,7 @@ listExistingProjects(
   user = "boeings",
   password = "",
   host = "www.biologic-db.org",
+  port = 6008,
   dbname = "reference_categories_db_new",
   dbtable = "project_description_table"
 )

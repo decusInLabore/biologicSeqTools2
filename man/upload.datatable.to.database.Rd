@@ -6,6 +6,7 @@
 \usage{
 upload.datatable.to.database(
   host = NULL,
+  port = 6008,
   user = NULL,
   password = NULL,
   prim.data.db = "project.database",

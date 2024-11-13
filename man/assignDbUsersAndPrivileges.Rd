@@ -7,6 +7,7 @@
 assignDbUsersAndPrivileges(
   accessFilePath = shinyDataPath,
   hostDbUrl = "10.27.241.82",
+  port = 6008,
   appUserName = substr(paste0(project_id, "_aUser"), 1, 15),
   geneDefault = NULL,
   domains = c("shiny-bioinformatics.crick.ac.uk", "10.\%"),

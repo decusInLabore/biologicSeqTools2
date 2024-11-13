@@ -7382,6 +7382,7 @@ inferDBcategories <- function(
 upload.pca.table.to.db <- function(
     df.pca,
     host = "www.biologic-db.org",
+    port = 6008,
     prim.data.db = "vtl_data",
     password = "",
     db.user = "boeings",
@@ -7423,13 +7424,26 @@ upload.pca.table.to.db <- function(
     #df.pca should contain three columns: sample_name, sample.group, sample.group_color, pca1, pca2, ..., pcaN
     df.pca[["row_names"]] <- 1:nrow(df.pca)
 
-    dbDB <- dbConnect(drv = RMySQL::MySQL(), user = db.user, password = password, host = host)
+    dbDB <- dbConnect(
+      drv = RMySQL::MySQL(),
+      user = db.user,
+      password = password,
+      host = host,
+      port = port
+    )
     dbGetQuery(dbDB, paste("CREATE DATABASE IF NOT EXISTS ", prim.data.db, sep=""))
     dbDB <- dbConnect(drv = RMySQL::MySQL(), user = db.user, password = db.pwd, dbname=prim.data.db, host = host)
     dbGetQuery(dbDB, paste("DROP TABLE IF EXISTS ", PCAdbTableName, sep=""))
     dbWriteTable(dbDB, PCAdbTableName, df.pca, row.names= FALSE)
 
-    dbDB <- dbConnect(drv = RMySQL::MySQL(), user = db.user, password = password, host = host, dbname=prim.data.db)
+    dbDB <- dbConnect(
+      drv = RMySQL::MySQL(),
+      user = db.user,
+      password = password,
+      host = host,
+      port = port,
+      dbname=prim.data.db
+    )
     dbGetQuery(dbDB, paste("ALTER TABLE `",PCAdbTableName,"` ADD UNIQUE(`row_names`)", sep=""))
     dbGetQuery(dbDB, paste("ALTER TABLE `",PCAdbTableName,"` ADD PRIMARY KEY(`row_names`)", sep=""))
     dbGetQuery(dbDB, paste0(
@@ -7503,6 +7517,7 @@ upload.pca.table.to.db <- function(
 
 upload.datatable.to.database <- function(
     host = NULL,
+    port = 6008,
     user = NULL,
     password = NULL,
     prim.data.db = "project.database",
@@ -7540,7 +7555,8 @@ upload.datatable.to.database <- function(
             user= "user",
             password = "password",
             dbname = "prim.data.db",
-            host = "host"){
+            host = "host",
+            port = 6008){
 
             if (mode == "SQLite"){
 
@@ -7554,7 +7570,8 @@ upload.datatable.to.database <- function(
                     drv = RMySQL::MySQL(),
                     user = user,
                     password = password,
-                    host = host
+                    host = host,
+                    port = port
 
                 )
 
@@ -7578,7 +7595,8 @@ upload.datatable.to.database <- function(
             user= user,
             password = password,
             dbname = prim.data.db,
-            host = host
+            host = host,
+            port = port
         )
 
         while (connectionCount > 2){
@@ -7591,7 +7609,8 @@ upload.datatable.to.database <- function(
                 user= user,
                 password = password,
                 dbname = prim.data.db,
-                host = host
+                host = host,
+                port = port
             )
 
 
@@ -7625,6 +7644,7 @@ upload.datatable.to.database <- function(
             user = user,
             password = password,
             host = host,
+            port = port,
             #dbname=prim.data.db,
             new.table = TRUE
         )
@@ -7708,6 +7728,7 @@ upload.datatable.to.database <- function(
             user = user,
             password = password,
             host = host,
+            port = port,
             dbname=prim.data.db
         )
 
@@ -7765,6 +7786,7 @@ upload.datatable.to.database <- function(
                         user = user,
                         password = password,
                         host = host,
+                        port = port,
                         dbname=prim.data.db
                     )
 
@@ -7799,7 +7821,8 @@ upload.datatable.to.database <- function(
         user = "user",
         password = "password",
         dbname = "prim.data.db",
-        host = "host"
+        host = "host",
+        port = 6008
     ){
         ## Establish connection ##
         if (mode == "SQLite"){
@@ -7816,6 +7839,7 @@ upload.datatable.to.database <- function(
                 user = user,
                 password = password,
                 host = host,
+                port = port,
                 dbname=prim.data.db
             )
 
@@ -7847,7 +7871,8 @@ upload.datatable.to.database <- function(
             user = user,
             password = password,
             dbname = dbname,
-            host = host
+            host = host,
+            port = port
         )
 
         ## Describe key columns in database table ##
@@ -7869,7 +7894,8 @@ upload.datatable.to.database <- function(
             user = user,
             password = password,
             dbname = dbname,
-            host = host
+            host = host,
+            port = port
         )
 
 
@@ -7915,7 +7941,8 @@ upload.datatable.to.database <- function(
                     user = user,
                     password = password,
                     dbname = dbname,
-                    host = host
+                    host = host,
+                    port = port
                 )
             }
             #print(alteration.string)
@@ -8003,6 +8030,7 @@ upload.datatable.to.database <- function(
                     user = user,
                     password = password,
                     host = host,
+                    port = port,
                     dbname=prim.data.db
                 )
 
@@ -8055,7 +8083,8 @@ import.db.table.from.db <- function(dbtable = "interpro_categori",
                                     dbname = "reference_categories_db_new",
                                     user     = "boeings",
                                     password = "",
-                                    host     = "www.biologic-db.org"
+                                    host     = "www.biologic-db.org",
+                                    port = 6008
 ){
     ## Helper function ##
     oldw <- getOption("warn")
@@ -8068,7 +8097,7 @@ import.db.table.from.db <- function(dbtable = "interpro_categori",
 
     library(RMySQL)
     ## Create connection
-    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, dbname=dbname)
+    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, port = port, dbname=dbname)
     ## Get number of expected rows from query ##
     nrows.to.download <- dbGetQuery(dbDB, paste0("SELECT COUNT(*) FROM ",dbtable))
 
@@ -8078,7 +8107,7 @@ import.db.table.from.db <- function(dbtable = "interpro_categori",
     download = TRUE
     i=1
     while (download) {
-        dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, dbname=dbname)
+        dbDB <- dbConnect(MySQL(), user = user, password = password, host = host,  port = port, dbname=dbname)
         out <- tryCatch({
             df.data = dbGetQuery(dbDB, paste0("SELECT DISTINCT * FROM ", dbtable))
         },
@@ -8275,6 +8304,7 @@ dbcat2gmt <- function(
 #'
 create.gmt.file.from.ref.data.table <- function(
     host = 'www.biologic-db.org',
+    port = port,
     dbname = "reference_categories_db_new",
     dataTable = "st_lab_categories",
     pwd = "Saturday08",
@@ -8290,7 +8320,8 @@ create.gmt.file.from.ref.data.table <- function(
             user = user,
             password = pwd,
             dbname= dbname,
-            host = host
+            host = host,
+            port = port
         )
 
         out <- tryCatch({
@@ -8668,6 +8699,7 @@ create.GSEA.table <- function(
 
         temp.cat.list <- import.db.table.from.db(
             host = host,
+            port = port,
             dbname = refdbname,
             dbtable = tables[i],
             password = db.pwd,
@@ -8780,6 +8812,7 @@ create.GSEA.table <- function(
 
     upload.datatable.to.database(
         host = host,
+        port = port,
         user = db.user,
         password = db.pwd,
         prim.data.db = "enriched_categories",
@@ -11104,11 +11137,12 @@ listExistingProjects <- function(
     user     = "boeings",
     password = "",
     host     = "www.biologic-db.org",
+    port     = 6008,
     dbname = "reference_categories_db_new",
     dbtable = "project_description_table"
 ){
     library(RMySQL)
-    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, dbname=dbname)
+    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, port = port, dbname=dbname)
     ResVec = sort(as.vector(dbGetQuery(dbDB, paste0("SELECT DISTINCT project_name FROM ", dbtable))[,1]))
     dbDisconnect(dbDB)
     return(ResVec)
@@ -11172,6 +11206,7 @@ createNewProject <- function(
 
     upload.datatable.to.database(
         host = host,
+        port = 6008,
         user = db.user,
         password = db.pwd,
         prim.data.db = dbname,
@@ -11260,6 +11295,7 @@ addProject2ProjectTable <- function(
 
     upload.datatable.to.database(
         host = host,
+        port = 6008,
         user = db.user,
         password = db.pwd,
         prim.data.db = dbname,
@@ -11667,6 +11703,7 @@ retrieve.gene.category.from.db <- function(
     user           = "boeings",
     password       = "",
     host           = "www.biologic-db.org",
+    port           = 6008,
     gene.symbol    = "mgi_symbol",
     print.cat.name = TRUE
 ){
@@ -11693,6 +11730,7 @@ retrieve.gene.category.from.db <- function(
         user     = user,
         password = password,
         host     = host,
+        port     = port,
         dbname   = dbname
     )
 
@@ -11742,6 +11780,7 @@ retrieve.gene.category.from.db <- function(
         user     = user,
         password = password,
         host     = host,
+        port     = port,
         dbname   = dbname
     )
 
@@ -11784,6 +11823,7 @@ retrieve.gene.category.from.db <- function(
 #'
 add.category.to.lab.reference.table.hs <- function(
     host = 'www.biologic-db.org',
+    port = 6008,
     pwd = db.pwd,
     user = "boeings",
     cat.ref.db = "reference_categories_db_new",
@@ -11881,6 +11921,7 @@ add.category.to.lab.reference.table.hs <- function(
         user = user,
         password = db.pwd,
         host = host,
+        port = port,
         dbname = cat.ref.db
     )
 
@@ -11903,6 +11944,7 @@ add.category.to.lab.reference.table.hs <- function(
         user = user,
         password = db.pwd,
         host = host,
+        port = port,
         dbname = cat.ref.db
     )
 
@@ -11923,7 +11965,14 @@ add.category.to.lab.reference.table.hs <- function(
 
     } else {
 
-            dbDB = DBI::dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname= cat.ref.db ,host = host)
+            dbDB = DBI::dbConnect(
+              RMySQL::MySQL(),
+              user = user,
+              password = pwd,
+              dbname= cat.ref.db ,
+              host = host,
+              port = port
+            )
 
             ## Set default ##
             next.id = 1
@@ -11953,7 +12002,14 @@ add.category.to.lab.reference.table.hs <- function(
 
         }
 
-    dbDB = DBI::dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname= cat.ref.db ,host = host)
+    dbDB = DBI::dbConnect(
+      RMySQL::MySQL(),
+      user = user,
+      password = pwd,
+      dbname= cat.ref.db ,
+      host = host,
+      port = port
+    )
     df.ref = DBI::dbGetQuery(dbDB, "SELECT DISTINCT * FROM js_lab_categories WHERE cat_id = 'not_existing'")
     DBI::dbDisconnect(dbDB)
 
@@ -12003,7 +12059,7 @@ add.category.to.lab.reference.table.hs <- function(
 
     #Upload to database
 
-    dbDB = DBI::dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname= cat.ref.db, host = host)
+    dbDB = DBI::dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname= cat.ref.db, host = host, port = port)
     if (new.lab.category.table){
         DBI::dbGetQuery(dbDB, paste("DROP TABLE IF EXISTS ", cat.ref.db.table, sep=""))
     }
@@ -12012,7 +12068,7 @@ add.category.to.lab.reference.table.hs <- function(
     while (!uploaded){
         tryCatch({
             killDbConnections()
-            dbDB = DBI::dbConnect(MySQL(), user = user, password = pwd, dbname= cat.ref.db,host = host)
+            dbDB = DBI::dbConnect(MySQL(), user = user, password = pwd, dbname= cat.ref.db,host = host, port = port)
             if (updateCat){
                 query <- paste0(
                     "UPDATE ", cat.ref.db.table,
@@ -12086,7 +12142,7 @@ add.category.to.lab.reference.table.hs <- function(
     if (add.internal.cat.description){
         ## Escape ##
         #cat.description.text <- gsub("\\'", "\\'", cat.description.text)
-        dbDB = DBI::dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname= cat.description.db,host = host)
+        dbDB = DBI::dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname= cat.description.db,host = host, port = port)
         insert.query <- paste0("INSERT INTO `",cat.description.db,"`.`",cat.description.db.table,"` (`cat_id`, `cat_name`, `cat_description`, `created_by`, `lab`, `creation_date`) VALUES ('",cat_id[1],"', '",cat_name[1],"', '",cat.description.text,"', '",data_source[1],"', '",lab.name,"', CURDATE())");
         DBI::dbGetQuery(dbDB, insert.query)
         DBI::dbDisconnect(dbDB)
@@ -12152,6 +12208,7 @@ setGeneric(
 msigdb.gmt2refDB <- function(
     df.gmt = "read.delim(gmt.file, header=FALSE, sep = '\t', stringsAsFactors = FALSE)",
     host = "www.biologic-db.org",
+    port = port,
     db.user = "boeings",
     pwd = "pwd",
     ref.db = "reference_database",
@@ -12230,6 +12287,7 @@ msigdb.gmt2refDB <- function(
         user = db.user,
         password = db.pwd,
         host = host,
+        port = port,
         dbname = ref.db
     )
     tables <- as.vector(dbGetQuery(dbDB, paste0("SHOW TABLES IN ", ref.db))[,1])
@@ -12356,7 +12414,8 @@ msigdb.gmt2refDB <- function(
         user = db.user,
         password = db.pwd,
         dbname = ref.db,
-        host = host
+        host = host,
+        port = port
     )
 
     if (create.new.table){
@@ -12676,10 +12735,11 @@ DotPlotSB <- function (
 list.db.tables.in.db <- function(dbname = "reference_categories_db_new",
                                  user     = "boeings",
                                  password = "",
-                                 host     = "www.biologic-db.org"
+                                 host     = "www.biologic-db.org",
+                                 port     = 6008
 ){
     library(RMySQL)
-    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, dbname=dbname)
+    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, port = port, dbname=dbname)
     table.vector = sort(as.vector(dbGetQuery(dbDB, "SHOW TABLES")[,1]))
     dbDisconnect(dbDB)
     return(table.vector)
@@ -12702,10 +12762,11 @@ list.db.table.col.names <- function(dbtable = "interpro_categori",
                                     dbname = "reference_categories_db_new",
                                     user     = "boeings",
                                     password = "",
-                                    host     = "www.biologic-db.org"
+                                    host     = "www.biologic-db.org",
+                                    port     = 6008
 ){
     library(RMySQL)
-    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, dbname=dbname)
+    dbDB <- dbConnect(MySQL(), user = user, password = password, host = host, port = port, dbname=dbname)
     column.vector = sort(as.vector(dbGetQuery(dbDB, paste0("SHOW COLUMNS in ",dbtable))[,1]))
     dbDisconnect(dbDB)
     return(column.vector)
@@ -13178,6 +13239,7 @@ excel <- function(df) {
 assignDbUsersAndPrivileges <- function(
     accessFilePath = shinyDataPath,
     hostDbUrl = "10.27.241.82",
+    port = 6008,
     appUserName = substr(paste0(project_id, "_aUser"), 1, 15),
     geneDefault = NULL,
     domains = c("shiny-bioinformatics.crick.ac.uk", "10.%"),
@@ -13198,6 +13260,7 @@ assignDbUsersAndPrivileges <- function(
         user = "db.user",
         password = "db.upload.pwd",
         host = "host",
+        port = port,
         dbname = "primDataDB",
         query = "mysql db query",
         #existingAccessFileName = existingAccessFileName
@@ -13210,6 +13273,7 @@ assignDbUsersAndPrivileges <- function(
             user = user,
             password = password,
             host = host,
+            port = port,
             dbname = dbname
         )
 
@@ -13245,6 +13309,7 @@ assignDbUsersAndPrivileges <- function(
                 user = dbAdminUser,
                 password = dbAdminPwd,
                 host = hostDbUrl,
+                port = port,
                 dbname = dbname,
                 query = query0,
                 #existingAccessFileName = existingAccessFileName
@@ -13259,6 +13324,7 @@ assignDbUsersAndPrivileges <- function(
                     user = dbAdminUser,
                     password = dbAdminPwd,
                     host = hostDbUrl,
+                    port = port,
                     dbname = dbname,
                     query = query0a,
                     #existingAccessFileName = existingAccessFileName
@@ -13278,6 +13344,7 @@ assignDbUsersAndPrivileges <- function(
                 user = dbAdminUser,
                 password = dbAdminPwd,
                 host = hostDbUrl,
+                post = port,
                 dbname = dbname,
                 query = query1,
                 #existingAccessFileName = existingAccessFileName
@@ -13300,7 +13367,8 @@ assignDbUsersAndPrivileges <- function(
             coordTb = tables["coordTb"],
             exprTb = tables["exprTb"],
             geneTb = tables["geneTb"],
-            default = geneDefault
+            default = geneDefault,
+            port = port
         )
 
         if (!file.exists(accessFilePath)){
@@ -13326,6 +13394,7 @@ assignDbUsersAndPrivileges <- function(
                 user = dbAdminUser,
                 password = dbAdminPwd,
                 host = hostDbUrl,
+                port = port,
                 dbname = dbname,
                 query = query7,
                 #existingAccessFileName = existingAccessFileName
@@ -13355,6 +13424,7 @@ assignDbUsersAndPrivileges <- function(
 
 uploadDbTableInfile <- function(
     host = NULL,
+    port = 6008,
     user = NULL,
     password = NULL,
     prim.data.db = "project.database",
@@ -13382,6 +13452,7 @@ uploadDbTableInfile <- function(
         user = "db.user",
         password = "db.upload.pwd",
         host = "host",
+        port = port,
         dbname = "primDataDB",
         query = "mysql db query",
         #existingAccessFileName = existingAccessFileName
@@ -13393,6 +13464,7 @@ uploadDbTableInfile <- function(
             user = user,
             password = password,
             host = host,
+            port = port,
             dbname = dbname
         )
 
@@ -13466,6 +13538,7 @@ uploadDbTableInfile <- function(
         user = user,
         password = password,
         host = host,
+        port = port,
         dbname = prim.data.db,
         query = query3,
         #existingAccessFileName = existingAccessFileName
@@ -13482,6 +13555,7 @@ uploadDbTableInfile <- function(
         user = user,
         password = password,
         host = host,
+        port = port,
         dbname = prim.data.db,
         query = query4,
         #existingAccessFileName = existingAccessFileName
@@ -13498,6 +13572,7 @@ uploadDbTableInfile <- function(
         user = user,
         password = password,
         host = host,
+        port = port,
         dbname = prim.data.db,
         query = query5,
         #existingAccessFileName = existingAccessFileName
@@ -13532,6 +13607,7 @@ doQuery <- function(
     user = "db.user",
     password = "db.upload.pwd",
     host = "host",
+    port = 6008,
     dbname = "primDataDB",
     query = "mysql db query",
     #existingAccessFileName = existingAccessFileName
@@ -13554,6 +13630,7 @@ doQuery <- function(
             user = user,
             password = password,
             host = host,
+            port = port,
             dbname = dbname
         )
 
@@ -13750,6 +13827,7 @@ assembleBiologicProject <- function(
     primDataDB = NULL,
     db.user = NULL,
     host = NULL,
+    port = 6008,
     lab.categories.table = NULL,
     HGtestEnrichmentGmtFile = NULL,
     GSEAtestEnrichmentGmtFile = NULL,
@@ -13887,6 +13965,7 @@ assembleBiologicProject <- function(
     ## Default settings
     pipelineList[["db.user"]] <- db.user
     pipelineList[["host"]] <- host
+    pipelineList[["port"]] <- port
 
     ## Add lab categories table, if available.
     ## The current format for lab category tables is [lab head initials]_lab_categories
