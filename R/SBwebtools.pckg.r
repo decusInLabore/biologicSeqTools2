@@ -7432,7 +7432,7 @@ upload.pca.table.to.db <- function(
       port = port
     )
     dbGetQuery(dbDB, paste("CREATE DATABASE IF NOT EXISTS ", prim.data.db, sep=""))
-    dbDB <- dbConnect(drv = RMySQL::MySQL(), user = db.user, password = db.pwd, dbname=prim.data.db, host = host)
+    dbDB <- dbConnect(drv = RMySQL::MySQL(), user = db.user, password = db.pwd, dbname=prim.data.db, host = host, port = port)
     dbGetQuery(dbDB, paste("DROP TABLE IF EXISTS ", PCAdbTableName, sep=""))
     dbWriteTable(dbDB, PCAdbTableName, df.pca, row.names= FALSE)
 
