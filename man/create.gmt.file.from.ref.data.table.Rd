@@ -6,7 +6,7 @@
 \usage{
 create.gmt.file.from.ref.data.table(
   host = "www.biologic-db.org",
-  port = port,
+  port = 6008,
   dbname = "reference_categories_db_new",
   dataTable = "st_lab_categories",
   pwd = "Saturday08",
