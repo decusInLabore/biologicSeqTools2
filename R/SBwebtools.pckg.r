@@ -2984,7 +2984,11 @@ setGeneric(
                     betaPrior = betaPrior
                 )
 
-                res <- DESeq2::results(dds, contrast = contrast.vector)
+                if (betaPrior){
+                    res <- DESeq2::results(dds, contrast = contrast.vector)
+                } else {
+                    res <- DESeq2::results(dds)
+                }
                 
                 
                 ## Save to file if 
